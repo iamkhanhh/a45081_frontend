@@ -14,24 +14,6 @@ export const routes: Routes = [
       import('./modules/errors/errors.module').then((m) => m.ErrorsModule),
   },
   {
-    path: 'workspace',
-    canActivate: [AuthGuard],
-    loadChildren: () =>
-      import('./modules/workspace/workspace.module').then((m) => m.WorkspaceModule),
-  },
-  {
-    path: 'user',
-    canActivate: [AuthGuard],
-    loadChildren: () =>
-      import('./modules/user/user.module').then((m) => m.UserModule),
-  },
-  {
-    path: 'sample',
-    canActivate: [AuthGuard],
-    loadChildren: () =>
-      import('./modules/sample/sample.module').then((m) => m.SampleModule),
-  },
-  {
     path: '',
     canActivate: [AuthGuard],
     loadChildren: () =>

@@ -7,6 +7,21 @@ const Routing: Routes = [
       import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
   },
   {
+    path: 'workspaces',
+    loadChildren: () =>
+      import('../modules/workspace/workspace.module').then((m) => m.WorkspaceModule),
+  },
+  {
+    path: 'users',
+    loadChildren: () =>
+      import('../modules/user/user.module').then((m) => m.UserModule),
+  },
+  {
+    path: 'samples',
+    loadChildren: () =>
+      import('../modules/sample/sample.module').then((m) => m.SampleModule),
+  },
+  {
     path: 'builder',
     loadChildren: () =>
       import('./builder/builder.module').then((m) => m.BuilderModule),
