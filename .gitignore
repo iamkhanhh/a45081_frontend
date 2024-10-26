@@ -50,4 +50,4 @@ testem.log
 Thumbs.db
 
 # Enviroments
-/src/enviroments
+/src/environments
