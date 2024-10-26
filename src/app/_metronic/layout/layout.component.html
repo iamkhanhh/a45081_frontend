@@ -9,13 +9,14 @@
         #ktHeader
       ></app-header>
 
-        <ng-container *ngIf="toolbarDisplay">
+        <!-- <ng-container *ngIf="toolbarDisplay">
           <app-toolbar class="toolbar py-5 py-lg-15" id="kt_toolbar"></app-toolbar>
-        </ng-container>
+        </ng-container> -->
 
       <app-content
         id="kt_content_container"
         class="d-flex flex-column-fluid align-items-start"
+        style="margin-top: 30px; max-width: 1444px !important;"
         [ngClass]="contentContainerClasses"
       ></app-content>
 
@@ -31,8 +32,8 @@
 <app-scroll-top></app-scroll-top>
 
 <!-- begin:: Drawers -->
-<app-activity-drawer></app-activity-drawer>
-<app-messenger-drawer></app-messenger-drawer>
+<!-- <app-activity-drawer></app-activity-drawer>
+<app-messenger-drawer></app-messenger-drawer> -->
 <!-- end:: Drawers -->
 
 <!-- end:: Engage -->

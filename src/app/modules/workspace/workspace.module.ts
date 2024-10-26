@@ -5,6 +5,7 @@ import { WorkspaceRoutingModule } from './workspace-routing.module';
 import { WorkspaceComponent } from './workspace.component';
 import { WorkspaceListComponent } from './workspace-list/workspace-list.component';
 import { WorkspaceIndexComponent } from './workspace-index/workspace-index.component';
+import { InlineSVGModule } from 'ng-inline-svg-2';
 
 
 @NgModule({
@@ -15,6 +16,7 @@ import { WorkspaceIndexComponent } from './workspace-index/workspace-index.compo
   ],
   imports: [
     CommonModule,
+    InlineSVGModule,
     WorkspaceRoutingModule
   ]
 })
