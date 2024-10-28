@@ -27,7 +27,7 @@
         &::after {
             content: " ";
             width: 50%;
-            border-bottom: 1px solid var(--#{$prefix}border-color);
+            border-bottom: 1px solid black;
         }
 
         &::before{

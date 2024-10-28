@@ -16,7 +16,7 @@ body {
 
 @include color-mode(light) {
 	body:not(.app-blank) {
-		background-image: url('../../media/patterns/header-bg.jpg');
+		// background-image: url('../../media/patterns/header-bg.jpg');
 	}
 }
 
