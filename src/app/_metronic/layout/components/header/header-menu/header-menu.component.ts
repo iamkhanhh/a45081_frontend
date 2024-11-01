@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/modules/auth';
 
 @Component({
   selector: 'app-header-menu',
@@ -7,9 +8,12 @@ import { Router } from '@angular/router';
   styleUrls: ['./header-menu.component.scss'],
 })
 export class HeaderMenuComponent implements OnInit {
-  constructor(private router: Router) {}
+  isAdmin: boolean = false;
+  constructor(private router: Router, private authService: AuthService,) {}
 
-  ngOnInit(): void {}
+  ngOnInit() {
+    this.isAdmin = this.authService.currentUserValue?.role == 'Admin';
+  }
 
   calculateMenuItemCssClass(url: string): string {
     return checkIsActive(this.router.url, url) ? 'active' : '';

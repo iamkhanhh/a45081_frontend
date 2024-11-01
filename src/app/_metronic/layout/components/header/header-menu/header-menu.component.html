@@ -20,7 +20,7 @@
 </div>
 
 <!-- Users -->
-<div class="menu-item me-lg-1">
+<div class="menu-item me-lg-1" *ngIf="isAdmin">
   <a class="menu-link py-3" routerLinkActive="active" routerLink="/users"
   ><span class="menu-title">Users</span
   ></a>

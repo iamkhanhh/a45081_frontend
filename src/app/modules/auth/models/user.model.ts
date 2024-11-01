@@ -9,7 +9,7 @@ export class UserModel extends AuthModel {
   // fullname: string;
   email: string;
   pic: string;
-  // roles: number[] = [];
+  role: string;
   // occupation: string;
   // companyName: string;
   phone_number: string;
@@ -59,7 +59,7 @@ export class UserModel extends AuthModel {
     // this.fullname = user.fullname || '';
     this.email = user.email || '';
     this.pic = './assets/media/avatars/blank.png';
-    // this.roles = user.roles || [];
+    this.role = user.role || 'User';
     // this.occupation = user.occupation || '';
     // this.companyName = user.companyName || '';
     this.phone_number = user.phone_number || '';
