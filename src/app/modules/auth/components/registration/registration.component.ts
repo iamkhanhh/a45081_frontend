@@ -6,6 +6,7 @@ import { AuthService } from '../../services/auth.service';
 import { ConfirmPasswordValidator } from './confirm-password.validator';
 import { UserModel } from '../../models/user.model';
 import { first } from 'rxjs/operators';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-registration',
@@ -61,7 +62,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
           Validators.compose([]),
         ],
         email: [
-          'qwe@qwe.qwe',
+          '',
           Validators.compose([
             Validators.required,
             Validators.email,
@@ -106,9 +107,9 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     const registrationSubscr = this.authService
       .registration(newUser)
       .pipe(first())
-      .subscribe((user: UserModel) => {
-        if (user) {
-          this.router.navigate(['/']);
+      .subscribe((response: any) => {
+        if (response.status == 'success') {
+          this.router.navigate([`/auth/activate-account/${response.data.id}`]);
         } else {
           this.hasError = true;
         }

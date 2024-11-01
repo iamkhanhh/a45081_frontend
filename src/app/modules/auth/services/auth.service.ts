@@ -6,6 +6,8 @@ import { AuthModel } from '../models/auth.model';
 import { AuthHTTPService } from './auth-http';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
+import { ResponseModel } from '../models/response.model';
+import { ToastrService } from 'ngx-toastr';
 
 export type UserType = UserModel | undefined;
 
@@ -33,7 +35,8 @@ export class AuthService implements OnDestroy {
 
   constructor(
     private authHttpService: AuthHTTPService,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
   ) {
     this.isLoadingSubject = new BehaviorSubject<boolean>(false);
     this.currentUserSubject = new BehaviorSubject<UserType>(undefined);
@@ -44,44 +47,66 @@ export class AuthService implements OnDestroy {
   }
 
   // public methods
-  login(email: string, password: string): Observable<UserType> {
+  login(email: string, password: string): Observable<any> {
     this.isLoadingSubject.next(true);
     return this.authHttpService.login(email, password).pipe(
-      map((auth: AuthModel) => {
-        const result = this.setAuthFromLocalStorage(auth);
-        return result;
+      map((response: ResponseModel) => {
+        return response;
       }),
       switchMap(() => this.getUserByToken()),
       catchError((err) => {
         console.error('err', err);
+        this.toastr.error(err.error.message);
         return of(undefined);
       }),
       finalize(() => this.isLoadingSubject.next(false))
     );
   }
 
-  logout() {
-    localStorage.removeItem(this.authLocalStorageToken);
-    this.router.navigate(['/auth/login'], {
-      queryParams: {},
-    });
+  redirectToLogin() {
+    return this.router.navigateByUrl('/auth/login');
   }
 
-  getUserByToken(): Observable<UserType> {
-    const auth = this.getAuthFromLocalStorage();
-    if (!auth || !auth.authToken) {
-      return of(undefined);
-    }
-
+  activateAccount(code: string, user_id: number): Observable<boolean> {
     this.isLoadingSubject.next(true);
-    return this.authHttpService.getUserByToken(auth.authToken).pipe(
-      map((user: UserType) => {
-        if (user) {
-          this.currentUserSubject.next(user);
+    return this.authHttpService
+      .activateAccount(code, user_id)
+      .pipe(
+        map((response: any) => {
+          return response;
+        }),
+        catchError((err) => {
+          console.error('err', err);
+          this.toastr.error(err.error.message);
+          return of(undefined);
+        }),
+        finalize(() => {this.isLoadingSubject.next(false)})
+      );
+  }
+
+  logout() {
+		return this.authHttpService.logout().pipe(
+			map((response: ResponseModel) => {
+				return true;
+			}),
+      catchError((err) => {
+        console.error('err', err);
+        this.toastr.error(err.error.message);
+        return of(undefined);
+      })
+    )
+	}
+
+  getUserByToken(): Observable<any> {
+    this.isLoadingSubject.next(true);
+    return this.authHttpService.getUserByToken().pipe(
+      map((response: any) => {
+        if (response.status == 'success') {
+          this.currentUserSubject.next(response.data);
+          return response.data;
         } else {
           this.logout();
         }
-        return user;
       }),
       finalize(() => this.isLoadingSubject.next(false))
     );
@@ -91,12 +116,14 @@ export class AuthService implements OnDestroy {
   registration(user: UserModel): Observable<any> {
     this.isLoadingSubject.next(true);
     return this.authHttpService.createUser(user).pipe(
-      map(() => {
+      map((response) => {
         this.isLoadingSubject.next(false);
+        return response
       }),
-      switchMap(() => this.login(user.email, user.password)),
+      // switchMap(() => this.login(user.email, user.password)),
       catchError((err) => {
         console.error('err', err);
+        this.toastr.error(err.error.message);
         return of(undefined);
       }),
       finalize(() => this.isLoadingSubject.next(false))
@@ -107,7 +134,17 @@ export class AuthService implements OnDestroy {
     this.isLoadingSubject.next(true);
     return this.authHttpService
       .forgotPassword(email)
-      .pipe(finalize(() => this.isLoadingSubject.next(false)));
+      .pipe(
+        map((response: any) => {
+          return response;
+        }),
+        catchError((err) => {
+          console.error('err', err);
+          this.toastr.error(err.error.message);
+          return of(undefined);
+        }),
+        finalize(() => {this.isLoadingSubject.next(false)})
+      );
   }
 
   // private methods
@@ -134,6 +171,14 @@ export class AuthService implements OnDestroy {
       return undefined;
     }
   }
+
+  private convertResponse(response: any): ResponseModel {
+		let res = new ResponseModel;
+		res.status = response.body.status;
+		res.message = response.body.message || '';
+		res.data = response.body.data || {};
+		return res;
+	}
 
   ngOnDestroy() {
     this.unsubscribe.forEach((sb) => sb.unsubscribe());

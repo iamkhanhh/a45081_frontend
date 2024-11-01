@@ -11,6 +11,10 @@ This project is about genetic analysis to detect whether the fetus is likely to 
 - Pompe disease (glycogen storage disorder type 2)​: Bệnh Pompe (rối loạn dự trữ glycogen nhóm 2)​
 - Wilson disease (copper metabolism disorder): Bệnh Wilson (rối loạn chuyển hóa đồng)
 
+## Environment
+
+NodeJS v20.11.1
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.

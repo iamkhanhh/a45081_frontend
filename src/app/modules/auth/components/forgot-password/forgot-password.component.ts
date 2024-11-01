@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { first } from 'rxjs/operators';
+import { ToastrService } from 'ngx-toastr';
 
 enum ErrorStates {
   NotSubmitted,
@@ -23,7 +24,11 @@ export class ForgotPasswordComponent implements OnInit {
 
   // private fields
   private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
-  constructor(private fb: FormBuilder, private authService: AuthService) {
+  constructor(
+    private fb: FormBuilder, 
+    private authService: AuthService,
+    private toastr: ToastrService,
+  ) {
     this.isLoading$ = this.authService.isLoading$;
   }
 
@@ -39,7 +44,7 @@ export class ForgotPasswordComponent implements OnInit {
   initForm() {
     this.forgotPasswordForm = this.fb.group({
       email: [
-        'admin@demo.com',
+        '',
         Validators.compose([
           Validators.required,
           Validators.email,
@@ -55,8 +60,14 @@ export class ForgotPasswordComponent implements OnInit {
     const forgotPasswordSubscr = this.authService
       .forgotPassword(this.f.email.value)
       .pipe(first())
-      .subscribe((result: boolean) => {
-        this.errorState = result ? ErrorStates.NoError : ErrorStates.HasError;
+      .subscribe((response: any) => {
+        if (response.status == 'success') {
+          this.errorState = ErrorStates.NoError;
+          this.toastr.success(response.message);
+        } else {
+          this.toastr.error(response.message);
+          this.errorState = ErrorStates.HasError;
+        }
       });
     this.unsubscribe.push(forgotPasswordSubscr);
   }
