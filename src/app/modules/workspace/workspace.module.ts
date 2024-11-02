@@ -6,6 +6,7 @@ import { WorkspaceComponent } from './workspace.component';
 import { WorkspaceListComponent } from './workspace-list/workspace-list.component';
 import { WorkspaceIndexComponent } from './workspace-index/workspace-index.component';
 import { InlineSVGModule } from 'ng-inline-svg-2';
+import { WorkspaceService } from './services/workspace.service';
 
 
 @NgModule({
@@ -18,6 +19,7 @@ import { InlineSVGModule } from 'ng-inline-svg-2';
     CommonModule,
     InlineSVGModule,
     WorkspaceRoutingModule
-  ]
+  ],
+  providers: [WorkspaceService]
 })
 export class WorkspaceModule { }
