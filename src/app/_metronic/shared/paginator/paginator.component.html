@@ -1,0 +1,68 @@
+<!-- start: Paginator -->
+<div class="pagination">
+  <!-- First Page Button -->
+  <div class="page-item" [class.disabled]="paginator.page === 1" (click)="goToFirstPage()">
+    <<
+  </div>
+
+  <!-- Previous Page Button -->
+  <div class="page-item" [class.disabled]="paginator.page === 1" (click)="goToPreviousPage()">
+    <
+  </div>
+
+  <!-- Page Numbers with Conditional Rendering -->
+  <div class="d-flex" *ngIf="paginator.totalPages  <= 5">
+    <div *ngFor="let page of getPagesArray()" class="page-item" [class.active]="page === paginator.page"
+      (click)="pageChange(page)">
+      {{ page }}
+    </div>
+  </div>
+
+  <div class="d-flex" *ngIf="paginator.totalPages > 5">
+    <div class="page-item" [class.active]="paginator.page === 1" (click)="pageChange(1)">1</div>
+
+    <div *ngIf="paginator.page > 3" class="page-item disabled">...</div>
+
+    <div *ngFor="let page of getMiddlePagesArray()" class="page-item" [class.active]="page === paginator.page"
+      (click)="pageChange(page)">
+      {{ page }}
+    </div>
+
+    <div *ngIf="paginator.page < paginator.totalPages - 2" class="page-item disabled">...</div>
+
+    <div class="page-item" [class.active]="paginator.page === paginator.totalPages" (click)="pageChange(paginator.totalPages)">{{ paginator.totalPages
+      }}</div>
+  </div>
+
+  <!-- Next Page Button -->
+  <div class="page-item" [class.disabled]="paginator.page === paginator.totalPages" (click)="goToNextPage()">
+    >
+  </div>
+
+  <!-- Last Page Button -->
+  <div class="page-item" [class.disabled]="paginator.page === paginator.totalPages" (click)="goToLastPage()">
+  >>
+  </div>
+
+</div>
+<div class="d-flex align-items-center py-3">
+  <!-- begin: loading -->
+  <div class="d-flex align-items-center" *ngIf="isLoading">
+    <div class="mr-2 text-muted">Loading...</div>
+    <div class="spinner spinner-primary mr-10"></div>
+  </div>
+  <!-- end: loading -->
+
+  <!-- begin: pageSize -->
+  <select class="form-control form-control-sm font-weight-bold mr-4 border-0 bg-light false" style="width: 75px"
+    [(ngModel)]="paginator.pageSize" (change)="sizeChange()">
+    <option class="btn" *ngFor="let ps of pageSizes">
+      {{ ps }}
+    </option>
+  </select><span class="react-bootstrap-table-pagin ation-total">&nbsp;Showing rows {{ paginator.pageBegin }} to&nbsp;{{
+    paginator.pageEnd
+    }}
+    of&nbsp;{{ paginator.total }}</span>
+  <!-- end: pageSize -->
+</div>
+<!-- end: Paginator -->

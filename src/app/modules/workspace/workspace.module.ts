@@ -7,6 +7,7 @@ import { WorkspaceListComponent } from './workspace-list/workspace-list.componen
 import { WorkspaceIndexComponent } from './workspace-index/workspace-index.component';
 import { InlineSVGModule } from 'ng-inline-svg-2';
 import { WorkspaceService } from './services/workspace.service';
+import { SharedModule } from 'src/app/_metronic/shared/shared.module';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { WorkspaceService } from './services/workspace.service';
   imports: [
     CommonModule,
     InlineSVGModule,
-    WorkspaceRoutingModule
+    WorkspaceRoutingModule,
+    SharedModule
   ],
   providers: [WorkspaceService]
 })

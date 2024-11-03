@@ -96,6 +96,8 @@
       <!-- end::Table -->
     </div>
     <!-- end::Table container -->
+    <app-paginator class="d-flex justify-content-between align-items-center flex-wrap" [paginator]="paginator"
+    [isLoading]="isLoading" (paginate)="paginate($event)"></app-paginator>
   </div>
   <!-- begin::Body -->
 </div>
