@@ -14,7 +14,7 @@ export class PaginatorState implements IPaginatorState {
   page = 1;
   pageSize = PageSizes[0];
   total = 0;
-  pageBegin = 1;
+  pageBegin = 0;
   totalPages = 1;
   pageEnd = this.pageSize;
   pageSizes: number[] = [];

@@ -15,4 +15,12 @@ export class WorkspaceService {
   loadWorkspaces(page: number, pageSize: number): Observable<any> {
 		return this.http.get(`${API_WORKSPACE_URL}?page=${page}&pageSize=${pageSize}`, { withCredentials: true });
 	}
+
+  loadAnalyses(workspace_id: number, page: number, pageSize: number): Observable<any> {
+		return this.http.get(`${environment.apiUrl}/analysis/getAnalysesByWorkspaceId/${workspace_id}?page=${page}&pageSize=${pageSize}`, { withCredentials: true });
+	}
+
+  getWorkspaceName(workspace_id: number): Observable<any> {
+		return this.http.get(`${API_WORKSPACE_URL}/getWorkspaceName/${workspace_id}`, { withCredentials: true });
+	}
 }
