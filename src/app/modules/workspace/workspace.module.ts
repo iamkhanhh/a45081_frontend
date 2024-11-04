@@ -8,18 +8,24 @@ import { WorkspaceIndexComponent } from './workspace-index/workspace-index.compo
 import { InlineSVGModule } from 'ng-inline-svg-2';
 import { WorkspaceService } from './services/workspace.service';
 import { SharedModule } from 'src/app/_metronic/shared/shared.module';
+import { CreateWorkspaceComponent } from './components/create-workspace/create-workspace.component';
+import { DeleteWorkspaceComponent } from './components/delete-workspace/delete-workspace.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
   declarations: [
     WorkspaceComponent,
     WorkspaceIndexComponent,
-    WorkspaceListComponent
+    WorkspaceListComponent,
+    CreateWorkspaceComponent,
+    DeleteWorkspaceComponent
   ],
   imports: [
     CommonModule,
     InlineSVGModule,
     WorkspaceRoutingModule,
+    ReactiveFormsModule,
     SharedModule
   ],
   providers: [WorkspaceService]

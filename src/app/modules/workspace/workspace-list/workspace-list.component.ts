@@ -2,6 +2,8 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { WorkspaceService } from '../services/workspace.service';
 import { PaginatorState, PageSizes } from 'src/app/_metronic/shared/models';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { CreateWorkspaceComponent } from '../components/create-workspace/create-workspace.component';
 
 export interface workspace {
   id: number;
@@ -23,7 +25,8 @@ export class WorkspaceListComponent implements OnInit {
   constructor(
     private toastr: ToastrService,
     private workspaceService: WorkspaceService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private modalService: NgbModal
   ) {}
 
   ngOnInit() {
@@ -50,8 +53,28 @@ export class WorkspaceListComponent implements OnInit {
   }
 
   newWorkspace() {
-    this.toastr.success('Created a workspace successfully!', 'Success!', {
-      timeOut: 3000,
+    this.edit(undefined);
+  }
+
+	edit(id: number | undefined) {
+    const modalRef = this.modalService.open(CreateWorkspaceComponent, { size: 'md' });
+    modalRef.componentInstance.id = id;
+    modalRef.result.then(() =>
+      this.loadWorkspaces(),
+      () => {}
+    );
+	}
+
+  delete(id: number) {
+    this.isLoading = true;
+    this.workspaceService.deleteWorkspace(id).subscribe((response: any) => {
+      this.isLoading = false;
+      if (response.status === 'success') {
+        this.loadWorkspaces();
+        this.toastr.success(response.message);
+      } else {
+        this.toastr.error(response.message);
+      }
     });
   }
 }

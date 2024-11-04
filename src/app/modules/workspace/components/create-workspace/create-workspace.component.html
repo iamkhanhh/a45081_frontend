@@ -1,1 +1,59 @@
-<p>create-workspace works!</p>
+<div class="modal-content">
+  <div class="modal-header">
+    <div class="modal-title h4" id="example-modal-sizes-title-lg">
+      <ng-container *ngIf="workspace">
+        <ng-container *ngIf="workspace.id">Edit</ng-container>
+        <ng-container *ngIf="!workspace.id">Create</ng-container>
+        workspace
+        <ng-container *ngIf="workspace.id">'{{workspace.name}}'</ng-container>
+      </ng-container>
+    </div>
+  </div>
+  <div class="overlay overlay-block cursor-default modal-body" style="min-height: 404px;">
+    <ng-container *ngIf="isLoading">
+      <div class="overlay-layer bg-transparent">
+        <div class="spinner spinner-lg spinner-success"></div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="workspace">
+      <form action="#" class="form form-label-right" [formGroup]="formGroup" autocomplete="off">
+        <div class="form-group row">
+          <div class="col-lg-12">
+            <label class="form-label">Enter Workspace Name</label>
+            <input type="text" class="form-control form-control-lg form-control-solid" name="name" placeholder="Name"
+              autocomplete="off" [class.is-invalid]="isControlInvalid('name')" [class.is-valid]="isControlValid('name')"
+              formControlName="name" />
+            <div class="valid-feedback" *ngIf="isControlValid('name')">Workspace Name was entered correct</div>
+            <div class="invalid-feedback" *ngIf="controlHasError('required', 'name')">Workspace Name is required</div>
+            <div class="invalid-feedback" *ngIf="controlHasError('maxLength', 'name')">Workspace Name should have
+              maximum 100 symbols</div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-lg-12">
+            <label class="form-label">Enter Pipeline</label>
+            <select class="form-control" formControlName="pipeline">
+              <option *ngFor="let data of pipelines" value="{{data.id}}">{{data.name}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-lg-12">
+            <label class="form-label">Enter Description</label>
+            <textarea class="form-control form-control-lg mb-3" rows="10" formControlName="dashboard"></textarea>
+          </div>
+        </div>
+      </form>
+    </ng-container>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light btn-elevate mr-2" (click)="modal.dismiss()">Cancel</button>
+    <ng-container *ngIf="workspace">
+      <button type="submit" class="btn btn-primary btn-elevate" (click)="save()"
+        [disabled]="formGroup.invalid || isLoading ">Save</button>
+    </ng-container>
+    <ng-container *ngIf="isLoading">
+      <span class="spinner spinner-primary ml-3 mr-5"></span>
+    </ng-container>
+  </div>
+</div>

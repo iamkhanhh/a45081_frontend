@@ -80,7 +80,8 @@ export class LoginComponent implements OnInit, OnDestroy {
       .login(this.f.email.value, this.f.password.value)
       .pipe(first())
       .subscribe((response: any) => {
-        if (response.sub) {
+        console.log(response);
+        if (response.id) {
           this.router.navigate([this.returnUrl]);
         } else {
           this.toastr.error(response.message);

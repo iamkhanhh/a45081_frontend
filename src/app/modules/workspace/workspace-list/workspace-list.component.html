@@ -30,6 +30,7 @@
                   data-kt-check-target=".widget-9-check" />
               </div>
             </th>
+            <th class="min-w-120px">ID</th>
             <th class="min-w-120px">NAME</th>
             <th class="min-w-120px">PIPELINE</th>
             <th class="min-w-120px">NUMBER</th>
@@ -49,6 +50,11 @@
               </div>
             </td>
             <td>
+              <p class="text-gray-900 fw-bolder d-block fs-6" style="margin-top: revert;">
+                {{workspace.id}}
+              </p>
+            </td>
+            <td>
               <div class="d-flex align-items-center">
                 <div class="d-flex justify-content-start flex-column">
                   <a routerLink="/workspaces/index/{{workspace.id}}" class="text-gray-900 fw-bolder text-hover-primary fs-6">
@@ -58,35 +64,35 @@
               </div>
             </td>
             <td>
-              <p class="text-gray-900 fw-bolder d-block fs-6">
+              <p class="text-gray-900 fw-bolder d-block fs-6" style="margin-top: revert;">
                 {{workspace.pipeline_name}}
               </p>
             </td>
             <td>
-              <p class="text-gray-900 fw-bolder d-block fs-6">
+              <p class="text-gray-900 fw-bolder d-block fs-6" style="margin-top: revert;">
                 {{workspace.number}}
               </p>
             </td>
             <td>
-              <p class="text-gray-900 fw-bolder d-block fs-6">
+              <p class="text-gray-900 fw-bolder d-block fs-6" style="margin-top: revert;">
                 {{workspace.createdAt}}
               </p>
             </td>
             <td>
               <div class="d-flex justify-content-end flex-shrink-0">
-                <a href="#" class="
+                <button (click)="edit(workspace.id)" class="
                   btn btn-icon btn-bg-light btn-active-color-primary btn-sm
                   me-1
                 ">
                   <span [inlineSVG]="'./assets/media/icons/duotune/art/art005.svg'" class="svg-icon svg-icon-3"></span>
-                </a>
-                <a href="#" class="
+                </button>
+                <button (click)="delete(workspace.id)" class="
                   btn btn-icon btn-bg-light btn-active-color-primary btn-sm
                 ">
                   <span [inlineSVG]="
                     './assets/media/icons/duotune/general/gen027.svg'
                   " class="svg-icon svg-icon-3"></span>
-                </a>
+                </button>
               </div>
             </td>
           </tr>
