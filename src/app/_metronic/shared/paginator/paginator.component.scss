@@ -33,4 +33,10 @@
 .pagination .page-item:hover:not(.disabled):not(.active) {
   background-color: #0066ffa8;
   color: #ffffff;
+
+  .ki-duotone,
+  .ki-outline,
+  .ki-solid {
+    color: white !important;
+  }
 }

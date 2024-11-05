@@ -2,12 +2,12 @@
 <div class="pagination">
   <!-- First Page Button -->
   <div class="page-item" [class.disabled]="paginator.page === 1" (click)="goToFirstPage()">
-    <<
+    <i class="ki-outline ki-double-left fs-1"></i>
   </div>
 
   <!-- Previous Page Button -->
   <div class="page-item" [class.disabled]="paginator.page === 1" (click)="goToPreviousPage()">
-    <
+    <i class="ki-outline ki-left fs-1"></i>
   </div>
 
   <!-- Page Numbers with Conditional Rendering -->
@@ -36,12 +36,12 @@
 
   <!-- Next Page Button -->
   <div class="page-item" [class.disabled]="paginator.page === paginator.totalPages" (click)="goToNextPage()">
-    >
+    <i class="ki-outline ki-right fs-1"></i>
   </div>
 
   <!-- Last Page Button -->
   <div class="page-item" [class.disabled]="paginator.page === paginator.totalPages" (click)="goToLastPage()">
-  >>
+    <i class="ki-outline ki-double-right fs-1"></i>
   </div>
 
 </div>

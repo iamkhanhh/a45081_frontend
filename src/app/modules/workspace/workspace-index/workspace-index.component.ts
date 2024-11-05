@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { PaginatorState } from 'src/app/_metronic/shared/models';
+import { GroupingState, PaginatorState } from 'src/app/_metronic/shared/models';
 import { WorkspaceService } from '../services/workspace.service';
 import { ActivatedRoute } from '@angular/router';
 
@@ -26,6 +26,7 @@ export class WorkspaceIndexComponent implements OnInit {
   workspace_id: number;
   analyses: analysis[] = []
   paginator: PaginatorState = new PaginatorState();
+  grouping: GroupingState = new GroupingState();
   isLoading: boolean;
 
   constructor(
@@ -55,6 +56,10 @@ export class WorkspaceIndexComponent implements OnInit {
       if (response.status === 'success') {
         this.analyses = response.data;
         this.paginator = this.paginator.recalculatePaginator(response.pageBegin, response.pageEnd, response.totalItems, response.totalPages);
+        const itemIds = this.analyses.map((a: analysis) => {
+          return a.id;
+        });
+        this.grouping.clearRows(itemIds);
         this.cd.detectChanges();
       } else {
         this.toastr.error(response.message);
@@ -71,5 +76,9 @@ export class WorkspaceIndexComponent implements OnInit {
     this.toastr.success('Created a anaysis successfully!', 'Success!', {
       timeOut: 3000,
     });
+  }
+
+  deleteSelected() {
+    
   }
 }
