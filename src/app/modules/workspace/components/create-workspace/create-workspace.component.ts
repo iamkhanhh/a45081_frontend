@@ -94,7 +94,17 @@ export class CreateWorkspaceComponent implements OnInit, OnDestroy {
 	}
 
   edit() {
-
+		this.isLoading = true;
+		const sb = this.workSpacesService.edit(this.id, this.formGroup.value).pipe(
+		).subscribe((response: any) => {
+			if (response.status == 'success') {
+				this.toastr.success(response.message);
+				this.modal.close();
+			} else {
+				this.toastr.error(response.message);
+			}
+		});
+		this.subscriptions.push(sb);
   }
 
   create() {

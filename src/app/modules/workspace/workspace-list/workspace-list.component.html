@@ -34,6 +34,7 @@
             <th class="min-w-120px">NAME</th>
             <th class="min-w-120px">PIPELINE</th>
             <th class="min-w-120px">NUMBER</th>
+            <th class="min-w-120px">LAST MODIFIED</th>
             <th class="min-w-120px">CREATED AT</th>
             <th class="min-w-100px text-end">ACTIONS</th>
           </tr>
@@ -71,6 +72,11 @@
             <td>
               <p class="text-gray-900 fw-bolder d-block fs-6" style="margin-top: revert;">
                 {{workspace.number}}
+              </p>
+            </td>
+            <td>
+              <p class="text-gray-900 fw-bolder d-block fs-6" style="margin-top: revert;">
+                {{workspace.updatedAt}}
               </p>
             </td>
             <td>

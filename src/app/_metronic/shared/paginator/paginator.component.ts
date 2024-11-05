@@ -51,7 +51,7 @@ export class PaginatorComponent implements OnInit {
   // Navigate to the last page
   goToLastPage(): void {
     if (this.paginator.page !== this.paginator.totalPages) {
-      this.pageChange(this.paginator.total);
+      this.pageChange(this.paginator.totalPages);
     }
   }
 

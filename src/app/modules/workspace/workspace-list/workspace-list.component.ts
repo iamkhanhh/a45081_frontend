@@ -4,6 +4,7 @@ import { WorkspaceService } from '../services/workspace.service';
 import { PaginatorState, PageSizes } from 'src/app/_metronic/shared/models';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CreateWorkspaceComponent } from '../components/create-workspace/create-workspace.component';
+import { DeleteWorkspaceComponent } from '../components/delete-workspace/delete-workspace.component';
 
 export interface workspace {
   id: number;
@@ -11,6 +12,7 @@ export interface workspace {
   number: number;
   pipeline_name: string;
   createdAt: string;
+  updatedAt: string;
 }
 @Component({
   selector: 'app-workspace-list',
@@ -66,15 +68,11 @@ export class WorkspaceListComponent implements OnInit {
 	}
 
   delete(id: number) {
-    this.isLoading = true;
-    this.workspaceService.deleteWorkspace(id).subscribe((response: any) => {
-      this.isLoading = false;
-      if (response.status === 'success') {
-        this.loadWorkspaces();
-        this.toastr.success(response.message);
-      } else {
-        this.toastr.error(response.message);
-      }
-    });
+    const modalRef = this.modalService.open(DeleteWorkspaceComponent, { size: 'md' });
+    modalRef.componentInstance.id = id;
+    modalRef.result.then(() =>
+      this.loadWorkspaces(),
+      () => {}
+    );
   }
 }

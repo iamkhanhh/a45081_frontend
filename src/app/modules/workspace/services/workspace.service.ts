@@ -39,4 +39,8 @@ export class WorkspaceService {
 	create(data: any): Observable<any> {
 		return this.http.post(`${API_WORKSPACE_URL}`, data ,{ withCredentials: true });
 	}
+
+	edit(id: number, data: any): Observable<any> {
+		return this.http.put(`${API_WORKSPACE_URL}/${id}`, data ,{ withCredentials: true });
+	}
 }
