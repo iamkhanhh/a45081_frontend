@@ -11,6 +11,8 @@ import { SharedModule } from 'src/app/_metronic/shared/shared.module';
 import { CreateWorkspaceComponent } from './components/create-workspace/create-workspace.component';
 import { DeleteWorkspaceComponent } from './components/delete-workspace/delete-workspace.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CreateAnalysisComponent } from './components/create-analysis/create-analysis.component';
+import { DeleteAnalysisComponent } from './components/delete-analysis/delete-analysis.component';
 
 
 @NgModule({
@@ -19,7 +21,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     WorkspaceIndexComponent,
     WorkspaceListComponent,
     CreateWorkspaceComponent,
-    DeleteWorkspaceComponent
+    DeleteWorkspaceComponent,
+    CreateAnalysisComponent,
+    DeleteAnalysisComponent
   ],
   imports: [
     CommonModule,

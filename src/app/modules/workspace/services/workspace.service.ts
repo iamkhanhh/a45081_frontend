@@ -43,4 +43,9 @@ export class WorkspaceService {
 	edit(id: number, data: any): Observable<any> {
 		return this.http.put(`${API_WORKSPACE_URL}/${id}`, data ,{ withCredentials: true });
 	}
+
+	// analysis handler
+	deleteAnalysis(analysis_id: number): Observable<any> {
+		return this.http.delete(`${environment.apiUrl}/analysis/${analysis_id}`, { withCredentials: true });
+	}
 }
