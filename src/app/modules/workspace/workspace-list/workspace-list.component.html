@@ -15,6 +15,28 @@
   <!-- end::Header -->
   <!-- begin::Body -->
   <div class="card-body py-3">
+
+    <ng-container *ngIf="grouping.getSelectedRowsCount()">
+			<div class="form">
+				<div class="row align-items-center form-group-actions margin-top-20 margin-bottom-20">
+					<div class="col-xl-12">
+						<div class="form-group form-group-inline">
+							<div class="form-label form-label-no-wrap">
+								<label class="font-bold font-danger"><span>Selected records count:
+										<b>{{ grouping.getSelectedRowsCount() }}</b></span></label>
+							</div>
+							<div>
+								<button type="button" class="btn btn-danger font-weight-bolder font-size-sm mr-1"
+									(click)="deleteSelected()">
+									<i class="fa fa-trash"></i> Delete All
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</ng-container>
+
     <!-- begin::Table container -->
     <div class="table-responsive">
       <!-- begin::Table -->
@@ -27,7 +49,10 @@
                 form-check form-check-sm form-check-custom form-check-solid
               ">
                 <input class="form-check-input" type="checkbox" value="1" data-kt-check="true"
-                  data-kt-check-target=".widget-9-check" />
+                  data-kt-check-target=".widget-9-check" 
+                  (click)="grouping.selectAllRows()"
+								  [checked]="grouping.checkAreAllRowsSelected()"
+                />
               </div>
             </th>
             <th class="min-w-120px">ID</th>
@@ -47,7 +72,13 @@
               <div class="
                 form-check form-check-sm form-check-custom form-check-solid
               ">
-                <input class="form-check-input widget-9-check" type="checkbox" value="{{workspace.id}}" />
+                <input 
+                  class="form-check-input widget-9-check" 
+                  type="checkbox" 
+                  value="{{workspace.id}}" 
+                  (click)="grouping.selectRow(workspace.id)"
+									[checked]="grouping.isRowSelected(workspace.id)"
+                />
               </div>
             </td>
             <td>

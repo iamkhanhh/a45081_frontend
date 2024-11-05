@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { WorkspaceService } from '../services/workspace.service';
-import { PaginatorState, PageSizes } from 'src/app/_metronic/shared/models';
+import { PaginatorState, GroupingState } from 'src/app/_metronic/shared/models';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CreateWorkspaceComponent } from '../components/create-workspace/create-workspace.component';
 import { DeleteWorkspaceComponent } from '../components/delete-workspace/delete-workspace.component';
@@ -23,6 +23,7 @@ export class WorkspaceListComponent implements OnInit {
   workspaces: workspace[] = [];
   paginator: PaginatorState = new PaginatorState();
   isLoading: boolean;
+  grouping: GroupingState = new GroupingState();
 
   constructor(
     private toastr: ToastrService,
@@ -41,7 +42,11 @@ export class WorkspaceListComponent implements OnInit {
       this.isLoading = false;
       if (response.status === 'success') {
         this.workspaces = response.data;
+        const itemIds = this.workspaces.map((w: workspace) => {
+          return w.id;
+        });
         this.paginator = this.paginator.recalculatePaginator(response.pageBegin, response.pageEnd, response.totalItems, response.totalPages);
+        this.grouping.clearRows(itemIds);
         this.cd.detectChanges();
       } else {
         this.toastr.error(response.message);
@@ -74,5 +79,9 @@ export class WorkspaceListComponent implements OnInit {
       this.loadWorkspaces(),
       () => {}
     );
+  }
+
+  deleteSelected() {
+
   }
 }
