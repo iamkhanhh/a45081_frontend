@@ -1,15 +1,6 @@
 # Information
 
-This project is about genetic analysis to detect whether the fetus is likely to carry one of the following 9 diseases:
-- Alpha Thalassemia​​​​: Tan máu bẩm sinh Thalassemia thể Alpha​​​​​
-- Beta Thalassemia​: Tan máu bẩm sinh Thalassemia thể Beta​
-- Milk allergy (Galactose metabolism disorder)​: Dị ứng sữa (Rối loạn chuyển hóa Galactose)​
-- G6PD deficiency​: Thiếu men G6PD​
-- Protein intolerance (Phenylketonuria)​: Không dung nạp đạm (Phenylketon niệu)​
-- Citrin deficiency cholestatic jaundice​: Vàng da ứ mật do thiếu men citrin​
-- Male sexual development disorder due to 5-alpha reductase deficiency​: Rối loạn phát triển giới tính ở nam do thiếu men 5-alpha reductase​
-- Pompe disease (glycogen storage disorder type 2)​: Bệnh Pompe (rối loạn dự trữ glycogen nhóm 2)​
-- Wilson disease (copper metabolism disorder): Bệnh Wilson (rối loạn chuyển hóa đồng)
+This project is about genetic analysis to annotate variants via vcf and fastq files.
 
 ## Environment
 
