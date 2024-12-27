@@ -3,6 +3,9 @@ import { ToastrService } from 'ngx-toastr';
 import { GroupingState, PaginatorState } from 'src/app/_metronic/shared/models';
 import { WorkspaceService } from '../services/workspace.service';
 import { ActivatedRoute } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { DeleteAnalysisComponent } from '../components/delete-analysis/delete-analysis.component';
+import { CreateAnalysisComponent } from '../components/create-analysis/create-analysis.component';
 
 export interface analysis {
   id: number;
@@ -34,6 +37,7 @@ export class WorkspaceIndexComponent implements OnInit {
     private workspaceService: WorkspaceService,
     private cd: ChangeDetectorRef,
     private route: ActivatedRoute,
+    private modalService: NgbModal
   ) {}
 
   ngOnInit() {
@@ -73,12 +77,23 @@ export class WorkspaceIndexComponent implements OnInit {
   }
 
   newAnalysis() {
-    this.toastr.success('Created a anaysis successfully!', 'Success!', {
-      timeOut: 3000,
-    });
+    const modalRef = this.modalService.open(CreateAnalysisComponent, { size: 'md' });
+    modalRef.result.then(() =>
+      this.loadAnalyses(),
+      () => {}
+    );
   }
 
   deleteSelected() {
-    
+
+  }
+
+  delete(id: number) {
+    const modalRef = this.modalService.open(DeleteAnalysisComponent, { size: 'md' });
+    modalRef.componentInstance.id = id;
+    modalRef.result.then(() =>
+      this.loadAnalyses(),
+      () => {}
+    );
   }
 }

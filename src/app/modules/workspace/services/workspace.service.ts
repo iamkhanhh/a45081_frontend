@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 import { FormGroup } from '@angular/forms';
 
 const API_WORKSPACE_URL = `${environment.apiUrl}/workspaces`;
+const API_ANALYSIS_URL = `${environment.apiUrl}/analysis`;
 
 @Injectable({
   providedIn: 'root',
@@ -46,6 +47,15 @@ export class WorkspaceService {
 
 	// analysis handler
 	deleteAnalysis(analysis_id: number): Observable<any> {
-		return this.http.delete(`${environment.apiUrl}/analysis/${analysis_id}`, { withCredentials: true });
+		return this.http.delete(`${API_ANALYSIS_URL}/${analysis_id}`, { withCredentials: true });
+	}
+
+	createAnalysis(data: any) {
+		return this.http.post(`${API_ANALYSIS_URL}`, data, { withCredentials: true });
+	}
+
+	// sample handler
+	getSamplesByPipeLine(pipeline: number) {
+		return this.http.get(`${environment.apiUrl}/samples/getSamplesByPipeLine/${pipeline}`, { withCredentials: true });
 	}
 }
