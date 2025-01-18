@@ -3,6 +3,7 @@ import { ToastrService } from 'ngx-toastr';
 import { PaginatorState, GroupingState } from 'src/app/_metronic/shared/models';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SampleService } from '../services/sample.service';
+import { DeleteSampleComponent } from '../components/delete-sample/delete-sample.component';
 
 export interface sample {
   id: number;
@@ -58,26 +59,13 @@ export class SampleListComponent implements OnInit {
     });
   }
 
-  newSample() {
-    this.edit(undefined);
-  }
-
-  edit(id: number | undefined) {
-    // const modalRef = this.modalService.open(CreateWorkspaceComponent, { size: 'md' });
-    // modalRef.componentInstance.id = id;
-    // modalRef.result.then(() =>
-    //   this.loadSamples(),
-    //   () => {}
-    // );
-  }
-
   delete(id: number) {
-    // const modalRef = this.modalService.open(DeleteWorkspaceComponent, { size: 'md' });
-    // modalRef.componentInstance.id = id;
-    // modalRef.result.then(() =>
-    //   this.loadSamples(),
-    //   () => {}
-    // );
+    const modalRef = this.modalService.open(DeleteSampleComponent, { size: 'md' });
+    modalRef.componentInstance.id = id;
+    modalRef.result.then(() =>
+      this.loadSamples(),
+      () => {}
+    );
   }
 
   deleteSelected() {

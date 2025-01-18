@@ -6,10 +6,16 @@
     </h3>
     <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover"
       title="Click to upload a sample">
-      <button (click)="newSample()" class="btn btn-sm btn-light-primary">
+      <button 
+        class="btn btn-sm btn-light-primary"
+        data-kt-menu-trigger="click"
+        data-kt-menu-placement="bottom-end"
+        data-kt-menu-flip="top-end"
+        >
         <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr075.svg'" class="svg-icon svg-icon-3"></span>
         New Sample
       </button>
+      <dropdown-create-sample (reloadSamples)="loadSamples()"></dropdown-create-sample>
     </div>
   </div>
   <!-- end::Header -->

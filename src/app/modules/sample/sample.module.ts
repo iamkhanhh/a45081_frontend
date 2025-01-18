@@ -6,12 +6,20 @@ import { InlineSVGModule } from 'ng-inline-svg-2';
 import { SampleListComponent } from './sample-list/sample-list.component';
 import { SampleComponent } from './sample.component';
 import { SharedModule } from 'src/app/_metronic/shared/shared.module';
+import { DeleteSampleComponent } from './components/delete-sample/delete-sample.component';
+import { DropdownCreateSampleComponent } from './components/dropdown-create-sample/dropdown-create-sample.component';
+import { CreateSampleVcfComponent } from './components/create-sample-vcf/create-sample-vcf.component';
+import { CreateSampleFastqComponent } from './components/create-sample-fastq/create-sample-fastq.component';
 
 
 @NgModule({
   declarations: [
     SampleListComponent,
-    SampleComponent
+    SampleComponent,
+    DeleteSampleComponent,
+    DropdownCreateSampleComponent,
+    CreateSampleVcfComponent,
+    CreateSampleFastqComponent
   ],
   imports: [
     CommonModule,
