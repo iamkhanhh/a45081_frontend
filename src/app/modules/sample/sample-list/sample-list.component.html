@@ -15,6 +15,31 @@
   <!-- end::Header -->
   <!-- begin::Body -->
   <div class="card-body py-3">
+
+    <ng-container *ngIf="grouping.getSelectedRowsCount()">
+      <div class="form">
+        <div class="row align-items-center form-group-actions margin-top-20 margin-bottom-20">
+          <div class="col-xl-12">
+            <div class="form-group form-group-inline">
+              <div class="form-label form-label-no-wrap">
+                <label class="font-bold font-danger"><span>Selected records count:
+                    <b>{{ grouping.getSelectedRowsCount() }}</b></span></label>
+              </div>
+              <div>
+                <button type="button" class="btn btn-danger font-weight-bolder font-size-sm mr-1"
+                  (click)="deleteSelected()">
+                  <i class="fa fa-trash"></i> Delete All
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <app-paginator class="d-flex justify-content-between align-items-center flex-wrap" [paginator]="paginator"
+      [isLoading]="isLoading" (paginate)="paginate($event)"></app-paginator>
+
     <!-- begin::Table container -->
     <div class="table-responsive">
       <!-- begin::Table -->
@@ -27,150 +52,76 @@
                 form-check form-check-sm form-check-custom form-check-solid
               ">
                 <input class="form-check-input" type="checkbox" value="1" data-kt-check="true"
-                  data-kt-check-target=".widget-9-check" />
+                  data-kt-check-target=".widget-9-check" (click)="grouping.selectAllRows()"
+                  [checked]="grouping.checkAreAllRowsSelected()" />
               </div>
             </th>
-            <th class="min-w-150px">Authors</th>
-            <th class="min-w-140px">Company</th>
-            <th class="min-w-120px">Progress</th>
-            <th class="min-w-100px text-end">Actions</th>
+            <th class="min-w-120px">ID</th>
+            <th class="min-w-120px">SAMPLE NAME</th>
+            <th class="min-w-120px">TYPE</th>
+            <th class="min-w-120px">SAMPLE STATUS</th>
+            <th class="min-w-120px">SIZE</th>
+            <th class="min-w-120px">ASSEMBLY</th>
+            <th class="min-w-120px">CREATED AT</th>
           </tr>
         </thead>
         <!-- end::Table head -->
         <!-- begin::Table body -->
-        <tbody>
+        <tbody *ngFor="let sample of samples">
           <tr>
             <td>
               <div class="
                 form-check form-check-sm form-check-custom form-check-solid
               ">
-                <input class="form-check-input widget-9-check" type="checkbox" value="1" />
+                <input class="form-check-input widget-9-check" type="checkbox" value="{{sample.id}}"
+                  (click)="grouping.selectRow(sample.id)" [checked]="grouping.isRowSelected(sample.id)" />
               </div>
+            </td>
+            <td>
+              <p class="text-gray-900 fw-bolder d-block fs-6" style="margin-top: revert;">
+                {{sample.id}}
+              </p>
             </td>
             <td>
               <div class="d-flex align-items-center">
-                <div class="symbol symbol-45px me-5">
-                  <img src="./assets/media/avatars/300-14.jpg" alt="" />
-                </div>
                 <div class="d-flex justify-content-start flex-column">
-                  <a href="#" class="text-gray-900 fw-bolder text-hover-primary fs-6">
-                    Ana Simmons
+                  <a routerLink="#" class="text-gray-900 fw-bolder text-hover-primary fs-6">
+                    {{sample.name}}
                   </a>
-                  <span class="text-muted fw-bold text-muted d-block fs-7">
-                    HTML, JS, ReactJS
-                  </span>
                 </div>
               </div>
             </td>
             <td>
-              <a href="#" class="text-gray-900 fw-bolder text-hover-primary d-block fs-6">
-                Intertico
-              </a>
-              <span class="text-muted fw-bold text-muted d-block fs-7">
-                Web, UI/UX Design
+              <span class="badge fs-6" [ngClass]="{
+                'badge-light-primary': sample.type === 'vcf',
+                'badge-light-info': sample.type === 'fastq'
+              }">
+                {{sample.type}}
               </span>
             </td>
-            <td class="text-end">
-              <div class="d-flex flex-column w-100 me-2">
-                <div class="d-flex flex-stack mb-2">
-                  <span class="text-muted me-2 fs-7 fw-bold">50%</span>
-                </div>
-                <div class="progress h-6px w-100">
-                  <div class="progress-bar bg-primary" role="progressbar" [style.width]="'50%'"></div>
-                </div>
-              </div>
-            </td>
             <td>
-              <div class="d-flex justify-content-end flex-shrink-0">
-                <a href="#" class="
-                  btn btn-icon btn-bg-light btn-active-color-primary btn-sm
-                  me-1
-                ">
-                  <span [inlineSVG]="
-                    './assets/media/icons/duotune/general/gen019.svg'
-                  " class="svg-icon svg-icon-3"></span>
-                </a>
-                <a href="#" class="
-                  btn btn-icon btn-bg-light btn-active-color-primary btn-sm
-                  me-1
-                ">
-                  <span [inlineSVG]="'./assets/media/icons/duotune/art/art005.svg'" class="svg-icon svg-icon-3"></span>
-                </a>
-                <a href="#" class="
-                  btn btn-icon btn-bg-light btn-active-color-primary btn-sm
-                ">
-                  <span [inlineSVG]="
-                    './assets/media/icons/duotune/general/gen027.svg'
-                  " class="svg-icon svg-icon-3"></span>
-                </a>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <div class="
-                form-check form-check-sm form-check-custom form-check-solid
-              ">
-                <input class="form-check-input widget-9-check" type="checkbox" value="1" />
-              </div>
-            </td>
-            <td>
-              <div class="d-flex align-items-center">
-                <div class="symbol symbol-45px me-5">
-                  <img src="./assets/media/avatars/300-2.jpg" alt="" />
-                </div>
-                <div class="d-flex justify-content-start flex-column">
-                  <a href="#" class="text-gray-900 fw-bolder text-hover-primary fs-6">
-                    Jessie Clarcson
-                  </a>
-                  <span class="text-muted fw-bold text-muted d-block fs-7">
-                    C#, ASP.NET, MS SQL
-                  </span>
-                </div>
-              </div>
-            </td>
-            <td>
-              <a href="#" class="text-gray-900 fw-bolder text-hover-primary d-block fs-6">
-                Agoda
-              </a>
-              <span class="text-muted fw-bold text-muted d-block fs-7">
-                Houses &amp; Hotels
+              <span class="badge fs-6" [ngClass]="{
+                'badge-light-success': sample.status === 'Completed',
+                'badge-light-warning': sample.status === 'Incomplete',
+                'badge-light-danger': sample.status === 'N/A'
+              }">
+                {{ sample.status }}
               </span>
             </td>
-            <td class="text-end">
-              <div class="d-flex flex-column w-100 me-2">
-                <div class="d-flex flex-stack mb-2">
-                  <span class="text-muted me-2 fs-7 fw-bold">70%</span>
-                </div>
-                <div class="progress h-6px w-100">
-                  <div class="progress-bar bg-danger" role="progressbar" [style.width]="'70%'"></div>
-                </div>
-              </div>
+            <td>
+              <p class="text-gray-900 fw-bolder d-block fs-6" style="margin-top: revert;">
+                {{ formatBytes(sample.size) }}
+              </p>
             </td>
             <td>
-              <div class="d-flex justify-content-end flex-shrink-0">
-                <a href="#" class="
-                  btn btn-icon btn-bg-light btn-active-color-primary btn-sm
-                  me-1
-                ">
-                  <span [inlineSVG]="
-                    './assets/media/icons/duotune/general/gen019.svg'
-                  " class="svg-icon svg-icon-3"></span>
-                </a>
-                <a href="#" class="
-                  btn btn-icon btn-bg-light btn-active-color-primary btn-sm
-                  me-1
-                ">
-                  <span [inlineSVG]="'./assets/media/icons/duotune/art/art005.svg'" class="svg-icon svg-icon-3"></span>
-                </a>
-                <a href="#" class="
-                  btn btn-icon btn-bg-light btn-active-color-primary btn-sm
-                ">
-                  <span [inlineSVG]="
-                    './assets/media/icons/duotune/general/gen027.svg'
-                  " class="svg-icon svg-icon-3"></span>
-                </a>
-              </div>
+              <p class="text-gray-900 fw-bolder d-block fs-6" style="margin-top: revert;">
+                {{sample.assembly}}
+              </p>
+            </td>
+            <td>
+              <p class="text-gray-900 fw-bolder d-block fs-6" style="margin-top: revert;">
+                {{sample.createdAt}}
+              </p>
             </td>
           </tr>
         </tbody>
@@ -179,6 +130,8 @@
       <!-- end::Table -->
     </div>
     <!-- end::Table container -->
+    <app-paginator class="d-flex justify-content-between align-items-center flex-wrap" [paginator]="paginator"
+      [isLoading]="isLoading" (paginate)="paginate($event)"></app-paginator>
   </div>
   <!-- begin::Body -->
 </div>

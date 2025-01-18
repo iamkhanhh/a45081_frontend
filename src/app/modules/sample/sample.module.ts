@@ -5,6 +5,7 @@ import { SampleRoutingModule } from './sample-routing.module';
 import { InlineSVGModule } from 'ng-inline-svg-2';
 import { SampleListComponent } from './sample-list/sample-list.component';
 import { SampleComponent } from './sample.component';
+import { SharedModule } from 'src/app/_metronic/shared/shared.module';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { SampleComponent } from './sample.component';
   imports: [
     CommonModule,
     InlineSVGModule,
-    SampleRoutingModule
+    SampleRoutingModule,
+    SharedModule
   ]
 })
 export class SampleModule { }
