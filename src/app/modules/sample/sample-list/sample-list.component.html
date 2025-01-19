@@ -5,17 +5,17 @@
       <span class="card-label fw-bolder fs-2 mb-1">My Samples</span>
     </h3>
     <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover"
-      title="Click to upload a sample">
-      <button 
-        class="btn btn-sm btn-light-primary"
-        data-kt-menu-trigger="click"
-        data-kt-menu-placement="bottom-end"
-        data-kt-menu-flip="top-end"
-        >
+      title="Click to upload a sample" ngbDropdown #myDrop="ngbDropdown">
+      <button type="button" class="btn btn-sm btn-light-primary" data-kt-menu-trigger="click"
+        data-kt-menu-placement="bottom-end" data-kt-menu-flip="top-end" id="dropdownMenu" ngbDropdownToggle>
         <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr075.svg'" class="svg-icon svg-icon-3"></span>
         New Sample
       </button>
-      <dropdown-create-sample (reloadSamples)="loadSamples()"></dropdown-create-sample>
+      <!-- <dropdown-create-sample (reloadSamples)="loadSamples()"></dropdown-create-sample> -->
+      <div class="dropdown-menu" ngbDropdownMenu  aria-labelledby="dropdownMenu">
+        <button class="btn btn-sm btn-light me-2 dropdown-item" (click)="openModalUploadVcf()">VCF</button>
+        <button class="btn btn-sm btn-light me-2 dropdown-item" (click)="openModalUploadFastq()">FASTQ</button>
+    </div>
     </div>
   </div>
   <!-- end::Header -->

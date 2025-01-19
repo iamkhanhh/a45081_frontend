@@ -4,6 +4,8 @@ import { PaginatorState, GroupingState } from 'src/app/_metronic/shared/models';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SampleService } from '../services/sample.service';
 import { DeleteSampleComponent } from '../components/delete-sample/delete-sample.component';
+import { CreateSampleVcfComponent } from '../components/create-sample-vcf/create-sample-vcf.component';
+import { CreateSampleFastqComponent } from '../components/create-sample-fastq/create-sample-fastq.component';
 
 export interface sample {
   id: number;
@@ -69,7 +71,12 @@ export class SampleListComponent implements OnInit {
   }
 
   deleteSelected() {
-
+    const modalRef = this.modalService.open(DeleteSampleComponent, { size: 'md' });
+    modalRef.componentInstance.ids = this.grouping.getSelectedRows();
+    modalRef.result.then(() =>
+      this.loadSamples(),
+      () => {}
+    );
   }
 
   /**
@@ -87,4 +94,20 @@ export class SampleListComponent implements OnInit {
 		const i = Math.floor(Math.log(bytes) / Math.log(k));
 		return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
 	}
+
+    openModalUploadVcf() {
+      const modalRef = this.modalService.open(CreateSampleVcfComponent, { size: 'xl' });
+      modalRef.result.then(() =>
+        this.loadSamples(),
+        () => {}
+      );
+    }
+  
+    openModalUploadFastq() {
+      const modalRef = this.modalService.open(CreateSampleFastqComponent, { size: 'xl' , scrollable: true});
+      modalRef.result.then(() =>
+        this.loadSamples(),
+        () => {}
+      );
+    }
 }

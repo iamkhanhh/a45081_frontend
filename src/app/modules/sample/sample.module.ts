@@ -10,6 +10,7 @@ import { DeleteSampleComponent } from './components/delete-sample/delete-sample.
 import { DropdownCreateSampleComponent } from './components/dropdown-create-sample/dropdown-create-sample.component';
 import { CreateSampleVcfComponent } from './components/create-sample-vcf/create-sample-vcf.component';
 import { CreateSampleFastqComponent } from './components/create-sample-fastq/create-sample-fastq.component';
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { CreateSampleFastqComponent } from './components/create-sample-fastq/cre
     CommonModule,
     InlineSVGModule,
     SampleRoutingModule,
-    SharedModule
+    SharedModule,
+    NgbDropdownModule
   ]
 })
 export class SampleModule { }
