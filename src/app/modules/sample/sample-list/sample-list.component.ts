@@ -66,7 +66,7 @@ export class SampleListComponent implements OnInit {
     modalRef.componentInstance.id = id;
     modalRef.result.then(() =>
       this.loadSamples(),
-      () => {}
+      () => { }
     );
   }
 
@@ -75,39 +75,39 @@ export class SampleListComponent implements OnInit {
     modalRef.componentInstance.ids = this.grouping.getSelectedRows();
     modalRef.result.then(() =>
       this.loadSamples(),
-      () => {}
+      () => { }
     );
   }
 
   /**
-	* format bytes
-	* @param bytes (File size in bytes)
-	* @param decimals (Decimals point)
-	*/
-	formatBytes(bytes: number, decimals = 2) {
-		if (bytes == 0) {
-			return "0 Bytes";
-		}
-		const k = 1024;
-		const dm = decimals <= 0 ? 0 : decimals;
-		const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
-		const i = Math.floor(Math.log(bytes) / Math.log(k));
-		return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
-	}
+  * format bytes
+  * @param bytes (File size in bytes)
+  * @param decimals (Decimals point)
+  */
+  formatBytes(bytes: number, decimals = 2) {
+    if (bytes == 0) {
+      return "0 Bytes";
+    }
+    const k = 1024;
+    const dm = decimals <= 0 ? 0 : decimals;
+    const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
+  }
 
-    openModalUploadVcf() {
-      const modalRef = this.modalService.open(CreateSampleVcfComponent, { size: 'xl' });
-      modalRef.result.then(() =>
-        this.loadSamples(),
-        () => {}
-      );
-    }
-  
-    openModalUploadFastq() {
-      const modalRef = this.modalService.open(CreateSampleFastqComponent, { size: 'xl' , scrollable: true});
-      modalRef.result.then(() =>
-        this.loadSamples(),
-        () => {}
-      );
-    }
+  openModalUploadVcf() {
+    const modalRef = this.modalService.open(CreateSampleVcfComponent, { size: 'xl' });
+    modalRef.result.then(() =>
+      this.loadSamples(),
+      () => { }
+    );
+  }
+
+  openModalUploadFastq() {
+    const modalRef = this.modalService.open(CreateSampleFastqComponent, { size: 'xl', scrollable: true });
+    modalRef.result.then(() =>
+      this.loadSamples(),
+      () => { }
+    );
+  }
 }

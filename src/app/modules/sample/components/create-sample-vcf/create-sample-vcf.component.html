@@ -1,2 +1,156 @@
-<p>create-sample-vcf works!</p>
-<button (click)="close()" >quit</button>
+<div class="modal-content">
+    <div class="modal-header">
+        <div class="modal-title h4" id="example-modal-sizes-title-lg">
+
+            <ng-container>Upload Vcf Samples</ng-container>
+        </div>
+    </div>
+
+    <div class="overlay overlay-block cursor-default modal-body" style="min-height: 400px;">
+
+        <ng-container>
+            <div class="dropzone" appDnd (fileDropped)="onFileDropped($event)">
+                <input type="file" #fileDropRef id="fileDropRef" multiple (change)="fileBrowseHandler($event)" />
+                <img src="./assets/media/dnd/ic-upload-file.svg" alt="">
+                <h3>Drag and drop file here</h3>
+                <h3>or</h3>
+                <label for="fileDropRef" style="cursor: pointer;">Browse for files</label>
+            </div>
+            <ngb-alert style="margin-top: 1rem;" [dismissible]="false" [type]="'dark'">
+                <span class="svg-icon svg-icon-primary svg-icon-2x mr-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                        height="24px" viewBox="0 0 24 24" version="1.1">
+                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <rect x="0" y="0" width="24" height="24" />
+                            <circle fill="#000000" opacity="0.3" cx="12" cy="12" r="10" />
+                            <rect fill="#000000" x="11" y="10" width="2" height="7" rx="1" />
+                            <rect fill="#000000" x="11" y="7" width="2" height="2" rx="1" />
+                        </g>
+                    </svg>
+                </span>
+                <strong>Allowed file format:</strong> vcf
+            </ngb-alert>
+            <div class="files-list" [formGroup]="formGroup">
+                <div style="border: dashed 1px #979797; margin-bottom: 1rem; padding:2rem 1rem;"
+                    *ngFor="let file of files; let i = index">
+                    <div class="single-file">
+                        <img src="./assets/media/dnd/ic-file.svg" width="45px" alt="file" style="margin-right: 10px;">
+                        <div class="info">
+                            <h4 class="name" style="word-break: break-word;">
+                                {{ file?.name }}
+                            </h4>
+                            <p class="size">
+                                {{ formatBytes(file?.size) }}
+                            </p>
+                            <app-progress [progress]="file?.progress"></app-progress>
+                        </div>
+                        <img src="assets/media/dnd/ic-delete-file.svg" class="delete" width="20px" alt="file"
+                            (click)="deleteFile(i)" *ngIf="file?.progress == 0">
+                        <img src="assets/media/dnd/rolling.svg" width="20px"
+                            style="align-self: flex-end; margin-left: 0.5rem;"
+                            *ngIf="file?.progress < 100 && file?.progress != 0">
+                        <!-- <img src="/assets/media/svg/icons/Navigation/Check.svg" width="20px"
+                            style="align-self: flex-end; margin-left: 0.5rem;"
+                            *ngIf="file?.progress == 100 && !file?.isError">
+                        <img src="/assets/media/svg/icons/Navigation/exclamation-mark.svg" width="20px"
+                            style="align-self: flex-end; margin-left: 0.5rem;" *ngIf="file?.isError"> -->
+                    </div>
+                    <div>
+                        <form action="#" class="form form-label-right" [formGroup]="getFormGroup(i)" autocomplete="off">
+                            <div class="form-group row">
+                                <div class="col-xl-6">
+                                    <label class="form-label">Sample Name*</label>
+                                    <input type="text" class="form-control form-control-lg form-control-solid"
+                                        name="sampleName" placeholder="Enter sample name" formControlName="sampleName"
+                                        [class.is-invalid]="isControlInvalid('sampleName', i)"
+                                        [class.is-valid]="isControlValid('sampleName', i)" />
+                                    <div class="invalid-feedback" *ngIf="controlHasError('required', 'sampleName', i)">
+                                        Sample Name is required!</div>
+                                </div>
+                                <div class="col-xl-6">
+                                    <label class="form-label">Patient First Name</label>
+                                    <input type="text" class="form-control form-control-lg form-control-solid"
+                                        name="firstName" placeholder="Enter patient first name"
+                                        formControlName="firstName"
+                                        [class.is-invalid]="isControlInvalid('firstName', i)"
+                                        [class.is-valid]="isControlValid('firstName', i)" />
+                                    <div class="invalid-feedback" *ngIf="controlHasError('required', 'firstName', i)">
+                                        First Name is required!</div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-xl-6">
+                                    <label class="form-label">Genome Build</label>
+                                    <div>
+                                        <input class="me-2" formControlName="genomeBuild" type="radio"
+                                            name="genomeBuild" [id]="'genomeBuildHg19_' + i" value="hg19" checked>
+                                        <label class="me-5" style="cursor: pointer;" [for]="'genomeBuildHg19_' + i">Hg19</label>
+                                        <input class="me-2" formControlName="genomeBuild" type="radio"
+                                            name="genomeBuild" [id]="'genomeBuildHg38_' + i" value="hg38">
+                                        <label style="cursor: pointer;" [for]="'genomeBuildHg38_' + i">Hg38</label>
+                                    </div>
+                                    <label class="form-label">Phenotype</label>
+                                    <textarea type="text" rows="3" class="form-control form-control-lg" name="phenotype"
+                                        formControlName="phenotype"></textarea>
+                                </div>
+                                <div class="col-xl-6">
+                                    <div>
+                                        <label class="form-label">Patient Last Name</label>
+                                        <input type="text" class="form-control form-control-lg form-control-solid"
+                                            name="lastName" placeholder="Enter patient last name"
+                                            formControlName="lastName"
+                                            [class.is-invalid]="isControlInvalid('lastName', i)"
+                                            [class.is-valid]="isControlValid('lastName', i)" />
+                                        <div class="invalid-feedback"
+                                            *ngIf="controlHasError('required', 'lastName', i)">Last Name is required!
+                                        </div>
+                                    </div>
+                                    <!-- <br> -->
+                                    <div>
+                                        <label class="form-label">DOB</label>
+                                        <div style="display: flex;">
+                                            <input type="text" name="dob"
+                                                class="form-control form-control-lg form-control-solid"
+                                                autocomplete="off" placeholder="yyyy/mm/dd" ngbDatepicker
+                                                #d="ngbDatepicker" formControlName="dob" readonly="true"
+                                                (click)="d.toggle()" [class.is-invalid]="isControlInvalid('dob', i)"
+                                                [class.is-valid]="isControlValid('dob', i)" />
+                                            <!-- <div class="input-group-append" (click)="d.toggle()">
+                                                <span class="input-group-text">
+                                                    <i class="text-dark-50 flaticon-calendar"></i>
+                                                </span>
+                                            </div> -->
+                                            <button class="btn btn-outline-secondary bi bi-calendar3 input-group-append" (click)="d.toggle()" type="button"></button>
+                                        </div>
+                                        <div class="invalid-feedback" *ngIf="controlHasError('required', 'dob', i)">Dob
+                                            is required!</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="row" style="margin-top: -10px; margin-bottom: 5px; color: #f64e60;;">
+                        <div *ngIf="file?.isError">
+                            <div class="col-xl-12">
+                                File upload failed!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </ng-container>
+
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-light btn-elevate mr-2" (click)="modal.dismiss()">Cancel</button>
+        <ng-container>
+            <button type="submit" class="btn btn-primary btn-elevate" (click)="save()"
+                [disabled]="checkSave()">Upload</button>
+        </ng-container>
+        <ng-container *ngIf="isLoading">
+            <span class="spinner spinner-primary ml-3 mr-5"></span>
+        </ng-container>
+    </div>
+</div>

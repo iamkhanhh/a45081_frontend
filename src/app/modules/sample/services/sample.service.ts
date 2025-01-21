@@ -19,4 +19,14 @@ export class SampleService {
   deleteFiles(ids: number[]): Observable<any>  {
     return this.http.delete(`${API_SAMPLE_URL}`, { withCredentials: true, body: {ids} });
   }
+
+  public generateRandomString(len: number) {
+		let result = '';
+		let characters = '0123456789';
+		let charactersLength = characters.length;
+		for (let i = 0; i < len; i++) {
+			result += characters.charAt(Math.floor(Math.random() * charactersLength));
+		}
+		return result;
+	}
 }

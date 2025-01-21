@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { SampleRoutingModule } from './sample-routing.module';
 import { InlineSVGModule } from 'ng-inline-svg-2';
 import { SampleListComponent } from './sample-list/sample-list.component';
@@ -10,7 +9,10 @@ import { DeleteSampleComponent } from './components/delete-sample/delete-sample.
 import { DropdownCreateSampleComponent } from './components/dropdown-create-sample/dropdown-create-sample.component';
 import { CreateSampleVcfComponent } from './components/create-sample-vcf/create-sample-vcf.component';
 import { CreateSampleFastqComponent } from './components/create-sample-fastq/create-sample-fastq.component';
-import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbAlertModule, NgbDatepickerModule, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { DndDirective } from './directives/dnd.directive';
+import { ProgressComponent } from './components/progress/progress.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -20,14 +22,19 @@ import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
     DeleteSampleComponent,
     DropdownCreateSampleComponent,
     CreateSampleVcfComponent,
-    CreateSampleFastqComponent
+    CreateSampleFastqComponent,
+    DndDirective,
+    ProgressComponent
   ],
   imports: [
     CommonModule,
     InlineSVGModule,
     SampleRoutingModule,
     SharedModule,
-    NgbDropdownModule
-  ]
+    NgbDropdownModule,
+    NgbDatepickerModule, 
+    NgbAlertModule,
+    ReactiveFormsModule
+  ],
 })
 export class SampleModule { }
