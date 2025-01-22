@@ -12,8 +12,8 @@ export class SampleService {
 
   constructor(private http: HttpClient) {}
 
-  loadSamples(page: number, pageSize: number): Observable<any> {
-    return this.http.get(`${API_SAMPLE_URL}?page=${page}&pageSize=${pageSize}`, { withCredentials: true });
+  loadSamples(page: number, pageSize: number, formValue: any): Observable<any> {
+    return this.http.post(`${API_SAMPLE_URL}/load-samples?page=${page}&pageSize=${pageSize}`, formValue ,{ withCredentials: true });
   }
 
   deleteFiles(ids: number[]): Observable<any>  {

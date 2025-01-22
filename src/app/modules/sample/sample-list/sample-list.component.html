@@ -13,14 +13,53 @@
       </button>
       <!-- <dropdown-create-sample (reloadSamples)="loadSamples()"></dropdown-create-sample> -->
       <div class="dropdown-menu" ngbDropdownMenu aria-labelledby="dropdownMenu">
-        <button class="btn btn-sm btn-light me-2 dropdown-item" (click)="openModalUploadVcf()">VCF</button>
-        <button class="btn btn-sm btn-light me-2 dropdown-item" (click)="openModalUploadFastq()">FASTQ</button>
+        <div class="px-8 py-2">
+          <div class="fs-5 text-gray-900 fw-bolder">Sample type Options</div>
+        </div>
+        
+        <div class="separator border-gray-200"></div>
+        
+        <div class="px-8 py-2">
+        
+          <div class="mb-10">
+            <div class="d-flex">
+              <button class="btn btn-sm btn-light btn-active-light-primary me-2 dropdown-item" (click)="openModalUploadVcf()">VCF</button>
+              <button class="btn btn-sm btn-light btn-active-light-primary me-2 dropdown-item" (click)="openModalUploadFastq()">FASTQ</button>
+            </div>
+          </div>
+        </div>
+      
+        <!-- <button class="btn btn-sm btn-light me-2 dropdown-item" (click)="openModalUploadVcf()">VCF</button>
+        <button class="btn btn-sm btn-light me-2 dropdown-item" (click)="openModalUploadFastq()">FASTQ</button> -->
       </div>
     </div>
   </div>
   <!-- end::Header -->
   <!-- begin::Body -->
   <div class="card-body py-3">
+
+    <div class="form form-label-right mb-5">
+      <div class="form-group row" [formGroup]="filterGroup">
+        <div class="col-lg-3" >
+          <input type="text" class="form-control" name="searchText" placeholder="Search" value=""
+            formControlName="searchTerm" /><small class="form-text text-muted"><b>Search</b> in sample name</small>
+        </div>
+        <div class="col-lg-3">
+          <select class="form-control" placeholder="Filter by Type" name="type" formControlName="type">
+            <option value='' [selected]="true">All</option>
+            <option value='fastq'>FastQ</option>
+            <option value='vcf'>VCF</option>
+          </select><small class="form-text text-muted"><b>Filter</b> by Type</small>
+        </div>
+        <div class="col-lg-3">
+          <select class="form-control" placeholder="Filter by Assembly" name="assembly" formControlName="assembly">
+            <option value='' [selected]="true">All</option>
+            <option value='hg19'>Hg19</option>
+            <option value='hg38'>Hg38</option>
+          </select><small class="form-text text-muted"><b>Filter</b> by Assembly</small>
+        </div>
+      </div>
+    </div>
 
     <ng-container *ngIf="grouping.getSelectedRowsCount()">
       <div class="form">

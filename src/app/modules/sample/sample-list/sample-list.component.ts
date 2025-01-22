@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { PaginatorState, GroupingState } from 'src/app/_metronic/shared/models';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -6,6 +6,8 @@ import { SampleService } from '../services/sample.service';
 import { DeleteSampleComponent } from '../components/delete-sample/delete-sample.component';
 import { CreateSampleVcfComponent } from '../components/create-sample-vcf/create-sample-vcf.component';
 import { CreateSampleFastqComponent } from '../components/create-sample-fastq/create-sample-fastq.component';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { debounceTime, distinctUntilChanged, Subscription } from 'rxjs';
 
 export interface sample {
   id: number;
@@ -21,21 +23,26 @@ export interface sample {
   templateUrl: './sample-list.component.html',
   styleUrl: './sample-list.component.scss'
 })
-export class SampleListComponent implements OnInit {
+export class SampleListComponent implements OnInit, OnDestroy {
   samples: sample[] = [];
   paginator: PaginatorState = new PaginatorState();
-  isLoading: boolean;
   grouping: GroupingState = new GroupingState();
+  isLoading: boolean;
+  filterGroup: FormGroup;
+  searchGroup: FormGroup;
+  private subscriptions: Subscription[] = [];
 
   constructor(
     private toastr: ToastrService,
     private readonly sampleService: SampleService,
     private cd: ChangeDetectorRef,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private fb: FormBuilder,
   ) { }
 
   ngOnInit() {
-    this.loadSamples()
+    this.filterForm();
+    this.loadSamples();
   }
 
   paginate(paginator: PaginatorState) {
@@ -45,7 +52,8 @@ export class SampleListComponent implements OnInit {
 
   loadSamples() {
     this.isLoading = true;
-    this.sampleService.loadSamples(this.paginator.page, this.paginator.pageSize).subscribe((response: any) => {
+    const formValue = this.filterGroup.value;
+    this.sampleService.loadSamples(this.paginator.page, this.paginator.pageSize, formValue).subscribe((response: any) => {
       this.isLoading = false;
       if (response.status === 'success') {
         this.samples = response.data;
@@ -109,5 +117,22 @@ export class SampleListComponent implements OnInit {
       this.loadSamples(),
       () => { }
     );
+  }
+
+  filterForm() {
+    this.filterGroup = this.fb.group({
+      type: [''],
+      searchTerm: [''],
+      assembly: ['']
+    });
+    this.subscriptions.push(
+      this.filterGroup.valueChanges.subscribe((values) => {
+        this.loadSamples()
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((sb) => sb.unsubscribe());
   }
 }
