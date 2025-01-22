@@ -29,7 +29,6 @@ export class SampleListComponent implements OnInit, OnDestroy {
   grouping: GroupingState = new GroupingState();
   isLoading: boolean;
   filterGroup: FormGroup;
-  searchGroup: FormGroup;
   private subscriptions: Subscription[] = [];
 
   constructor(

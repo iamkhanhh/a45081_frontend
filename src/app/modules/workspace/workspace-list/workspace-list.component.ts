@@ -1,10 +1,12 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { WorkspaceService } from '../services/workspace.service';
 import { PaginatorState, GroupingState } from 'src/app/_metronic/shared/models';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CreateWorkspaceComponent } from '../components/create-workspace/create-workspace.component';
 import { DeleteWorkspaceComponent } from '../components/delete-workspace/delete-workspace.component';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 export interface workspace {
   id: number;
@@ -19,26 +21,32 @@ export interface workspace {
   templateUrl: './workspace-list.component.html',
   styleUrl: './workspace-list.component.scss'
 })
-export class WorkspaceListComponent implements OnInit {
+export class WorkspaceListComponent implements OnInit, OnDestroy {
   workspaces: workspace[] = [];
   paginator: PaginatorState = new PaginatorState();
   isLoading: boolean;
   grouping: GroupingState = new GroupingState();
+  filterGroup: FormGroup;
+  private subscriptions: Subscription[] = [];
 
   constructor(
     private toastr: ToastrService,
     private workspaceService: WorkspaceService,
     private cd: ChangeDetectorRef,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private fb: FormBuilder,
   ) {}
 
   ngOnInit() {
+    this.filterForm();
     this.loadWorkspaces();
   }
 
   loadWorkspaces() {
     this.isLoading = true;
-    this.workspaceService.loadWorkspaces(this.paginator.page, this.paginator.pageSize).subscribe((response: any) => {
+    const formValue = this.filterGroup.value;
+    formValue.searchDate = formValue.searchDate != '' ? `${formValue.searchDate.year}-${formValue.searchDate.month}-${formValue.searchDate.day}`: '';
+    this.workspaceService.loadWorkspaces(this.paginator.page, this.paginator.pageSize, formValue).subscribe((response: any) => {
       this.isLoading = false;
       if (response.status === 'success') {
         this.workspaces = response.data;
@@ -83,5 +91,21 @@ export class WorkspaceListComponent implements OnInit {
 
   deleteSelected() {
 
+  }
+
+  filterForm() {
+    this.filterGroup = this.fb.group({
+      searchDate: [''],
+      searchTerm: ['']
+    });
+    this.subscriptions.push(
+      this.filterGroup.valueChanges.subscribe((values) => {
+        this.loadWorkspaces()
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((sb) => sb.unsubscribe());
   }
 }

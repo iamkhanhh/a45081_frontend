@@ -16,6 +16,26 @@
   <!-- begin::Body -->
   <div class="card-body py-3">
 
+    <div class="form form-label-right mb-5">
+      <div class="form-group row" [formGroup]="filterGroup">
+        <div class="col-lg-3" >
+          <input type="text" class="form-control" name="searchText" placeholder="Search" value=""
+            formControlName="searchTerm" /><small class="form-text text-muted"><b>Search</b> in name</small>
+        </div>
+        <div class="col-lg-3">
+          <div style="display: flex;">
+            <input type="text" name="searchDate"
+                class="form-control form-control-lg form-control-solid"
+                autocomplete="off" placeholder="yyyy/mm/dd" ngbDatepicker
+                #d="ngbDatepicker" formControlName="searchDate" readonly="true"
+                (click)="d.toggle()"/>
+            <button class="btn btn-outline-secondary bi bi-calendar3 input-group-append" (click)="d.toggle()" type="button"></button>
+        </div>
+          <small class="form-text text-muted"><b>Filter</b> by Created At</small>
+        </div>
+      </div>
+    </div>
+
     <ng-container *ngIf="grouping.getSelectedRowsCount()">
 			<div class="form">
 				<div class="row align-items-center form-group-actions margin-top-20 margin-bottom-20">

@@ -13,6 +13,7 @@ import { DeleteWorkspaceComponent } from './components/delete-workspace/delete-w
 import { ReactiveFormsModule } from '@angular/forms';
 import { CreateAnalysisComponent } from './components/create-analysis/create-analysis.component';
 import { DeleteAnalysisComponent } from './components/delete-analysis/delete-analysis.component';
+import { NgbDatepickerModule, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 @NgModule({
@@ -30,7 +31,9 @@ import { DeleteAnalysisComponent } from './components/delete-analysis/delete-ana
     InlineSVGModule,
     WorkspaceRoutingModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    NgbDropdownModule,
+    NgbDatepickerModule,
   ],
   providers: [WorkspaceService]
 })

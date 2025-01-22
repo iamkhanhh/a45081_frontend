@@ -13,8 +13,8 @@ const API_ANALYSIS_URL = `${environment.apiUrl}/analysis`;
 export class WorkspaceService {
   constructor(private http: HttpClient) {}
 
-  loadWorkspaces(page: number, pageSize: number): Observable<any> {
-		return this.http.get(`${API_WORKSPACE_URL}?page=${page}&pageSize=${pageSize}`, { withCredentials: true });
+  loadWorkspaces(page: number, pageSize: number, formValue: any): Observable<any> {
+		return this.http.post(`${API_WORKSPACE_URL}/load-workspaces?page=${page}&pageSize=${pageSize}`, formValue ,{ withCredentials: true });
 	}
 
   loadAnalyses(workspace_id: number, page: number, pageSize: number): Observable<any> {
