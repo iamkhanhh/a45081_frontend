@@ -14,6 +14,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CreateAnalysisComponent } from './components/create-analysis/create-analysis.component';
 import { DeleteAnalysisComponent } from './components/delete-analysis/delete-analysis.component';
 import { NgbDatepickerModule, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { DeleteMultipleWorkspacesComponent } from './components/delete-multiple-workspaces/delete-multiple-workspaces.component';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { NgbDatepickerModule, NgbDropdownModule } from '@ng-bootstrap/ng-bootstr
     CreateWorkspaceComponent,
     DeleteWorkspaceComponent,
     CreateAnalysisComponent,
-    DeleteAnalysisComponent
+    DeleteAnalysisComponent,
+    DeleteMultipleWorkspacesComponent
   ],
   imports: [
     CommonModule,

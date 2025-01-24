@@ -7,6 +7,7 @@ import { CreateWorkspaceComponent } from '../components/create-workspace/create-
 import { DeleteWorkspaceComponent } from '../components/delete-workspace/delete-workspace.component';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { DeleteMultipleWorkspacesComponent } from '../components/delete-multiple-workspaces/delete-multiple-workspaces.component';
 
 export interface workspace {
   id: number;
@@ -90,7 +91,12 @@ export class WorkspaceListComponent implements OnInit, OnDestroy {
   }
 
   deleteSelected() {
-
+    const modalRef = this.modalService.open(DeleteMultipleWorkspacesComponent, { size: 'md' });
+    modalRef.componentInstance.ids = this.grouping.getSelectedRows();
+    modalRef.result.then(() =>
+      this.loadWorkspaces(),
+      () => {}
+    );
   }
 
   filterForm() {

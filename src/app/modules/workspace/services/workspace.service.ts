@@ -8,20 +8,20 @@ const API_WORKSPACE_URL = `${environment.apiUrl}/workspaces`;
 const API_ANALYSIS_URL = `${environment.apiUrl}/analysis`;
 
 @Injectable({
-  providedIn: 'root',
+	providedIn: 'root',
 })
 export class WorkspaceService {
-  constructor(private http: HttpClient) {}
+	constructor(private http: HttpClient) { }
 
-  loadWorkspaces(page: number, pageSize: number, formValue: any): Observable<any> {
-		return this.http.post(`${API_WORKSPACE_URL}/load-workspaces?page=${page}&pageSize=${pageSize}`, formValue ,{ withCredentials: true });
+	loadWorkspaces(page: number, pageSize: number, formValue: any): Observable<any> {
+		return this.http.post(`${API_WORKSPACE_URL}/load-workspaces?page=${page}&pageSize=${pageSize}`, formValue, { withCredentials: true });
 	}
 
-  loadAnalyses(workspace_id: number, page: number, pageSize: number): Observable<any> {
+	loadAnalyses(workspace_id: number, page: number, pageSize: number): Observable<any> {
 		return this.http.get(`${environment.apiUrl}/analysis/getAnalysesByWorkspaceId/${workspace_id}?page=${page}&pageSize=${pageSize}`, { withCredentials: true });
 	}
 
-  getWorkspaceName(workspace_id: number): Observable<any> {
+	getWorkspaceName(workspace_id: number): Observable<any> {
 		return this.http.get(`${API_WORKSPACE_URL}/getWorkspaceName/${workspace_id}`, { withCredentials: true });
 	}
 
@@ -29,7 +29,7 @@ export class WorkspaceService {
 		return this.http.get(`${environment.apiUrl}/pipelines`, { withCredentials: true });
 	}
 
-  getWorkspaceById(workspace_id: number): Observable<any> {
+	getWorkspaceById(workspace_id: number): Observable<any> {
 		return this.http.get(`${API_WORKSPACE_URL}/${workspace_id}`, { withCredentials: true });
 	}
 
@@ -37,12 +37,16 @@ export class WorkspaceService {
 		return this.http.delete(`${API_WORKSPACE_URL}/${workspace_id}`, { withCredentials: true });
 	}
 
+	deleteMultipleWorkspaces(ids: number[]): Observable<any> {
+		return this.http.delete(`${API_WORKSPACE_URL}/delete-multiple-workspaces`, { withCredentials: true, body: {ids} });
+	}
+
 	create(data: any): Observable<any> {
-		return this.http.post(`${API_WORKSPACE_URL}`, data ,{ withCredentials: true });
+		return this.http.post(`${API_WORKSPACE_URL}`, data, { withCredentials: true });
 	}
 
 	edit(id: number, data: any): Observable<any> {
-		return this.http.put(`${API_WORKSPACE_URL}/${id}`, data ,{ withCredentials: true });
+		return this.http.put(`${API_WORKSPACE_URL}/${id}`, data, { withCredentials: true });
 	}
 
 	// analysis handler
