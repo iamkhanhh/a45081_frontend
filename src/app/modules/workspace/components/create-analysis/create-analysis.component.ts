@@ -83,7 +83,6 @@ export class CreateAnalysisComponent {
   create() {
     this.isLoading = true;
     const formData = this.formGroup.value;
-    console.log(this.formatSampleValue(formData.sampleList, 'file_size'))
     const data = {
       name: formData.analysisName,
       project_id: this.projectId,

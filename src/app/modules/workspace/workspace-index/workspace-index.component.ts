@@ -78,6 +78,7 @@ export class WorkspaceIndexComponent implements OnInit {
 
   newAnalysis() {
     const modalRef = this.modalService.open(CreateAnalysisComponent, { size: 'md' });
+    modalRef.componentInstance.projectId = this.workspace_id;
     modalRef.result.then(() =>
       this.loadAnalyses(),
       () => {}
