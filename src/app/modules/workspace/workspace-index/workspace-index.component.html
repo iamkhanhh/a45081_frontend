@@ -70,7 +70,6 @@
             <th class="min-w-120px">UPDATED</th>
             <th class="min-w-120px">ANALYZED</th>
             <th class="min-w-120px">VARIANTS</th>
-            <th class="min-w-120px">SIZE</th>
             <th class="min-w-120px">STATUS</th>
             <th class="min-w-50px text-end">ACTIONS</th>
           </tr>
@@ -132,14 +131,14 @@
               </p>
             </td>
             <td>
-              <p class="text-gray-900 fw-bolder d-block fs-6" style="margin-top: revert;">
-                {{analysis.size}}
-              </p>
-            </td>
-            <td>
-              <p class="text-gray-900 fw-bolder d-block fs-6" style="margin-top: revert;">
-                {{analysis.status}}
-              </p>
+              <span class="badge fs-6" style="margin-top: revert;" [ngClass]="{
+                'badge-light-success': analysis.status === 'Analyzed',
+                'badge-light-warning': analysis.status === 'VCF Analyzing' || analysis.status === 'FASTQ Analyzing',
+                'badge-light-primary': analysis.status === 'VCF Queuing' || analysis.status === 'FASTQ Queuing',
+                'badge-light-danger': analysis.status === 'Error'
+              }">
+                {{ analysis.status }}
+              </span>
             </td>
             <td>
               <div class="d-flex justify-content-end flex-shrink-0">
