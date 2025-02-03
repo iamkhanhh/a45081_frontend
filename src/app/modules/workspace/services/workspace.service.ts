@@ -17,8 +17,8 @@ export class WorkspaceService {
 		return this.http.post(`${API_WORKSPACE_URL}/load-workspaces?page=${page}&pageSize=${pageSize}`, formValue, { withCredentials: true });
 	}
 
-	loadAnalyses(workspace_id: number, page: number, pageSize: number): Observable<any> {
-		return this.http.get(`${environment.apiUrl}/analysis/getAnalysesByWorkspaceId/${workspace_id}?page=${page}&pageSize=${pageSize}`, { withCredentials: true });
+	loadAnalyses(workspace_id: number, page: number, pageSize: number, formValue: any): Observable<any> {
+		return this.http.post(`${environment.apiUrl}/analysis/getAnalysesByWorkspaceId/${workspace_id}?page=${page}&pageSize=${pageSize}`, formValue, { withCredentials: true });
 	}
 
 	getWorkspaceName(workspace_id: number): Observable<any> {

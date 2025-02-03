@@ -24,26 +24,58 @@
   <!-- begin::Body -->
   <div class="card-body py-3">
 
+    <div class="form form-label-right mb-5">
+      <div class="form-group row" [formGroup]="filterGroup">
+        <div class="col-lg-3">
+          <input type="text" class="form-control" name="analysisName" placeholder="Search" value=""
+            formControlName="analysisName" /><small class="form-text text-muted"><b>Search</b> in Analysis Name</small>
+        </div>
+        <div class="col-lg-3">
+          <input type="text" class="form-control" name="sampleName" placeholder="Search" value=""
+            formControlName="sampleName" /><small class="form-text text-muted"><b>Search</b> in Sample Name</small>
+        </div>
+        <div class="col-lg-3">
+          <select class="form-control" placeholder="Filter by Assembly" name="assembly" formControlName="assembly">
+            <option value='' [selected]="true">All</option>
+            <option value='hg19'>Hg19</option>
+            <option value='hg38'>Hg38</option>
+          </select><small class="form-text text-muted"><b>Filter</b> by Assembly</small>
+        </div>
+        <div class="col-lg-3">
+          <select class="form-control" placeholder="Filter by Status" name="status" formControlName="status">
+            <option value='' [selected]="true">All</option>
+            <option value='queuing'>Queuing</option>
+            <option value='analyzing'>Analyzing</option>
+            <option value='analyzed'>Analyzed</option>
+            <option value='error'>Error</option>
+          </select><small class="form-text text-muted"><b>Filter</b> by Status</small>
+        </div>
+      </div>
+    </div>
+
     <ng-container *ngIf="grouping.getSelectedRowsCount()">
-			<div class="form">
-				<div class="row align-items-center form-group-actions margin-top-20 margin-bottom-20">
-					<div class="col-xl-12">
-						<div class="form-group form-group-inline">
-							<div class="form-label form-label-no-wrap">
-								<label class="font-bold font-danger"><span>Selected records count:
-										<b>{{ grouping.getSelectedRowsCount() }}</b></span></label>
-							</div>
-							<div>
-								<button type="button" class="btn btn-danger font-weight-bolder font-size-sm mr-1"
-									(click)="deleteSelected()">
-									<i class="fa fa-trash"></i> Delete All
-								</button>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</ng-container>
+      <div class="form">
+        <div class="row align-items-center form-group-actions margin-top-20 margin-bottom-20">
+          <div class="col-xl-12">
+            <div class="form-group form-group-inline">
+              <div class="form-label form-label-no-wrap">
+                <label class="font-bold font-danger"><span>Selected records count:
+                    <b>{{ grouping.getSelectedRowsCount() }}</b></span></label>
+              </div>
+              <div>
+                <button type="button" class="btn btn-danger font-weight-bolder font-size-sm mr-1"
+                  (click)="deleteSelected()">
+                  <i class="fa fa-trash"></i> Delete All
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <app-paginator class="d-flex justify-content-between align-items-center flex-wrap" [paginator]="paginator"
+      [isLoading]="isLoading" (paginate)="paginate($event)"></app-paginator>
 
     <!-- begin::Table container -->
     <div class="table-responsive">
@@ -57,10 +89,8 @@
                 form-check form-check-sm form-check-custom form-check-solid
               ">
                 <input class="form-check-input" type="checkbox" value="1" data-kt-check="true"
-                  data-kt-check-target=".widget-9-check" 
-                  (click)="grouping.selectAllRows()"
-								  [checked]="grouping.checkAreAllRowsSelected()"
-                />
+                  data-kt-check-target=".widget-9-check" (click)="grouping.selectAllRows()"
+                  [checked]="grouping.checkAreAllRowsSelected()" />
               </div>
             </th>
             <th class="min-w-50px">ID</th>
@@ -82,13 +112,8 @@
               <div class="
                 form-check form-check-sm form-check-custom form-check-solid
               ">
-                <input 
-                  class="form-check-input widget-9-check" 
-                  type="checkbox" 
-                  value="{{analysis.id}}" 
-                  (click)="grouping.selectRow(analysis.id)"
-									[checked]="grouping.isRowSelected(analysis.id)"
-                />
+                <input class="form-check-input widget-9-check" type="checkbox" value="{{analysis.id}}"
+                  (click)="grouping.selectRow(analysis.id)" [checked]="grouping.isRowSelected(analysis.id)" />
               </div>
             </td>
             <td>
@@ -99,9 +124,10 @@
             <td>
               <div class="d-flex align-items-center">
                 <div class="d-flex justify-content-start flex-column">
-                  <a routerLink="/workspaces/index/{{analysis.id}}" class="text-gray-900 fw-bolder text-hover-primary fs-6">
+                  <p 
+                    class="text-gray-900 fw-bolder text-hover-primary fs-6">
                     {{analysis.name}}
-                  </a>
+                  </p>
                 </div>
               </div>
             </td>
@@ -142,10 +168,10 @@
             </td>
             <td>
               <div class="d-flex justify-content-end flex-shrink-0">
-                <a href="#" class="
-                  btn btn-icon btn-bg-light btn-active-color-primary btn-sm
-                  me-1
-                ">
+                <a href="#" *ngIf="analysis.status === 'Analyzed'" class="
+                btn btn-icon btn-bg-light btn-active-color-primary btn-sm
+                me-1
+              ">
                   <span [inlineSVG]="'./assets/media/icons/duotune/art/art005.svg'" class="svg-icon svg-icon-3"></span>
                 </a>
                 <button (click)="delete(analysis.id)" class="
@@ -165,7 +191,7 @@
     </div>
     <!-- end::Table container -->
     <app-paginator class="d-flex justify-content-between align-items-center flex-wrap" [paginator]="paginator"
-    [isLoading]="isLoading" (paginate)="paginate($event)"></app-paginator>
+      [isLoading]="isLoading" (paginate)="paginate($event)"></app-paginator>
   </div>
   <!-- begin::Body -->
 </div>
