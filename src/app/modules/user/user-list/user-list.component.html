@@ -150,19 +150,19 @@
                     './assets/media/icons/duotune/general/gen019.svg'
                   " class="svg-icon svg-icon-3"></span>
                 </a> -->
-                <a href="#" class="
+                <button (click)="edit(user.id)" class="
                   btn btn-icon btn-bg-light btn-active-color-primary btn-sm
                   me-1
                 ">
                   <span [inlineSVG]="'./assets/media/icons/duotune/art/art005.svg'" class="svg-icon svg-icon-3"></span>
-                </a>
-                <a href="#" class="
+                </button>
+                <button (click)="delete(user.id)" class="
                   btn btn-icon btn-bg-light btn-active-color-primary btn-sm
                 ">
                   <span [inlineSVG]="
                     './assets/media/icons/duotune/general/gen027.svg'
                   " class="svg-icon svg-icon-3"></span>
-                </a>
+                </button>
               </div>
             </td>
           </tr>

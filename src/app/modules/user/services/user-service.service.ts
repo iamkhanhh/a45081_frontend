@@ -14,4 +14,12 @@ export class UserService {
   loadUsers(page: number, pageSize: number, formValue: any): Observable<any> {
     return this.http.post(`${API_USER_URL}/load-users?page=${page}&pageSize=${pageSize}`, formValue ,{ withCredentials: true });
   }
+
+  deleteUser(id: number): Observable<any> {
+    return this.http.delete(`${API_USER_URL}/${id}`,{ withCredentials: true });
+  }
+
+  deleteMultipleUsers(ids: number[]): Observable<any> {
+    return this.http.delete(`${API_USER_URL}`,{ withCredentials: true, body: {ids}  });
+  }
 }

@@ -8,12 +8,18 @@ import { InlineSVGModule } from 'ng-inline-svg-2';
 import { SharedModule } from 'src/app/_metronic/shared/shared.module';
 import { NgbAlertModule, NgbDatepickerModule, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CreateUserComponent } from './components/create-user/create-user.component';
+import { DeleteUserComponent } from './components/delete-user/delete-user.component';
+import { DeleteMultipleUserComponent } from './components/delete-multiple-user/delete-multiple-user.component';
 
 
 @NgModule({
   declarations: [
     UserComponent,
-    UserListComponent
+    UserListComponent,
+    CreateUserComponent,
+    DeleteUserComponent,
+    DeleteMultipleUserComponent
   ],
   imports: [
     CommonModule,

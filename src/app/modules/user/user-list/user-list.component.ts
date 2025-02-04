@@ -5,6 +5,9 @@ import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { GroupingState, PaginatorState } from 'src/app/_metronic/shared/models';
 import { UserService } from '../services/user-service.service';
+import { CreateUserComponent } from '../components/create-user/create-user.component';
+import { DeleteUserComponent } from '../components/delete-user/delete-user.component';
+import { DeleteMultipleUserComponent } from '../components/delete-multiple-user/delete-multiple-user.component';
 
 export interface user {
   id: number;
@@ -64,28 +67,35 @@ export class UserListComponent implements OnInit {
     this.loadUsers();
   }
 
+  newUser() {
+    this.edit(undefined);
+  }
+
+  edit(id: number | undefined) {
+    const modalRef = this.modalService.open(CreateUserComponent, { size: 'md' });
+    modalRef.componentInstance.id = id;
+    modalRef.result.then(() =>
+      this.loadUsers(),
+      () => { }
+    );
+  }
+
   delete(id: number) {
-    // const modalRef = this.modalService.open(DeleteSampleComponent, { size: 'md' });
-    // modalRef.componentInstance.id = id;
-    // modalRef.result.then(() =>
-    //   this.loadUsers(),
-    //   () => { }
-    // );
+    const modalRef = this.modalService.open(DeleteUserComponent, { size: 'md' });
+    modalRef.componentInstance.id = id;
+    modalRef.result.then(() =>
+      this.loadUsers(),
+      () => { }
+    );
   }
 
   deleteSelected() {
-    // const modalRef = this.modalService.open(DeleteSampleComponent, { size: 'md' });
-    // modalRef.componentInstance.ids = this.grouping.getSelectedRows();
-    // modalRef.result.then(() =>
-    //   this.loadUsers(),
-    //   () => { }
-    // );
-  }
-
-  newUser() {
-    this.toastr.success('Created an user successfully!', 'Success!', {
-      timeOut: 3000,
-    });
+    const modalRef = this.modalService.open(DeleteMultipleUserComponent, { size: 'md' });
+    modalRef.componentInstance.ids = this.grouping.getSelectedRows();
+    modalRef.result.then(() =>
+      this.loadUsers(),
+      () => { }
+    );
   }
 
   filterForm() {
