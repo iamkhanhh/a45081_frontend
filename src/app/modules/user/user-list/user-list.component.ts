@@ -72,7 +72,7 @@ export class UserListComponent implements OnInit {
   }
 
   edit(id: number | undefined) {
-    const modalRef = this.modalService.open(CreateUserComponent, { size: 'md' });
+    const modalRef = this.modalService.open(CreateUserComponent, { size: 'xl' });
     modalRef.componentInstance.id = id;
     modalRef.result.then(() =>
       this.loadUsers(),

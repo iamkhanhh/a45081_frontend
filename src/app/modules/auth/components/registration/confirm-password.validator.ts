@@ -13,4 +13,21 @@ export class ConfirmPasswordValidator {
       control.get('cPassword')?.setErrors({ ConfirmPassword: true });
     }
   }
+
+  static MatchPasswordEdit(control: AbstractControl) {
+    let password = control.get('password')?.value || '';
+    let confirmPassword = control.get('cPassword')?.value || '';
+
+    if (password === confirmPassword) {
+      control.get('cPassword')?.setErrors(null);
+      return null;
+    }
+
+    if (confirmPassword !== '' || (confirmPassword === '' && password !== '')) {
+      control.get('cPassword')?.setErrors({ ConfirmPassword: true });
+    } else {
+      control.get('cPassword')?.setErrors(null);
+    }
+  }
+
 }

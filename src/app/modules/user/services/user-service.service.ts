@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { UserModel } from '../../auth';
 
 const API_USER_URL = `${environment.apiUrl}/users`;
 
@@ -21,5 +22,17 @@ export class UserService {
 
   deleteMultipleUsers(ids: number[]): Observable<any> {
     return this.http.delete(`${API_USER_URL}`,{ withCredentials: true, body: {ids}  });
+  }
+
+  getUserById(id: number): Observable<any> {
+    return this.http.get(`${API_USER_URL}/${id}`,{ withCredentials: true });
+  }
+
+  updateUser(user: UserModel): Observable<any> {
+    return this.http.patch(`${API_USER_URL}`, user,{ withCredentials: true });
+  }
+
+  createUser(user: UserModel): Observable<any> {
+    return this.http.post(`${API_USER_URL}`, user,{ withCredentials: true });
   }
 }
