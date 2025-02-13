@@ -1,1 +1,278 @@
-<p>create-sample-fastq works!</p>
+<div class="modal-content">
+    <div class="modal-header">
+        <div class="modal-title h4" id="example-modal-sizes-title-lg">
+
+            <ng-container>Upload Fastq Samples</ng-container>
+        </div>
+    </div>
+
+    <div class="overlay overlay-block cursor-default modal-body" style="min-height: 400px;" cdkScrollable>
+
+        <ng-container>
+            <div class="dropzone" appDnd (fileDropped)="onFileDropped($event)">
+                <input type="file" #fileDropRef id="fileDropRef" multiple (change)="fileBrowseHandler($event)" />
+                <img src="./assets/media/dnd/ic-upload-file.svg" alt="">
+                <h3>Drag and drop file here</h3>
+                <h3>or</h3>
+                <label for="fileDropRef" style="cursor: pointer;">Browse for files</label>
+            </div>
+            <ngb-alert style="margin-top: 1rem;" [dismissible]="false" [type]="'dark'">
+                <span class="svg-icon svg-icon-primary svg-icon-2x mr-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                        height="24px" viewBox="0 0 24 24" version="1.1">
+                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <rect x="0" y="0" width="24" height="24" />
+                            <circle fill="#000000" opacity="0.3" cx="12" cy="12" r="10" />
+                            <rect fill="#000000" x="11" y="10" width="2" height="7" rx="1" />
+                            <rect fill="#000000" x="11" y="7" width="2" height="2" rx="1" />
+                        </g>
+                    </svg>
+                </span>
+                <strong>Allowed file format:</strong> fastq
+                <strong>Supported file types:</strong> &#60;Sample_name&#62;_R1_&#60;xxxx&#62; .fq, .fastq (tar, .gz),
+                &#60;Sample_name&#62;_R2_&#60;xxxx&#62; .fq, .fastq (tar, .gz)
+            </ngb-alert>
+            <div class="row" cdkDropListGroup>
+                <div class="col-sm-12 col-xl-4">
+                    <div class="files-list drag-box" id="files" cdkDropList [cdkDropListData]="files"
+                        (cdkDropListDropped)="drop($event)">
+                        <div class="file-box"
+                            style="border: dashed 1px #979797; margin-bottom: 1rem; padding:0 1rem; cursor: move;"
+                            *ngFor="let file of files; let i = index" [cdkDragData]="file" cdkDrag
+                            [cdkDragDisabled]="file?.isProcessing || file?.isError">
+                            <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
+                            <div>
+                                <div class="single-file">
+                                    <img src="assets/media/dnd/ic-file.svg" width="45px" alt="file"
+                                        style="margin-right: 10px;">
+                                    <div class="info">
+                                        <h4 class="name" style="word-break: break-word;">
+                                            {{ file?.name }}
+                                        </h4>
+                                        <p class="size">
+                                            {{ formatBytes(file?.size) }}
+                                        </p>
+                                        <app-progress [progress]="file?.progress"></app-progress>
+                                    </div>
+                                    <img src="assets/media/dnd/ic-delete-file.svg" class="delete" width="20px"
+                                        alt="file" (click)="deleteFile(i)" *ngIf="file?.progress == 0">
+                                    <img src="assets/media/dnd/rolling.svg" width="20px"
+                                        style="align-self: flex-end; margin-left: 0.5rem;"
+                                        *ngIf="file?.progress < 100 && file?.progress != 0">
+                                    <i class="ki-outline ki-tablet-ok fs-1" width="20px"
+                                        style="align-self: flex-end; margin-left: 0.5rem;"
+                                        *ngIf="file?.progress == 100 && !file?.isError"></i>
+                                    <i class="ki-outline ki-tablet-delete fs-1" width="20px"
+                                        style="align-self: flex-end; margin-left: 0.5rem;" *ngIf="file?.isError"></i>
+                                    <!-- <img src="/assets/media/svg/icons/Navigation/Check.svg" width="20px"
+                                        style="align-self: flex-end; margin-left: 0.5rem;"
+                                        *ngIf="file?.progress == 100 && !file?.isError"> -->
+                                    <!-- <img src="/assets/media/svg/icons/Navigation/exclamation-mark.svg" width="20px"
+                                        style="align-self: flex-end; margin-left: 0.5rem;" *ngIf="file?.isError"> -->
+                                </div>
+                                <div class="row" style="margin-top: -10px; margin-bottom: 5px; color: #f64e60;;">
+                                    <div *ngIf="file?.isError">
+                                        <div class="col-xl-12">
+                                            File upload failed!
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-sm-12 col-xl-8">
+                    <div style="margin-top: 1.5rem;">
+                        <ng-container>
+                            <div class="formFadeOut"
+                                style="border: dashed 1px #979797; margin-bottom: 1rem; padding:0 1rem;"
+                                *ngFor="let fileForm of formGroupLists; let i = index">
+                                <div style="padding: 0.5rem;">
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                        <h3>Sample</h3>
+                                        <div>
+                                            <a (click)="deleteForm(i)"
+                                                class="btn btn-xs btn-icon btn-light btn-hover-primary"><i
+                                                    class="ki ki-close icon-xs text-muted"></i></a>
+                                        </div>
+                                    </div><br>
+                                    <form action="#" class="form form-label-right" [formGroup]="fileForm"
+                                        autocomplete="off">
+                                        <div class="form-group row">
+                                            <div class="col-xl-6">
+                                                <label class="form-label">Sample Name*</label>
+                                                <input type="text"
+                                                    class="form-control form-control-lg form-control-solid"
+                                                    name="sampleName" placeholder="Enter sample name"
+                                                    formControlName="sampleName"
+                                                    [class.is-invalid]="isControlInvalid('sampleName', i)"
+                                                    [class.is-valid]="isControlValid('sampleName', i)" />
+                                                <div class="invalid-feedback"
+                                                    *ngIf="controlHasError('required', 'sampleName', i)">Sample Name is
+                                                    required!</div>
+                                            </div>
+                                            <div class="col-xl-6">
+                                                <label class="form-label">Patient First Name</label>
+                                                <input type="text"
+                                                    class="form-control form-control-lg form-control-solid"
+                                                    name="firstName" placeholder="Enter patient first name"
+                                                    formControlName="firstName"
+                                                    [class.is-invalid]="isControlInvalid('firstName', i)"
+                                                    [class.is-valid]="isControlValid('firstName', i)" />
+                                                <div class="invalid-feedback"
+                                                    *ngIf="controlHasError('required', 'firstName', i)">First Name is
+                                                    required!</div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-xl-6">
+                                                <label class="form-label">Phenotype</label>
+                                                <textarea type="text" rows="5" class="form-control form-control-lg"
+                                                    name="phenotype" formControlName="phenotype"></textarea>
+                                            </div>
+                                            <div class="col-xl-6">
+                                                <div>
+                                                    <label class="form-label">Patient Last Name</label>
+                                                    <input type="text"
+                                                        class="form-control form-control-lg form-control-solid"
+                                                        name="lastName" placeholder="Enter patient last name"
+                                                        formControlName="lastName"
+                                                        [class.is-invalid]="isControlInvalid('lastName', i)"
+                                                        [class.is-valid]="isControlValid('lastName', i)" />
+                                                    <div class="invalid-feedback"
+                                                        *ngIf="controlHasError('required', 'lastName', i)">Last Name is
+                                                        required!</div>
+                                                </div>
+                                                <br>
+                                                <div>
+                                                    <label class="form-label">DOB</label>
+                                                    <div style="display: flex;">
+                                                        <input type="text" name="dob"
+                                                            class="form-control form-control-lg form-control-solid"
+                                                            autocomplete="off" placeholder="yyyy/mm/dd" ngbDatepicker
+                                                            #d="ngbDatepicker" formControlName="dob" readonly="true"
+                                                            (click)="d.toggle()"
+                                                            [class.is-invalid]="isControlInvalid('dob', i)"
+                                                            [class.is-valid]="isControlValid('dob', i)" />
+                                                        <button
+                                                            class="btn btn-outline-secondary bi bi-calendar3 input-group-append"
+                                                            (click)="d.toggle()" type="button"></button>
+                                                    </div>
+                                                    <div class="invalid-feedback"
+                                                        *ngIf="controlHasError('required', 'dob', i)">Dob is required!
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mb-2">
+                                            <div class="col-xl-6">
+                                                <label class="form-label">Forward</label>
+                                                <div style="padding: 0.5rem" id="forward{{i}}"
+                                                    class="example-list drag-box" cdkDropList
+                                                    [cdkDropListData]="dragForm[i]['forward']"
+                                                    (cdkDropListDropped)="drop($event)"
+                                                    [cdkDropListEnterPredicate]="fowardPredicate">
+                                                    <div *ngFor="let file of dragForm[i]['forward']"
+                                                        [cdkDragData]="file" cdkDrag>
+                                                        <div class="example-custom-placeholder" *cdkDragPlaceholder>
+                                                        </div>
+                                                        <div style="cursor: move; margin-bottom: 5px;">
+                                                            <img src="assets/media/dnd/ic-file.svg" width="25px"
+                                                                alt="file" style="margin-right: 10px;">
+                                                            <span>{{file?.name}} - {{formatBytes(file?.size)}} -
+                                                                {{file?.progress}}%</span>
+                                                        </div>
+                                                        <div *cdkDragPreview class="file-box"
+                                                            style="border: dashed 1px #979797; margin-bottom: 1rem; padding:0 1rem;">
+                                                            <div class="single-file" style="min-width: 100px;">
+                                                                <img src="assets/media/dnd/ic-file.svg" width="45px"
+                                                                    alt="file" style="margin-right: 10px;">
+                                                                <div class="info">
+                                                                    <h4 class="name" style="word-break: break-word;">
+                                                                        {{ file?.name }}
+                                                                    </h4>
+                                                                    <p class="size">
+                                                                        {{ formatBytes(file?.size) }}
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-6">
+                                                <label class="form-label">Reverse</label>
+                                                <div style="padding: 0.5rem" id="reverse{{i}}"
+                                                    class="example-list drag-box" cdkDropList
+                                                    [cdkDropListData]="dragForm[i]['reverse']"
+                                                    (cdkDropListDropped)="drop($event)"
+                                                    [cdkDropListEnterPredicate]="reversePredicate">
+                                                    <div *ngFor="let file of dragForm[i]['reverse']; let i = index"
+                                                        cdkDrag [cdkDragData]="file">
+                                                        <div class="example-custom-placeholder" *cdkDragPlaceholder>
+                                                        </div>
+                                                        <div style="cursor: move; margin-bottom: 5px;">
+                                                            <img src="assets/media/dnd/ic-file.svg" width="25px"
+                                                                alt="file" style="margin-right: 10px;">
+                                                            <span>{{file?.name}} - {{formatBytes(file?.size)}} -
+                                                                {{file?.progress}}%</span>
+                                                        </div>
+                                                        <div *cdkDragPreview class="file-box"
+                                                            style="border: dashed 1px #979797; margin-bottom: 1rem; padding:0 1rem;">
+                                                            <div class="single-file" style="min-width: 100px;">
+                                                                <img src="assets/media/dnd/ic-file.svg" width="45px"
+                                                                    alt="file" style="margin-right: 10px;">
+                                                                <div class="info">
+                                                                    <h4 class="name" style="word-break: break-word;">
+                                                                        {{ file?.name }}
+                                                                    </h4>
+                                                                    <p class="size">
+                                                                        {{ formatBytes(file?.size) }}
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <div class="row" style="margin-top: -10px; margin-bottom: 5px; color: #f64e60;;">
+                                        <div *ngIf="dragForm[i]['message']">
+                                            <div class="col-xl-12">
+                                                {{dragForm[i]['message']}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+                    <div style="text-align: end;">
+                        <button class="btn btn-primary btn-elevate" (click)="addForm()">Add Sample</button>
+                        <!-- <a (click)="addForm()"
+                            style="font-size: 15px; color: unset; text-decoration: underline; cursor: pointer;"
+                            class="text-hover-primary">
+                            Add Sample...
+                        </a> -->
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-light btn-elevate mr-2" (click)="modal.dismiss()">Cancel</button>
+        <ng-container>
+            <button type="submit" class="btn btn-primary btn-elevate" (click)="save()"
+                [disabled]="checkSave()">Upload</button>
+        </ng-container>
+        <ng-container *ngIf="isLoading">
+            <span class="spinner spinner-primary ml-3 mr-5"></span>
+        </ng-container>
+    </div>
+</div>

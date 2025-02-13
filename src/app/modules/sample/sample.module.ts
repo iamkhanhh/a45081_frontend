@@ -13,6 +13,7 @@ import { NgbAlertModule, NgbDatepickerModule, NgbDropdownModule } from '@ng-boot
 import { DndDirective } from './directives/dnd.directive';
 import { ProgressComponent } from './components/progress/progress.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import {DragDropModule} from '@angular/cdk/drag-drop';
 
 
 @NgModule({
@@ -34,7 +35,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     NgbDropdownModule,
     NgbDatepickerModule, 
     NgbAlertModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    DragDropModule
   ],
 })
 export class SampleModule { }
