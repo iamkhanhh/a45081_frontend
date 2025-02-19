@@ -4,6 +4,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { delay, of, Subject, Subscription, tap } from 'rxjs';
 import { SampleService } from '../../services/sample.service';
 import { ToastrService } from 'ngx-toastr';
+import { HttpEventType } from '@angular/common/http';
 
 @Component({
   selector: 'app-create-sample-vcf',
@@ -52,7 +53,7 @@ export class CreateSampleVcfComponent {
       this.prepareFilesList(Array.from(input.files));
     }
   }
-  
+
 
   /**
    * Delete file from files list
@@ -109,62 +110,95 @@ export class CreateSampleVcfComponent {
   }
 
   save() {
-		this.isLoading = true;
+    this.isLoading = true;
     this.toastr.success('Start uploading files...');
-		this.files.forEach((e, index) => {
+    this.files.forEach((e, index) => {
       const time = Date.now();
-			let uploadName = `${time}_${this.sampleService.generateRandomString(6)}_${e.name.substring(0, e.name.indexOf('.vcf')).replace(/ /g, '_')}`;
-			e.uploadName = e.name;
+      let uploadName = `${time}_${this.sampleService.generateRandomString(6)}_${e.name.substring(0, e.name.indexOf('.vcf')).replace(/ /g, '_')}`;
+      e.uploadName = e.name;
       e.progress = 0;
-		})
-		let totalFile = 0;
-		const uploadMultifile = setInterval(() => {
-			if(totalFile++ < this.files.length) {
-				this.uploadFile(this.files[totalFile-1], totalFile-1);
-			}
-			if(this.files.every((el) => el.progress == 100)) {
-				this.isLoading = false;
-				clearInterval(uploadMultifile);
-				const delayObservable = of(true).pipe(
-					delay(1000),
-					tap((res) => {
-						this.toastr.success('Uploaded files successfully!');
-						this.modal.close();
-					})
-				);
-				const sb = delayObservable.subscribe()
-				this.subscriptions.push(sb);
-			}
-			else if(this.files.every((el) => el.isError == true)) {
-				this.isLoading = false;
-				clearInterval(uploadMultifile);
-				const delayObservable = of(false).pipe(
-					delay(1000),
-					tap((res) => {
-						this.toastr.error('Uploaded files unsuccessfully!');
-					})
-				);
-				const sb = delayObservable.subscribe()
-				this.subscriptions.push(sb);
-			}
-		}, 2000);
-	}
+    })
+    let totalFile = 0;
+    const uploadMultifile = setInterval(() => {
+      if (totalFile++ < this.files.length) {
+        this.uploadFile(this.files[totalFile - 1], totalFile - 1);
+      }
+      if (this.files.every((el) => el.isError == true)) {
+        this.isLoading = false;
+        clearInterval(uploadMultifile);
+        const delayObservable = of(false).pipe(
+          delay(1000),
+          tap((res) => {
+            this.toastr.error('Uploaded files unsuccessfully!');
+          })
+        );
+        const sb = delayObservable.subscribe()
+        this.subscriptions.push(sb);
+      } else if (this.files.every((el) => {el.progress == 100})) {
+        this.isLoading = false;
+        clearInterval(uploadMultifile);
+        const delayObservable = of(true).pipe(
+          delay(1000),
+          tap((res) => {
+            this.toastr.success('Uploaded files successfully!');
+            this.modal.close();
+          })
+        );
+        const sb = delayObservable.subscribe()
+        this.subscriptions.push(sb);
+      }
+    }, 2000);
+  }
 
   uploadFile(file: File, index: number) {
-    setTimeout(() => {
-      if (index === this.files.length) {
-        return;
-      } else {
-        const progressInterval = setInterval(() => {
-          if (this.files[index].progress === 100) {
-            clearInterval(progressInterval);
-            this.uploadFile(this.files[index + 1], index + 1);
-          } else {
-            this.files[index].progress += 5;
-          }
-        }, 200);
-      }
-    }, 1000);
+    this.files[index].progress += 1;
+    if (file.size < 10000000) {
+      const sb = this.sampleService.generateSinglePresignedUrl(file.name).subscribe((res: any) => {
+        if (res.status == 'success') {
+          let presignedUrl = res.data.url;
+
+          const uploadSub = this.sampleService.uploadSingleFile(presignedUrl, file).subscribe((event: any) => {
+            if (event.type === HttpEventType.UploadProgress) {
+              this.files[index].progress = Math.round((event.loaded / event.total!) * 100);
+            } else if (event.type === HttpEventType.Response) {
+              this.files[index].progress = 100;
+              this.toastr.success('File uploaded successfully');
+            }
+          }, (error) => {
+            this.files[index].isError = true;
+            this.toastr.error('Upload failed');
+            console.error(error);
+
+          })
+          this.subscriptions.push(uploadSub);
+        } else {
+          this.toastr.error(res.message);
+        }
+      })
+      this.subscriptions.push(sb);
+    } else {
+      // get total size of the file
+      let totalSize = file.size;
+      // set chunk size to 10MB
+      let chunkSize = 10000000;
+      // calculate number of chunks
+      let numChunks = Math.ceil(totalSize / chunkSize);
+    }
+    // setTimeout(() => {
+    //   if (index >= this.files.length) {
+    //     return;
+    //   } else {
+    //     const progressInterval = setInterval(() => {
+    //       if (this.files[index].progress === 100) {
+    //         clearInterval(progressInterval);
+    //         this.uploadFile(this.files[index + 1], index + 1);
+    //       } else {
+    //         // this.sampleService.getUploadPresignedUrl()
+    //         this.files[index].progress += 5;
+    //       }
+    //     }, 200);
+    //   }
+    // }, 1000);
   }
 
   checkSave() {
@@ -175,7 +209,7 @@ export class CreateSampleVcfComponent {
 
   getFormGroup(index: number): FormGroup {
     return this.FilesArray.controls[index] as FormGroup;
-  }  
+  }
 
   isControlValid(controlName: string, index: any): boolean {
     const control = this.FilesArray.controls[index]?.get(controlName);

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -18,6 +18,25 @@ export class SampleService {
 
   deleteFiles(ids: number[]): Observable<any>  {
     return this.http.delete(`${API_SAMPLE_URL}`, { withCredentials: true, body: {ids} });
+  }
+
+  generateSinglePresignedUrl(fileName: string): Observable<any>  {
+    let formValue = {
+      fileName
+    }
+    return this.http.post(`${API_SAMPLE_URL}/generateSinglePresignedUrl`, formValue, { withCredentials: true });
+  }
+
+  uploadSingleFile(url: string, file: File): Observable<any>  {
+    const formData: FormData = new FormData();
+    formData.append('file', file);
+    return this.http.put(url, formData, {
+      headers: new HttpHeaders({
+        'Content-Type': 'text/vcard'
+      }),
+      reportProgress: true,
+      observe: 'events'
+    });
   }
 
   public generateRandomString(len: number) {
