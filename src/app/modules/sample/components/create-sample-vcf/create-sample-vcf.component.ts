@@ -6,6 +6,11 @@ import { SampleService } from '../../services/sample.service';
 import { ToastrService } from 'ngx-toastr';
 import { HttpEventType } from '@angular/common/http';
 
+interface DATE_FORMAT {
+  year: number,
+  month: number,
+  day: number
+}
 @Component({
   selector: 'app-create-sample-vcf',
   templateUrl: './create-sample-vcf.component.html',
@@ -134,7 +139,7 @@ export class CreateSampleVcfComponent {
         );
         const sb = delayObservable.subscribe()
         this.subscriptions.push(sb);
-      } else if (this.files.every((el) => {el.progress == 100})) {
+      } else if (this.files.every((el) => el.progress == 100)) {
         this.isLoading = false;
         clearInterval(uploadMultifile);
         const delayObservable = of(true).pipe(
@@ -156,13 +161,35 @@ export class CreateSampleVcfComponent {
       const sb = this.sampleService.generateSinglePresignedUrl(file.name).subscribe((res: any) => {
         if (res.status == 'success') {
           let presignedUrl = res.data.url;
+          let uploadName = res.data.uploadName;
 
           const uploadSub = this.sampleService.uploadSingleFile(presignedUrl, file).subscribe((event: any) => {
             if (event.type === HttpEventType.UploadProgress) {
               this.files[index].progress = Math.round((event.loaded / event.total!) * 100);
             } else if (event.type === HttpEventType.Response) {
-              this.files[index].progress = 100;
-              this.toastr.success('File uploaded successfully');
+              const fromValue = this.FilesArray.controls[index].value;
+              let data = {
+                original_name: file.name,
+                sample_name: fromValue.sampleName,
+                file_size: file.size,
+                file_type: this.files[index].fileType,
+                upload_name: uploadName,
+                first_name: fromValue.firstName,
+                last_name: fromValue.lastName,
+                dob: this.formatDate(fromValue.dob),
+                phenotype: fromValue.phenotype,
+                assembly: fromValue.genomeBuild
+              }
+              const sb2 = this.sampleService.postFileInfor(data).subscribe((response: any) => {
+                if (response.status == "success") {
+                  this.files[index].progress = 100;
+                }
+                else {
+                  this.files[index].isError = true;
+                  this.files[index].progress = 100;
+                }
+              })
+              this.subscriptions.push(sb2);
             }
           }, (error) => {
             this.files[index].isError = true;
@@ -177,34 +204,103 @@ export class CreateSampleVcfComponent {
       })
       this.subscriptions.push(sb);
     } else {
-      // get total size of the file
-      let totalSize = file.size;
-      // set chunk size to 10MB
-      let chunkSize = 10000000;
-      // calculate number of chunks
-      let numChunks = Math.ceil(totalSize / chunkSize);
+      const totalSize = file.size;
+      const chunkSize = 10 * 1024 * 1024; // 10MB
+      const numChunks = Math.ceil(totalSize / chunkSize);
+
+      this.sampleService.startMultipartUpload(file.name).subscribe((res: any) => {
+        if (res.status === 'success') {
+          const uploadId = res.data.UploadId;
+          const uploadName = res.data.uploadName;
+          console.log('UploadId:', uploadId);
+          console.log('uploadName:', uploadName);
+
+          this.sampleService.generatePresignedUrls(uploadName, uploadId, numChunks).subscribe((res: any) => {
+            if (res.status === 'success') {
+              const urls = res.data.urls;
+              console.log('urls', urls);
+              let parts: any[] = [];
+              let uploadedChunks = 0;
+
+              const uploadChunk = (i: number) => {
+                if (i >= numChunks) {
+                  this.sampleService.completeMultipartUpload(uploadName, uploadId, parts).subscribe((completeRes: any) => {
+                    if (completeRes.status === 'success') {
+                      const fromValue = this.FilesArray.controls[index].value;
+                      let data = {
+                        original_name: file.name,
+                        sample_name: fromValue.sampleName,
+                        file_size: file.size,
+                        file_type: this.files[index].fileType,
+                        upload_name: uploadName,
+                        first_name: fromValue.firstName,
+                        last_name: fromValue.lastName,
+                        dob: this.formatDate(fromValue.dob),
+                        phenotype: fromValue.phenotype,
+                        assembly: fromValue.genomeBuild
+                      }
+                      const sb2 = this.sampleService.postFileInfor(data).subscribe((response: any) => {
+                        if (response.status == "success") {
+                          this.files[index].progress = 100;
+                        }
+                        else {
+                          this.files[index].isError = true;
+                          this.files[index].progress = 100;
+                        }
+                      })
+                      this.subscriptions.push(sb2);
+                    } else {
+                      this.files[index].isError = true;
+                      this.toastr.error('Upload failed');
+                      console.error(completeRes.message);
+                    }
+                  });
+                  return;
+                }
+
+                const start = i * chunkSize;
+                const end = Math.min(start + chunkSize, totalSize);
+                const chunk = file.slice(start, end);
+                const presignedUrl = urls[i];
+
+                this.sampleService.uploadSingleFile(presignedUrl, chunk).subscribe((event: any) => {
+                  if (event.type === HttpEventType.UploadProgress) {
+                    this.files[index].progress = Math.round(((uploadedChunks + event.loaded / event.total!) / numChunks) * 100);
+                  } else if (event.type === HttpEventType.Response) {
+                    parts.push({
+                      etag: event.headers.get('etag'),
+                      PartNumber: i + 1,
+                    });
+                    uploadedChunks++;
+                    uploadChunk(i + 1);
+                  }
+                }, (error) => {
+                  this.files[index].isError = true;
+                  this.toastr.error('Upload failed');
+                  console.error(error);
+                });
+              };
+
+              uploadChunk(0);
+            } else {
+              this.toastr.error(res.message);
+            }
+          });
+        } else {
+          this.toastr.error(res.message);
+        }
+      });
     }
-    // setTimeout(() => {
-    //   if (index >= this.files.length) {
-    //     return;
-    //   } else {
-    //     const progressInterval = setInterval(() => {
-    //       if (this.files[index].progress === 100) {
-    //         clearInterval(progressInterval);
-    //         this.uploadFile(this.files[index + 1], index + 1);
-    //       } else {
-    //         // this.sampleService.getUploadPresignedUrl()
-    //         this.files[index].progress += 5;
-    //       }
-    //     }, 200);
-    //   }
-    // }, 1000);
   }
 
   checkSave() {
     if (this.files.length == 0 || this.isLoading == true || this.formGroup.invalid) {
       return true
     }
+  }
+
+  formatDate(date: DATE_FORMAT): Date {
+    return new Date(date.year, date.month - 1, date.day);
   }
 
   getFormGroup(index: number): FormGroup {

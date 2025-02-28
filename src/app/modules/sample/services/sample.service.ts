@@ -27,16 +27,46 @@ export class SampleService {
     return this.http.post(`${API_SAMPLE_URL}/generateSinglePresignedUrl`, formValue, { withCredentials: true });
   }
 
-  uploadSingleFile(url: string, file: File): Observable<any>  {
+  startMultipartUpload(fileName: string): Observable<any>  {
+    let formValue = {
+      fileName
+    }
+    return this.http.post(`${API_SAMPLE_URL}/startMultipartUpload`, formValue, { withCredentials: true });
+  }
+
+  generatePresignedUrls(fileName: string, uploadId: string, partNumbers: number): Observable<any>  {
+    let formValue = {
+      fileName,
+      uploadId,
+      partNumbers
+    }
+    return this.http.post(`${API_SAMPLE_URL}/generatePresignedUrls`, formValue, { withCredentials: true });
+  }
+
+  completeMultipartUpload(fileName: string, uploadId: string, parts: any): Observable<any>  {
+    let formValue = {
+      fileName,
+      uploadId,
+      parts
+    }
+    return this.http.post(`${API_SAMPLE_URL}/completeMultipartUpload`, formValue, { withCredentials: true });
+  }
+
+  uploadSingleFile(url: string, file: Blob): Observable<any>  {
     const formData: FormData = new FormData();
     formData.append('file', file);
-    return this.http.put(url, formData, {
+    return this.http.put(url, file, {
       headers: new HttpHeaders({
-        'Content-Type': 'text/vcard'
+        // 'Content-Type': 'text/vcard',
+        'Access-Control-Expose-Headers': 'etag'
       }),
       reportProgress: true,
       observe: 'events'
     });
+  }
+
+  postFileInfor(data: any) {
+    return this.http.post(`${API_SAMPLE_URL}/postFileInfor`, data ,{ withCredentials: true });
   }
 
   public generateRandomString(len: number) {
