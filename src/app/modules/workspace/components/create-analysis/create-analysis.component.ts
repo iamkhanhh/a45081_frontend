@@ -93,20 +93,17 @@ export class CreateAnalysisComponent {
       description: formData.description,
       assembly: formData.genomeBuild
     }
-    const sb = this.workspaceService.createAnalysis(data).pipe(
-      delay(1000),
-      tap((res: any) => {
-        if (res.status == 'success') {
-          this.isLoading = false;
-          this.toastr.success(res.message);
-          this.modal.close();
-        }
-        else {
-          this.isLoading = false;
-          this.toastr.error(res.message);
-        }
-      })
-    ).subscribe();
+    const sb = this.workspaceService.createAnalysis(data).subscribe((res: any) => {
+      if (res.status == 'success') {
+        this.isLoading = false;
+        this.toastr.success(res.message);
+        this.modal.close();
+      }
+      else {
+        this.isLoading = false;
+        this.toastr.error(res.message);
+      }
+    });
 
     this.subscriptions.push(sb);
   }
