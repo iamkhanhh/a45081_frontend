@@ -86,6 +86,7 @@ export class WorkspaceIndexComponent implements OnInit, OnDestroy {
   newAnalysis() {
     const modalRef = this.modalService.open(CreateAnalysisComponent, { size: 'md' });
     modalRef.componentInstance.projectId = this.workspace_id;
+    modalRef.componentInstance.id = null;
     modalRef.result.then(() =>
       this.loadAnalyses(),
       () => {}
@@ -94,6 +95,16 @@ export class WorkspaceIndexComponent implements OnInit, OnDestroy {
 
   deleteSelected() {
 
+  }
+
+  edit(id: number) {
+    const modalRef = this.modalService.open(CreateAnalysisComponent, { size: 'md' });
+    modalRef.componentInstance.projectId = this.workspace_id;
+    modalRef.componentInstance.id = id;
+    modalRef.result.then(() =>
+      this.loadAnalyses(),
+      () => {}
+    );
   }
 
   delete(id: number) {

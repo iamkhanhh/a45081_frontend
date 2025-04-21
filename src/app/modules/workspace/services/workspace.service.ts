@@ -25,6 +25,14 @@ export class WorkspaceService {
 		return this.http.get(`${API_WORKSPACE_URL}/getWorkspaceName/${workspace_id}`, { withCredentials: true });
 	}
 
+	loadAnalysisForEdit(analysis_id: number): Observable<any> {
+		return this.http.get(`${API_ANALYSIS_URL}/${analysis_id}`, { withCredentials: true });
+	}
+
+	saveEdit(analysis_id: number, data: any): Observable<any> {
+		return this.http.put(`${API_ANALYSIS_URL}/${analysis_id}`, data, { withCredentials: true });
+	}
+
 	getListPipeline(): Observable<any> {
 		return this.http.get(`${environment.apiUrl}/pipelines`, { withCredentials: true });
 	}
@@ -46,7 +54,7 @@ export class WorkspaceService {
 	}
 
 	edit(id: number, data: any): Observable<any> {
-		return this.http.put(`${API_WORKSPACE_URL}/${id}`, data, { withCredentials: true });
+		return this.http.put(`${API_ANALYSIS_URL}/${id}`, data, { withCredentials: true });
 	}
 
 	// analysis handler
