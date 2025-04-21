@@ -2,23 +2,8 @@
   <!-- begin::Header -->
   <div class="card-header border-0 pt-5">
     <h3 class="card-title align-items-start flex-column">
-      <span class="card-label fw-bolder fs-2 mb-1">{{ workspace_name }}</span>
+      <span class="card-label fw-bolder fs-2 mb-1">My Analyses</span>
     </h3>
-    <div class="d-flex" style="gap: 8px;">
-      <div class="card-toolbar">
-        <a routerLink="/workspaces/list" class="btn btn-sm btn-light-primary">
-          <i class="fa fa-arrow-left"></i>
-          Back
-        </a>
-      </div>
-      <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover"
-        title="Click to create a new workspace">
-        <button (click)="newAnalysis()" class="btn btn-sm btn-light-primary">
-          <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr075.svg'" class="svg-icon svg-icon-3"></span>
-          New Analysis
-        </button>
-      </div>
-    </div>
   </div>
   <!-- end::Header -->
   <!-- begin::Body -->
@@ -29,10 +14,6 @@
         <div class="col-lg-3">
           <input type="text" class="form-control" name="analysisName" placeholder="Search" value=""
             formControlName="analysisName" /><small class="form-text text-muted"><b>Search</b> in Analysis Name</small>
-        </div>
-        <div class="col-lg-3">
-          <input type="text" class="form-control" name="sampleName" placeholder="Search" value=""
-            formControlName="sampleName" /><small class="form-text text-muted"><b>Search</b> in Sample Name</small>
         </div>
         <div class="col-lg-3">
           <select class="form-control" placeholder="Filter by Assembly" name="assembly" formControlName="assembly">
@@ -95,7 +76,7 @@
             </th>
             <th class="min-w-50px">ID</th>
             <th class="min-w-120px">ANALYSIS NAME</th>
-            <th class="min-w-120px">PIPELINE</th>
+            <th class="min-w-120px">WORKSPACE</th>
             <th class="min-w-120px">ASSEMBLY</th>
             <th class="min-w-120px">ANALYZED</th>
             <th class="min-w-120px">VARIANTS</th>
@@ -132,7 +113,7 @@
             </td>
             <td>
               <p class="text-gray-900 fw-bolder d-block fs-6" style="margin-top: revert;">
-                {{analysis.pipeline_name}}
+                {{analysis.workspaceName}}
               </p>
             </td>
             <td>
@@ -173,11 +154,6 @@
               ">
                   <i class="ki-outline ki-entrance-right fs-1"></i>
                 </a>
-                <button (click)="delete(analysis.id)" *ngIf="analysis.status === 'Analyzed'" class="
-                btn btn-icon btn-bg-light btn-active-color-primary btn-sm
-              ">
-                  <span [inlineSVG]="'./assets/media/icons/duotune/art/art005.svg'" class="svg-icon svg-icon-3"></span>
-                </button>
                 <button (click)="delete(analysis.id)" class="
                   btn btn-icon btn-bg-light btn-active-color-primary btn-sm
                 ">
