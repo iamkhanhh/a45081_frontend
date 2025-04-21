@@ -12,12 +12,12 @@ import { Subscription } from 'rxjs';
 export interface analysis {
   id: number;
   name: string;
-  number: number;
   pipeline_name: string;
   createdAt: string;
   updatedAt: string;
   analyzed: string;
   variants: number;
+  assembly: string;
   size: string;
   status: string
 }
@@ -29,7 +29,7 @@ export interface analysis {
 export class WorkspaceIndexComponent implements OnInit, OnDestroy {
   workspace_name: string = '';
   workspace_id: number;
-  analyses: analysis[] = []
+  analyses: analysis[] = [];
   paginator: PaginatorState = new PaginatorState();
   grouping: GroupingState = new GroupingState();
   isLoading: boolean;
