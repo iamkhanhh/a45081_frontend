@@ -37,6 +37,7 @@ import { DeleteMultipleWorkspacesComponent } from './components/delete-multiple-
     NgbDropdownModule,
     NgbDatepickerModule,
   ],
-  providers: [WorkspaceService]
+  providers: [WorkspaceService],
+  exports: [DeleteAnalysisComponent]
 })
 export class WorkspaceModule { }

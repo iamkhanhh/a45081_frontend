@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { GroupingState, PaginatorState } from 'src/app/_metronic/shared/models';
 import { AnalysisService } from '../services/analysis.service';
+import { DeleteAnalysisComponent } from '../../workspace/components/delete-analysis/delete-analysis.component';
 
 export interface analysis {
   id: number;
@@ -72,12 +73,12 @@ export class AnalysisListComponent implements OnInit, OnDestroy {
   }
 
   delete(id: number) {
-    // const modalRef = this.modalService.open(DeleteAnalysisComponent, { size: 'md' });
-    // modalRef.componentInstance.id = id;
-    // modalRef.result.then(() =>
-    //   this.loadAnalyses(),
-    //   () => { }
-    // );
+    const modalRef = this.modalService.open(DeleteAnalysisComponent, { size: 'md' });
+    modalRef.componentInstance.id = id;
+    modalRef.result.then(() =>
+      this.loadAnalyses(),
+      () => { }
+    );
   }
 
   filterForm() {

@@ -15,4 +15,8 @@ export class AnalysisService {
   loadAnalyses(page: number, pageSize: number, formValue: any): Observable<any> {
     return this.http.post(`${environment.apiUrl}/analysis/load-analyses?page=${page}&pageSize=${pageSize}`, formValue, { withCredentials: true });
   }
+
+  getAnalysis(id: number): Observable<any> {
+    return this.http.get(`${API_ANALYSIS_URL}/${id}`, { withCredentials: true });
+  }
 }

@@ -6,14 +6,19 @@ import { SharedModule } from 'src/app/_metronic/shared/shared.module';
 import { NgbAlertModule, NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AnalysisRoutingModule } from './analysis-routing.module';
-import { DeleteAnalysisComponent } from './components/delete-analysis/delete-analysis.component';
 import { AnalysisListComponent } from './analysis-list/analysis-list.component';
+import { WorkspaceModule } from '../workspace/workspace.module';
+import { AnalysisIndexComponent } from './analysis-index/analysis-index.component';
+import { VariantListComponent } from './components/variant-list/variant-list.component';
+import { AnalysisReportVariantComponent } from './components/analysis-report-variant/analysis-report-variant.component';
 
 @NgModule({
   declarations: [
     AnalysisComponent,
-    DeleteAnalysisComponent,
-    AnalysisListComponent
+    AnalysisIndexComponent,
+    AnalysisListComponent,
+    VariantListComponent,
+    AnalysisReportVariantComponent
   ],
   imports: [
     CommonModule,
@@ -23,6 +28,7 @@ import { AnalysisListComponent } from './analysis-list/analysis-list.component';
     NgbDatepickerModule, 
     NgbAlertModule,
     ReactiveFormsModule,
+    WorkspaceModule
   ]
 })
 export class AnalysisModule { }
