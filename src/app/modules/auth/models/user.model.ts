@@ -8,12 +8,13 @@ export class UserModel extends AuthModel {
   password: string;
   // fullname: string;
   email: string;
-  // pic: string;
+  pic?: string;
   role: string;
   // occupation: string;
   // companyName: string;
   phone_number: string;
-  // address?: AddressModel;
+  address: string;
+  institution: string;
   // socialNetworks?: SocialNetworksModel;
   // personal information
   first_name: string;
@@ -58,13 +59,14 @@ export class UserModel extends AuthModel {
     this.password = user.password || '';
     // this.fullname = user.fullname || '';
     this.email = user.email || '';
-    // this.pic = './assets/media/avatars/blank.png';
+    this.pic = './assets/media/avatars/blank.png';
     this.role = user.role || 'User';
     // this.occupation = user.occupation || '';
     // this.companyName = user.companyName || '';
     this.phone_number = user.phone_number || '';
     this.status = user.status || 'active';
-    // this.address = user.address;
+    this.address = user.address || '';
+    this.institution = user.institution || '';
     // this.socialNetworks = user.socialNetworks;
   }
 }

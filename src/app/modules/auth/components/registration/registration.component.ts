@@ -59,7 +59,15 @@ export class RegistrationComponent implements OnInit, OnDestroy {
         ],
         phone_number: [
           '',
-          Validators.compose([]),
+        ],
+        address: [
+          '',
+        ],
+        institution: [
+          '',
+          Validators.compose([
+            Validators.required,
+          ]),
         ],
         email: [
           '',

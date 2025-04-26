@@ -16,7 +16,9 @@ const EMPTY_USER: UserModel = {
   status: 'Pending',
   phone_number: '',
   setUser(user: any) { },
-  setAuth(auth: any) { }
+  setAuth(auth: any) { },
+  institution: '',
+  address: ''
 }
 @Component({
   selector: 'app-create-user',
