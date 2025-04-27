@@ -1,21 +1,47 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { getCSSVariableValue } from 'src/app/_metronic/kt/_utils';
+import { AccountService } from '../../../services/account.service';
+import { ToastrService } from 'ngx-toastr';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-analysis-workspace-chart',
   templateUrl: './analysis-workspace-chart.component.html',
   styleUrl: './analysis-workspace-chart.component.scss'
 })
-export class AnalysisWorkspaceChartComponent implements OnInit {
+export class AnalysisWorkspaceChartComponent implements OnInit, OnDestroy {
   chartOptions: any = {};
-  constructor() {}
+  private subscriptions: Subscription[] = [];
+  
+  constructor(
+    private accountService: AccountService,
+    private cd: ChangeDetectorRef,
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit(): void {
-    this.chartOptions = getChartOptions(350);
+    this.loadData();
+  }
+
+  loadData() {
+    const sbAccount = this.accountService.getAccountStatistics().subscribe((res) => {
+      if (res.status === 'success') {
+        // this.data = res.data;
+        this.chartOptions = getChartOptions(350, res.data.lastSixMonths, res.data.analysesStatistics, res.data.workspacesStatistics);
+        this.cd.detectChanges();
+      } else {
+        this.toastr.error(res.message);
+      }
+    });
+    this.subscriptions.push(sbAccount);
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((sb) => sb.unsubscribe());
   }
 }
 
-function getChartOptions(height: number) {
+function getChartOptions(height: number, lastSixMonths: string[], analysesStatistics: number[], workspacesStatistics: number[]) {
   const labelColor = getCSSVariableValue('--bs-gray-500')
   const borderColor = getCSSVariableValue('--bs-gray-200')
   const baseColor = getCSSVariableValue('--bs-primary')
@@ -25,11 +51,11 @@ function getChartOptions(height: number) {
     series: [
       {
         name: 'Analyses',
-        data: [44, 55, 57, 56, 61, 58],
+        data: analysesStatistics,
       },
       {
         name: 'Workspaces',
-        data: [76, 85, 101, -12, 87, 105],
+        data: workspacesStatistics,
       },
     ],
     chart: {
@@ -59,7 +85,7 @@ function getChartOptions(height: number) {
       colors: ['transparent'],
     },
     xaxis: {
-      categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+      categories: lastSixMonths,
       axisBorder: {
         show: false,
       },

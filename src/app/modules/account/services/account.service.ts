@@ -22,4 +22,8 @@ export class AccountService {
   update(data: any): Observable<any> {
     return this.http.put(`${API_ACCOUNT_URL}`, data, { withCredentials: true });
   }
+
+  getAccountStatistics(): Observable<any> {
+    return this.http.get(`${API_ACCOUNT_URL}/account-statistics`, { withCredentials: true });
+  }
 }
