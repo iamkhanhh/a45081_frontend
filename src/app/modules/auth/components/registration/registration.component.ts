@@ -84,6 +84,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
             Validators.required,
             Validators.minLength(3),
             Validators.maxLength(100),
+            Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{5,}$/)
           ]),
         ],
         cPassword: [

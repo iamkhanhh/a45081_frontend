@@ -5,7 +5,7 @@
     </div>
 
     <a
-      routerLink="/crafted/account/settings"
+      routerLink="/account/settings"
       class="btn btn-primary align-self-center"
     >
       Edit Profile
@@ -17,119 +17,65 @@
       <label class="col-lg-4 fw-bold text-muted">Full Name</label>
 
       <div class="col-lg-8">
-        <span class="fw-bolder fs-6 text-gray-900">Max Smith</span>
-      </div>
-    </div>
-
-    <div class="row mb-7">
-      <label class="col-lg-4 fw-bold text-muted">Company</label>
-
-      <div class="col-lg-8 fv-row">
-        <span class="fw-bold fs-6">Keenthemes</span>
+        <span class="fw-bolder fs-6 text-gray-900">{{ data.first_name }} {{ data.last_name }}</span>
       </div>
     </div>
 
     <div class="row mb-7">
       <label class="col-lg-4 fw-bold text-muted">
-        Contact Phone
+        Email
         <i
           class="fas fa-exclamation-circle ms-1 fs-7"
           data-bs-toggle="tooltip"
-          title="Phone number must be active"
+          title="Email must be active"
         ></i>
       </label>
 
       <div class="col-lg-8 d-flex align-items-center">
-        <span class="fw-bolder fs-6 me-2">044 3276 454 935</span>
+        <span class="fw-bolder fs-6 me-2">{{ data.email }}</span>
 
         <span class="badge badge-success">Verified</span>
       </div>
     </div>
 
     <div class="row mb-7">
-      <label class="col-lg-4 fw-bold text-muted">Company Site</label>
+      <label class="col-lg-4 fw-bold text-muted">Institution</label>
 
-      <div class="col-lg-8">
-        <a href="#" class="fw-bold fs-6 text-gray-900 text-hover-primary">
-          keenthemes.com
-        </a>
+      <div class="col-lg-8 fv-row">
+        <span class="fw-bold fs-6">{{ data.institution }}</span>
       </div>
     </div>
 
     <div class="row mb-7">
       <label class="col-lg-4 fw-bold text-muted">
-        Country
-        <i
-          class="fas fa-exclamation-circle ms-1 fs-7"
-          data-bs-toggle="tooltip"
-          title="Country of origination"
-        ></i>
+        Contact Phone
       </label>
 
-      <div class="col-lg-8">
-        <span class="fw-bolder fs-6 text-gray-900">Germany</span>
+      <div class="col-lg-8 d-flex align-items-center">
+        <span class="fw-bolder fs-6 me-2">{{ data.phone_number }}</span>
       </div>
     </div>
 
     <div class="row mb-7">
-      <label class="col-lg-4 fw-bold text-muted">Communication</label>
+      <label class="col-lg-4 fw-bold text-muted">Address</label>
 
-      <div class="col-lg-8">
-        <span class="fw-bolder fs-6 text-gray-900">Email, Phone</span>
-      </div>
-    </div>
-
-    <div class="row mb-10">
-      <label class="col-lg-4 fw-bold text-muted">Allow Changes</label>
-
-      <div class="col-lg-8">
-        <span class="fw-bold fs-6">Yes</span>
-      </div>
-    </div>
-
-    <div
-      class="
-        notice
-        d-flex
-        bg-light-warning
-        rounded
-        border-warning border border-dashed
-        p-6
-      "
-    >
-      <app-keenicon name="information-5" class="fs-2 text-warning me-4"></app-keenicon>
-      <div class="d-flex flex-stack flex-grow-1">
-        <div class="fw-bold">
-          <h4 class="text-gray-800 fw-bolder">We need your attention!</h4>
-          <div class="fs-6 text-gray-600">
-            Your payment was declined. To start using tools, please
-            <a class="fw-bolder" routerLink="/crafted/account/settings">
-              {{ " " }}
-              Add Payment Method
-            </a>
-            .
-          </div>
-        </div>
+      <div class="col-lg-8 fv-row">
+        <span class="fw-bold fs-6">{{ data.address }}</span>
       </div>
     </div>
   </div>
 </div>
 
 <div class="row gy-10 gx-xl-10">
-  <div class="col-xl-6">
-    <app-charts-widget1
+  <div>
+    <!-- <app-charts-widget1
       class="card card-xxl-stretch mb-5 mb-xl-10"
-    ></app-charts-widget1>
-  </div>
-
-  <div class="col-xl-6">
-    <app-tables-widget1
-      class="card card-xxl-stretch mb-5 mb-xl-10"
-    ></app-tables-widget1>
+    ></app-charts-widget1> -->
+    <app-analysis-workspace-chart class="card card-xxl-stretch mb-5 mb-xl-10"></app-analysis-workspace-chart>
   </div>
 </div>
 
-<div class="row gy-10 gx-xl-10">
+<!-- <div class="row gy-10 gx-xl-10">
   <div class="col-xl-6">
     <app-lists-widget5
       class="card card-xxl-stretch mb-5 mb-xl-10"
@@ -141,4 +87,4 @@
       class="card card-xxl-stretch mb-5 mb-xl-10"
     ></app-tables-widget5>
   </div>
-</div>
+</div> -->

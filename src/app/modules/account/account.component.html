@@ -8,7 +8,7 @@
             position-relative
           "
         >
-          <img src="./assets/media/avatars/300-1.jpg" alt="Metronic" />
+          <img src="./assets/media/avatars/blank.png" alt="User's Image" />
           <div
             class="
               position-absolute
@@ -47,10 +47,7 @@
                   cursor-pointer
                 "
               >
-                Max Smith
-              </a>
-              <a class="cursor-pointer">
-                <app-keenicon name="verify" class="fs-1 text-primary"></app-keenicon>
+                {{ data?.first_name }} {{ data?.last_name }}
               </a>
               <a
                 class="
@@ -65,7 +62,7 @@
                 data-bs-toggle="modal"
                 data-bs-target="#kt_modal_upgrade_plan"
               >
-                Upgrade to Pro
+                {{ data?.role }}
               </a>
             </div>
 
@@ -81,69 +78,8 @@
                 "
               >
                 <app-keenicon name="profile-circle" class="fs-4 me-1"></app-keenicon>
-                Developer
+                {{ data?.email }}
               </a>
-              <a
-                class="
-                  d-flex
-                  align-items-center
-                  text-gray-500 text-hover-primary
-                  me-5
-                  mb-2
-                  cursor-pointer
-                "
-              >
-                <app-keenicon name="geolocation" class="fs-4 me-1"></app-keenicon>
-                SF, Bay Area
-              </a>
-              <a
-                class="
-                  d-flex
-                  align-items-center
-                  text-gray-500 text-hover-primary
-                  mb-2
-                  cursor-pointer
-                "
-              >
-                <app-keenicon name="geolocation" class="fs-4 me-1"></app-keenicon>
-                max&#64;kt.com
-              </a>
-            </div>
-          </div>
-
-          <div class="d-flex my-4">
-            <a
-              class="btn btn-sm btn-light me-2 cursor-pointer"
-              id="kt_user_follow_button"
-            >
-              <app-keenicon name="phone" class="fs-3 d-none"></app-keenicon>
-              <span class="indicator-label">Follow</span>
-              <span class="indicator-progress">
-                Please wait...
-                <span
-                  class="spinner-border spinner-border-sm align-middle ms-2"
-                ></span>
-              </span>
-            </a>
-            <a
-              class="btn btn-sm btn-primary me-3 cursor-pointer"
-              data-bs-toggle="modal"
-              data-bs-target="#kt_modal_offer_a_deal"
-            >
-              Hire Me
-            </a>
-            <div class="me-0">
-              <button
-                class="
-                  btn btn-sm btn-icon btn-bg-light btn-active-color-primary
-                "
-                data-kt-menu-trigger="click"
-                data-kt-menu-placement="bottom-end"
-                data-kt-menu-flip="top-end"
-              >
-                <i class="bi bi-three-dots fs-3"></i>
-              </button>
-              <app-dropdown-menu1></app-dropdown-menu1>
             </div>
           </div>
         </div>
@@ -163,11 +99,11 @@
                 "
               >
                 <div class="d-flex align-items-center">
-                  <app-keenicon name="arrow-up" class="fs-3 text-success me-2"></app-keenicon>
-                  <div class="fs-2 fw-bolder">4500$</div>
+                  <app-keenicon name="abstract-16" class="fs-3 text-primary me-2"></app-keenicon>
+                  <div class="fs-2 fw-bolder">{{ data?.workspaces }} </div>
                 </div>
 
-                <div class="fw-bold fs-6 text-gray-500">Earnings</div>
+                <div class="fw-bold fs-6 text-gray-500">Workspaces</div>
               </div>
 
               <div
@@ -182,55 +118,12 @@
                 "
               >
                 <div class="d-flex align-items-center">
-                  <app-keenicon name="phone" class="fs-3 text-danger me-2"></app-keenicon>
-                  <div class="fs-2 fw-bolder">75</div>
+                  <app-keenicon name="test-tubes" class="fs-3 text-primary me-2"></app-keenicon>
+                  <div class="fs-2 fw-bolder">{{ data?.analyses }} </div>
                 </div>
 
-                <div class="fw-bold fs-6 text-gray-500">Projects</div>
+                <div class="fw-bold fs-6 text-gray-500">Analyses</div>
               </div>
-
-              <div
-                class="
-                  border border-gray-300 border-dashed
-                  rounded
-                  min-w-125px
-                  py-3
-                  px-4
-                  me-6
-                  mb-3
-                "
-              >
-                <div class="d-flex align-items-center">
-                  <app-keenicon name="arrow-up" class="fs-3 text-success me-2"></app-keenicon>
-                  <div class="fs-2 fw-bolder">60%</div>
-                </div>
-
-                <div class="fw-bold fs-6 text-gray-500">Success Rate</div>
-              </div>
-            </div>
-          </div>
-
-          <div
-            class="
-              d-flex
-              align-items-center
-              w-200px w-sm-300px
-              flex-column
-              mt-3
-            "
-          >
-            <div class="d-flex justify-content-between w-100 mt-auto mb-2">
-              <span class="fw-bold fs-6 text-gray-500"
-                >Profile Compleation</span
-              >
-              <span class="fw-bolder fs-6">50%</span>
-            </div>
-            <div class="h-5px mx-3 w-100 bg-light mb-3">
-              <div
-                class="bg-success rounded h-5px"
-                role="progressbar"
-                [style.width]="'50%'"
-              ></div>
             </div>
           </div>
         </div>
@@ -250,7 +143,7 @@
         <li class="nav-item">
           <a
             class="nav-link text-active-primary me-6"
-            routerLink="/crafted/account/overview"
+            routerLink="/account/overview"
             routerLinkActive="active"
           >
             Overview
@@ -259,7 +152,7 @@
         <li class="nav-item">
           <a
             class="nav-link text-active-primary me-6"
-            routerLink="/crafted/account/settings"
+            routerLink="/account/settings"
             routerLinkActive="active"
           >
             Settings

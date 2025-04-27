@@ -13,6 +13,10 @@ import { NotificationsComponent } from './settings/forms/notifications/notificat
 import { SignInMethodComponent } from './settings/forms/sign-in-method/sign-in-method.component';
 import { DropdownMenusModule, WidgetsModule } from '../../_metronic/partials';
 import {SharedModule} from "../../_metronic/shared/shared.module";
+import { AnalysisWorkspaceChartComponent } from './overview/components/analysis-workspace-chart/analysis-workspace-chart.component';
+import { InlineSVGModule } from 'ng-inline-svg-2';
+import { NgApexchartsModule } from 'ng-apexcharts';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -25,6 +29,7 @@ import {SharedModule} from "../../_metronic/shared/shared.module";
     EmailPreferencesComponent,
     NotificationsComponent,
     SignInMethodComponent,
+    AnalysisWorkspaceChartComponent
   ],
   imports: [
     CommonModule,
@@ -32,6 +37,9 @@ import {SharedModule} from "../../_metronic/shared/shared.module";
     DropdownMenusModule,
     WidgetsModule,
     SharedModule,
+    InlineSVGModule,
+    NgApexchartsModule,
+    ReactiveFormsModule
   ],
 })
 export class AccountModule {}
