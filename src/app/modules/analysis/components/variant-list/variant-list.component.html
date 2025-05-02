@@ -1,1 +1,356 @@
-<p>variant-list works!</p>
+<div class="main-wrapper">
+    <div class="filter-wrapper" id="aside" style="min-width: 200px;">
+        <span (click)="toggleAside()"
+            class="aside-toggle btn btn-icon btn-primary btn-hover-primary shadow-sm custom-aside-btn"
+            id="kt_aside_toggle" data-toggle="tooltip" data-placement="right" data-container="body"
+            data-boundary="window" title="Toggle Aside">
+            <app-keenicon class="fs-1 me-1 text-white" [name]="asideState ? 'left' : 'right'"></app-keenicon>
+        </span>
+        <div class="filter-container" id="filter-conatiner">
+            <div class="filter-header">
+                <h5>Filter By</h5>
+            </div>
+            <hr>
+            <div class="filter-body">
+                <!-- begin: Filtration form -->
+                <div class="form form-label-right" [formGroup]="filterGroup">
+                    <div class="form-group row mb-1">
+                        <label class="text-bold col-12 col-form-label">Gene</label>
+                        <div class="col-12">
+                            <ng-select2 placeholder="Select Gene name" [options]="options" formControlName="geneName">
+
+                            </ng-select2>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-1">
+                        <label class="text-bold col-12 col-form-label">Read Depth</label>
+                        <!-- <div class="col-12">
+							<mat-slider formControlName="depthGreater" style="width: 100%;" thumbLabel min="0" max="600"
+								step="1" aria-label="units">
+							</mat-slider>
+						</div> -->
+                        <div class="col-5">
+                            <!-- <input class="form-control" type="number" formControlName="depthGreater"> -->
+                            <select class="form-control" placeholder="Filter by Type" name="type"
+                                formControlName="readDepthSign">
+                                <option value="greater">>=</option>
+                                <option value="lower"> =< </option>
+                            </select>
+                        </div>
+                        <div class="col-7">
+                            <input class="form-control" type="number" formControlName="readDepth">
+                        </div>
+                    </div>
+                    <div class="form-group row mb-1">
+                        <label class="text-bold col-12 col-form-label">Allele Fraction</label>
+                        <!-- <div class="col-12">
+							<input type="number" class="form-control" name="searchText" placeholder="Enter AF"
+								formControlName="alleleFraction" />
+						</div> -->
+                        <div class="col-5">
+                            <!-- <input class="form-control" type="number" formControlName="depthGreater"> -->
+                            <select class="form-control" placeholder="Filter by Type" name="type"
+                                formControlName="AFSign">
+                                <option value="greater"> >= </option>
+                                <option value="lower"> =< </option>
+                            </select>
+                        </div>
+                        <div class="col-7">
+                            <input class="form-control" type="number" formControlName="alleleFraction">
+                        </div>
+                    </div>
+                    <div class="form-group row mb-1">
+                        <label class="text-bold col-12 col-form-label">Classification</label>
+                        <div class="col-12">
+                            <ng-select2 [data]="classificationList" placeholder="Select Classification"
+                                [options]="options" formControlName="classification">
+                            </ng-select2>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-1">
+                        <label class="text-bold col-12 col-form-label">GnomAD</label>
+                        <!-- <div class="col-5">
+							<input class="form-control" type="number" formControlName="gnomADfrom">
+						</div>
+						<div class="col-2" style="margin: auto;">
+							To
+						</div>
+						<div class="col-5">
+							<input class="form-control" type="number" formControlName="gnomADto">
+						</div> -->
+                        <div class="col-5">
+                            <!-- <input class="form-control" type="number" formControlName="depthGreater"> -->
+                            <select class="form-control" placeholder="Filter by Type" name="type"
+                                formControlName="gnomAdSign">
+                                <option value="greater"> > </option>
+                                <option value="lower"> < </option>
+                            </select>
+                        </div>
+                        <div class="col-7">
+                            <input class="form-control" type="number" min="0" formControlName="gnomAd">
+                        </div>
+                    </div>
+                    <div class="form-group row mb-1">
+                        <label class="text-bold col-12 col-form-label">Annotation</label>
+                        <div class="col-12">
+                            <ng-select2 [data]="annotationList" placeholder="Select Annotation"
+                                [options]="annotationOptions" formControlName="annotation"
+                                (valueChanged)="onTagChanged($event)">
+                            </ng-select2>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-1">
+                        <label class="text-bold col-12 col-form-label">Chromosome</label>
+                        <div class="col-12">
+                            <ng-select2 [data]="chromosomeList" placeholder="Select Chromosome" [options]="options"
+                                formControlName="chromosome">
+                            </ng-select2>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2 mt-5">
+                        <button class="btn btn-primary" style="padding: 12px" (click)="applyFilter()">Apply Filter</button>
+                        <button class="btn btn-primary" style="padding: 12px" (click)="reset()">Reset</button>
+                      </div>
+                </div>
+
+            </div>
+            <!-- end: Filtration form -->
+        </div>
+    </div>
+    <div class="content-wrapper" id="content-container">
+        <div *ngIf="isLoading" class="spin-loading">
+            <div style=" 
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			z-index: 100;" class="spinner-border text-primary"></div>
+        </div>
+        <div class="card card-custom gutter-b">
+            <div class="card-header">
+                <div class="card-toolbar" style="width: 100%; margin-top: 25px; margin-bottom: 20px;">
+                    <div class="d-inline-block" style="width: 100%">
+                        <div style="float: right;">
+                            <button id="dropdownMenu" #btnShowCol (click)="isListShowing = !isListShowing"
+                                class="btn btn-sm btn-light-primary">
+                                Show/Hide Columns
+                                <app-keenicon *ngIf="!isListShowing" name="down" class="fs-1 me-1"></app-keenicon>
+                                <app-keenicon *ngIf="isListShowing" name="up" class="fs-1 me-1"></app-keenicon>
+                            </button>
+
+                            <mat-selection-list class="show-hide-column-list" #listColumn [hidden]="!isListShowing">
+                                <mat-list-option checkboxPosition="before" class="mat-primary show-hide-column-opt"
+                                    *ngFor="let column of columnsName" (click)="onColumnListControlChanged(listColumn)"
+                                    [selected]="column.isSelected" [value]="column.columnVal">
+                                    {{ column.name }}
+                                </mat-list-option>
+                            </mat-selection-list>
+
+                        </div>
+                        <div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div [ngClass]="isLoading ? 'blur card-body' : 'card-body'" style="position: relative;">
+
+                <!-- begin: Grouping -->
+                <ng-container *ngIf="grouping.getSelectedRowsCount()">
+                    <div class="form">
+                        <div class="row align-items-center form-group-actions margin-top-20 margin-bottom-20">
+                            <div class="col-xl-12">
+                                <div class="form-group form-group-inline">
+                                    <div class="form-label form-label-no-wrap">
+                                        <label class="font-bold font-danger"><span>Selected records count:
+                                                <b>{{ grouping.getSelectedRowsCount() }}</b></span></label>
+                                    </div>
+                                    <div>
+                                        <a type="button"
+                                            class="btn btn-light-primary font-weight-bolder font-size-sm mr-1"
+                                            (click)="addReport()">
+                                            <i class="far fa-sticky-note"></i> Add To Report
+                                        </a>&nbsp;
+                                        <button type="button"
+                                            class="btn btn-light-primary font-weight-bolder font-size-sm mr-1"
+                                            [disabled]="loadingExport" (click)="exportVariants()">
+                                            Export
+                                        </button>&nbsp;
+                                        <ng-container *ngIf="loadingExport">
+                                            <span class="spinner spinner-primary ml-3 mr-5"></span>
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+                <!-- end: Grouping -->
+
+                <app-paginator class="d-flex justify-content-between align-items-center flex-wrap"
+                    [paginator]="paginator" [isLoading]="isLoading" (paginate)="paginate($event)"></app-paginator>
+
+                <!-- begin:Table -->
+                <div class="table-responsive angular-bootstrap-table" style="width: 100%">
+                    <div>
+                        <table style="table-layout: fixed; overflow-x: auto !important; width: 100%"
+                            class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4 overflow-hidden table-vertical-center">
+                            <thead class="fw-bolder text-muted">
+                                <th class="selection-cell-header" style="width:50px" data-row-selection="true">
+                                    <div class="
+                                            form-check form-check-sm form-check-custom form-check-solid
+                                          ">
+                                        <input class="form-check-input" type="checkbox" value="1" data-kt-check="true"
+                                            data-kt-check-target=".widget-9-check" (click)="grouping.selectAllRows()"
+                                            [checked]="grouping.checkAreAllRowsSelected()" />
+                                    </div>
+                                </th>
+                                <th class="width-100">
+                                    Gene
+                                </th>
+                                <th class="width-125">
+                                    Transcript
+                                </th>
+                                <th class="width-110">
+                                    HGVSc
+                                </th>
+                                <th class="width-100" [class.hidden-column]="checkColumnIsSelected('pnomen')">
+                                    p.nomen
+                                </th>
+                                <th class="width-100">
+                                    Coverage
+                                </th>
+                                <th class="width-110">
+                                    Function
+                                </th>
+                                <th class="width-110">
+                                    Location
+                                </th>
+                                <th class="width-110">
+                                    Score
+                                </th>
+                                <th class="width-105">
+                                    ClinVar
+                                </th>
+                                <th class="width-120">
+                                    Classification
+                                </th>
+                                <th class="width-120">
+                                    GNomad_ALL
+                                </th>
+                                <th class="width-150">
+                                    Omim Disease
+                                </th>
+                                <th class="width-150" [class.hidden-column]="checkColumnIsSelected('gnomad_AMR')">
+                                    GNomad_AMR
+                                </th>
+                                <th class="width-150" [class.hidden-column]="checkColumnIsSelected('gnomad_AFR')">
+                                    GNomad_AFR
+                                </th>
+                                <th class="width-120" [class.hidden-column]="checkColumnIsSelected('rsid')">
+                                    rsid
+                                </th>
+                                <th class="width-150" [class.hidden-column]="checkColumnIsSelected('REF-ALT')">
+                                    REF - ALT
+                                </th>
+                                <th class="width-120" [class.hidden-column]="checkColumnIsSelected('cosmicID')">
+                                    Cosmic
+                                </th>
+                                <th class="width-150" [class.hidden-column]="checkColumnIsSelected('position')">
+                                    Position
+                                </th>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let variant of variantsList; let i = index">
+                                    <td class="selection-cell">
+                                        <label class="checkbox checkbox-single"><input type="checkbox"
+                                                (click)="grouping.selectRow(variant.id)"
+                                                [checked]="grouping.isRowSelected(variant.id)" />
+                                            <span></span>
+                                        </label>
+                                    </td>
+                                    <!-- <td>{{ variant.id }}</td> -->
+                                    <td>
+                                        <a href="javascript:void(0)" (click)="getVariantDetail(variant)">{{
+                                            variant.gene }} </a>
+                                    </td>
+                                    <td>
+                                        <span>{{ variant.transcript_id }}</span>
+                                    </td>
+                                    <td>
+                                        <a href="javascript:void(0)"
+                                            (click)="openIGVModal(variant.chrom, variant.position)">{{ variant.cnomen }}
+                                        </a>
+                                    </td>
+                                    <td [class.hidden-column]="checkColumnIsSelected('pnomen')">
+                                        <span>{{ variant.pnomen }}</span>
+                                    </td>
+                                    <td>
+                                        <span>{{ variant.coverage }}</span>
+                                    </td>
+                                    <td>
+                                        <span>{{ variant.function }}</span>
+                                    </td>
+                                    <td>
+                                        <span>{{ variant.location }}</span>
+                                    </td>
+                                    <td>
+                                        <span>{{ variant.VAR_SCORE }}</span>
+                                    </td>
+                                    <td>
+                                        <a href="https://www.ncbi.nlm.nih.gov/clinvar/variation/{{ variant.Clinvar_VARIANT_ID }}"
+                                            target="_blank">{{variant.Clinvar_VARIANT_ID}}</a>
+                                        <br>
+                                        <span *ngIf="variant.Clinvar_VARIANT_ID != '.'"><i
+                                                [ngClass]="variant.gold_stars >= 1 ? 'fa fa-star yellow-star' : 'fa fa-star'"></i></span>
+                                        <span *ngIf="variant.Clinvar_VARIANT_ID != '.'"><i
+                                                [ngClass]="variant.gold_stars >= 2 ? 'fa fa-star yellow-star' : 'fa fa-star'"></i></span>
+                                        <span *ngIf="variant.Clinvar_VARIANT_ID != '.'"><i
+                                                [ngClass]="variant.gold_stars >= 3 ? 'fa fa-star yellow-star' : 'fa fa-star'"></i></span>
+                                        <span *ngIf="variant.Clinvar_VARIANT_ID != '.'"><i
+                                                [ngClass]="variant.gold_stars >= 4 ? 'fa fa-star yellow-star' : 'fa fa-star'"></i></span>
+                                    </td>
+                                    <td>
+                                        <span [class]="getVariantClass(variant.classification)"
+                                            class="classification">{{ variant.classification
+                                            }}</span>
+                                    </td>
+                                    <td>
+                                        <span>{{ variant.gnomad_ALL }}</span>
+                                    </td>
+                                    <td>
+                                        <a href="https://www.omim.org/entry/{{ variant.gene_omim }}"
+                                            target="_blank">{{variant.gene_omim}}</a>
+                                        <br>
+                                        <span>{{ variant.omimDisease }}</span>
+                                    </td>
+                                    <td [class.hidden-column]="checkColumnIsSelected('gnomad_AMR')">
+                                        <span>{{ variant.gnomad_AMR }}</span>
+                                    </td>
+                                    <td [class.hidden-column]="checkColumnIsSelected('gnomad_AFR')">
+                                        <span>{{ variant.gnomad_AFR }}</span>
+                                    </td>
+                                    <td [class.hidden-column]="checkColumnIsSelected('rsid')">
+                                        <span>{{ variant.rsid }}</span>
+                                    </td>
+                                    <td [class.hidden-column]="checkColumnIsSelected('REF-ALT')">
+                                        <span>{{ variant.REF }} > {{variant.ALT}}</span>
+                                    </td>
+                                    <td [class.hidden-column]="checkColumnIsSelected('cosmicID')">
+                                        <span>{{ variant.cosmicID }}</span>
+                                    </td>
+                                    <td [class.hidden-column]="checkColumnIsSelected('position')">
+                                        <span>{{ variant.chrom }}:{{ variant.position }}</span>
+                                    </td>
+                                    <!-- <td><span>{{ variant.zygosity }}</span></td> -->
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- end: Table -->
+                <app-paginator class="d-flex justify-content-between align-items-center flex-wrap"
+                    [paginator]="paginator" [isLoading]="isLoading" (paginate)="paginate($event)"></app-paginator>
+            </div>
+        </div>
+    </div>
+</div>

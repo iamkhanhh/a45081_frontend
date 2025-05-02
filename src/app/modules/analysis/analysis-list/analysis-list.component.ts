@@ -6,24 +6,15 @@ import { Subscription } from 'rxjs';
 import { GroupingState, PaginatorState } from 'src/app/_metronic/shared/models';
 import { AnalysisService } from '../services/analysis.service';
 import { DeleteAnalysisComponent } from '../../workspace/components/delete-analysis/delete-analysis.component';
+import { Analysis } from '../_models/analysis.model';
 
-export interface analysis {
-  id: number;
-  name: string;
-  analyzed: string;
-  variants: number;
-  assembly: string;
-  workspaceName: string;
-  status: string;
-  createdAt: string
-}
 @Component({
   selector: 'app-analysis-list',
   templateUrl: './analysis-list.component.html',
   styleUrl: './analysis-list.component.scss'
 })
 export class AnalysisListComponent implements OnInit, OnDestroy {
-  analyses: analysis[] = [];
+  analyses: Analysis[] = [];
   paginator: PaginatorState = new PaginatorState();
   grouping: GroupingState = new GroupingState();
   isLoading: boolean = false;
@@ -51,7 +42,7 @@ export class AnalysisListComponent implements OnInit, OnDestroy {
       if (response.status === 'success') {
         this.analyses = response.data;
         this.paginator = this.paginator.recalculatePaginator(response.pageBegin, response.pageEnd, response.totalItems, response.totalPages);
-        const itemIds = this.analyses.map((a: analysis) => {
+        const itemIds = this.analyses.map((a: Analysis) => {
           return a.id;
         });
         this.grouping.clearRows(itemIds);
