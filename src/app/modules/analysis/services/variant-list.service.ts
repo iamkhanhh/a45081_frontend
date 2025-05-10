@@ -11,4 +11,8 @@ export class VariantListService {
     API_URL = `${environment.apiUrl}/variant`;
 
     constructor(private http: HttpClient) { }
+
+    loadVariants(page: number, pageSize: number, data: any) {
+        return this.http.post(`${this.API_URL}?page=${page}&pageSize=${pageSize}`, data, { withCredentials: true });
+    }
 }

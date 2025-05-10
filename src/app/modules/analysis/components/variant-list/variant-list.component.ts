@@ -19,6 +19,9 @@ export class VariantListComponent {
   @Input() id: number;
   @ViewChild('btnShowCol') toggleButton: ElementRef;
   @ViewChild('listColumn') menu: ElementRef;
+  @ViewChild('contentContainer') contentContainer: ElementRef;
+  @ViewChild('aside') aside: ElementRef;
+  @ViewChild('asideToggle') asideToggle: ElementRef;
 
   url: any;
   isLoading: boolean;
@@ -31,7 +34,7 @@ export class VariantListComponent {
   variantsList: any[] = [];
   old_annotation: string[] = [];
   isListShowing = false;
-  columnSelected = [];
+  columnSelected: string[] = [];
   asideState: boolean = true
   public chromosomeList = this.stringArrayToSelect2(Datalist.chromosome);
   public annotationList: any
@@ -66,14 +69,12 @@ export class VariantListComponent {
   ) {}
 
   ngOnInit(): void {
-    this.url = `${environment.apiUrl}/variant/${this.id}`;
+    this.url = `${environment.apiUrl}/variants/${this.id}`;
     this.variantListService.API_URL = this.url;
     this.filterForm();
-    this.applyFilter();
+    this.loadVariants();
     this.setUpSelect2();
     this.showColumnList();
-
-    
   }
 
   setUpSelect2() {
@@ -142,7 +143,7 @@ export class VariantListComponent {
 
   paginate(paginator: PaginatorState) {
     this.paginator = paginator;
-    // this.loadWorkspaces();
+    this.loadVariants();
   }
 
   showColumnList() {
@@ -182,77 +183,105 @@ export class VariantListComponent {
     });
   }
 
-  applyFilter() {
-    // let filter = this.filter();
-    // this.variantListService.patchState({ filter });
+  loadVariants() {
+    this.isLoading = true;
+    let filter = this.filter();
+    console.log("filter",filter);
+    const sbLoadVariants = this.variantListService.loadVariants(this.paginator.page, this.paginator.pageSize, filter)
+      .subscribe((res: any) => {
+        console.log("res",res);
+        
+        if (res.status == 'success') {
+          this.variantsList = res.data;
+          this.paginator.total = res.total;
+          const itemIds = this.variantsList.map((w: any) => {
+            return w._id;
+          });
+          this.paginator = this.paginator.recalculatePaginator(res.pageBegin, res.pageEnd, res.totalItems, res.totalPages);
+          this.grouping.clearRows(itemIds);
+        }
+        else {
+          this.toastr.error(res.message);
+        }
+        this.isLoading = false;
+        this.cd.detectChanges();
+
+      })
+    this.subscriptions.push(sbLoadVariants);
   }
 
   reset() {
-    // this.filterGroup.reset();
-    // let filter = this.filter();
-    // this.variantListService.patchState({ filter });
+    this.filterGroup.reset();
+    this.loadVariants();
   }
 
-  filter() {
-    // let filter = {};
-    // const chromosome = this.filterGroup.get('chromosome').value;
-    // if (chromosome) {
-    // 	let arrayInt = []
-    // 	chromosome.forEach(e => {
-    // 		let tmp = e.split(" ")
-    // 		arrayInt.push(parseInt(tmp[1]))
-    // 	})
-
-    // 	filter['chrom'] = arrayInt;
-    // }
-
-    // const readDepthSign = this.filterGroup.get('readDepthSign').value;
-    // if (readDepthSign) {
-    // 	filter['readDepthSign'] = readDepthSign;
-    // }
-
-    // const readDepth = this.filterGroup.get('readDepth').value;
-    // if (readDepth || readDepth == 0) {
-    // 	filter['readDepth'] = readDepth;
-    // }
-
-    // const AFSign = this.filterGroup.get('AFSign').value;
-    // if (AFSign) {
-    // 	filter['AFSign'] = AFSign;
-    // }
-
-    // const alleleFraction = this.filterGroup.get('alleleFraction').value;
-    // if (alleleFraction || alleleFraction == 0) {
-    // 	filter['alleleFraction'] = alleleFraction;
-    // }
-
-    // const gnomAdSign = this.filterGroup.get('gnomAdSign').value;
-    // if (gnomAdSign) {
-    // 	filter['gnomAdSign'] = gnomAdSign;
-    // }
-
-    // const gnomAd = this.filterGroup.get('gnomAd').value;
-    // if (gnomAd || gnomAd == 0) {
-    // 	filter['gnomAd'] = gnomAd;
-    // }
-
-    // const geneName = this.filterGroup.get('geneName').value
-    // if (geneName) {
-    // 	filter['gene'] = geneName;
-    // }
-
-    // const annotation = this.filterGroup.get('annotation').value
-    // if (annotation) {
-    // 	filter['annotation'] = annotation;
-    // }
-
-    // const classification = this.filterGroup.get('classification').value
-    // if (classification) {
-    // 	filter['classification'] = classification;
-    // }
-
-    // return filter;
-  }
+  filter(): any {
+    const filter: { [key: string]: any } = {};
+    
+    console.log("this.filterGroup.value",this.filterGroup.value);
+    
+    const chromosomeCtrl = this.filterGroup.get('chromosome');
+    if (chromosomeCtrl && chromosomeCtrl.value) {
+      const tempArr: string[] = [];
+      chromosomeCtrl.value.forEach((e: any) => {
+        let chr = this.chromosomeList[e].text;
+        const tmp = chr.split(" ");
+        tempArr.push(tmp[1]);
+      });
+      filter['chrom'] = tempArr;
+    }
+  
+    const readDepthSignCtrl = this.filterGroup.get('readDepthSign');
+    if (readDepthSignCtrl && readDepthSignCtrl.value) {
+      filter['readDepthSign'] = readDepthSignCtrl.value;
+    }
+  
+    const readDepthCtrl = this.filterGroup.get('readDepth');
+    if (readDepthCtrl && (readDepthCtrl.value || readDepthCtrl.value === 0)) {
+      filter['readDepth'] = readDepthCtrl.value;
+    }
+  
+    const AFSignCtrl = this.filterGroup.get('AFSign');
+    if (AFSignCtrl && AFSignCtrl.value) {
+      filter['AFSign'] = AFSignCtrl.value;
+    }
+  
+    const alleleFractionCtrl = this.filterGroup.get('alleleFraction');
+    if (alleleFractionCtrl && (alleleFractionCtrl.value || alleleFractionCtrl.value === 0)) {
+      filter['alleleFraction'] = alleleFractionCtrl.value;
+    }
+  
+    const gnomAdSignCtrl = this.filterGroup.get('gnomAdSign');
+    if (gnomAdSignCtrl && gnomAdSignCtrl.value) {
+      filter['gnomAdSign'] = gnomAdSignCtrl.value;
+    }
+  
+    const gnomAdCtrl = this.filterGroup.get('gnomAd');
+    if (gnomAdCtrl && (gnomAdCtrl.value || gnomAdCtrl.value === 0)) {
+      filter['gnomAd'] = gnomAdCtrl.value;
+    }
+  
+    const geneNameCtrl = this.filterGroup.get('geneName');
+    if (geneNameCtrl && geneNameCtrl.value) {
+      filter['gene'] = geneNameCtrl.value;
+    }
+  
+    const annotationCtrl = this.filterGroup.get('annotation');
+    if (annotationCtrl && annotationCtrl.value) {
+      filter['annotation'] = annotationCtrl.value;
+    }
+  
+    const classificationCtrl = this.filterGroup.get('classification');
+    if (classificationCtrl && classificationCtrl.value) {
+      const arrayString: string[] = [];
+      classificationCtrl.value.forEach((e: any) => {
+        arrayString.push(this.classificationList[e].text);
+      });
+      filter['classification'] = arrayString;
+    }
+  
+    return filter;
+  }  
 
   search(searchTerm: string) {
     // this.variantListService.patchState({ searchTerm });
@@ -264,19 +293,19 @@ export class VariantListComponent {
 
   toggleAside() {
     if (this.asideState) {
-    	this.asideState = false
-    	// document.getElementById("content-container").style.width = '100%'
-    	// document.getElementById("aside").style.transform = 'translateX(-100%)'
-    	// document.getElementById("kt_aside_toggle").style.right = '-40px'
-    	// document.getElementById("aside").style.position = 'absolute'
+      this.asideState = false;
+      this.renderer.setStyle(this.contentContainer.nativeElement, 'width', '100%');
+      this.renderer.setStyle(this.aside.nativeElement, 'transform', 'translateX(-100%)');
+      this.renderer.setStyle(this.asideToggle.nativeElement, 'right', '-40px');
+      this.renderer.setStyle(this.aside.nativeElement, 'position', 'absolute');
     } else {
-    	this.asideState = true
-    	// document.getElementById("content-container").style.width = '85%'
-    	// document.getElementById("aside").style.transform = 'translateX(0)'
-    	// document.getElementById("kt_aside_toggle").style.right = '-15px'
-    	// document.getElementById("aside").style.position = 'initial'
+      this.asideState = true;
+      this.renderer.setStyle(this.contentContainer.nativeElement, 'width', '85%');
+      this.renderer.setStyle(this.aside.nativeElement, 'transform', 'translateX(0)');
+      this.renderer.setStyle(this.asideToggle.nativeElement, 'right', '-15px');
+      this.renderer.setStyle(this.aside.nativeElement, 'position', 'initial');
     }
-  }
+  }  
 
   openIGVModal(chrom: any, position: any) {
     // const modalRef = this.modalService.open(IgvModalComponent, { size: 'lg', windowClass: "igv-browser-modal" });
@@ -300,8 +329,8 @@ export class VariantListComponent {
     this.cd.detectChanges();
   }
 
-  checkColumnIsSelected(columnVal: any) {
-    // return !(this.columnSelected.indexOf(columnVal) != -1)
+  checkColumnIsSelected(columnVal: string) {
+    return !(this.columnSelected.indexOf(columnVal) != -1)
   }
 
   getVariantClass(classification: string) {

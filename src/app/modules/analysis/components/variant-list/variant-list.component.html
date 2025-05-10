@@ -1,8 +1,8 @@
 <div class="main-wrapper">
-    <div class="filter-wrapper" id="aside" style="min-width: 200px;">
+    <div class="filter-wrapper" id="aside" #aside style="min-width: 200px;">
         <span (click)="toggleAside()"
             class="aside-toggle btn btn-icon btn-primary btn-hover-primary shadow-sm custom-aside-btn"
-            id="kt_aside_toggle" data-toggle="tooltip" data-placement="right" data-container="body"
+            id="kt_aside_toggle" #asideToggle data-toggle="tooltip" data-placement="right" data-container="body"
             data-boundary="window" title="Toggle Aside">
             <app-keenicon class="fs-1 me-1 text-white" [name]="asideState ? 'left' : 'right'"></app-keenicon>
         </span>
@@ -108,7 +108,7 @@
                         </div>
                     </div>
                     <div class="d-flex gap-2 mt-5">
-                        <button class="btn btn-primary" style="padding: 12px" (click)="applyFilter()">Apply Filter</button>
+                        <button class="btn btn-primary" style="padding: 12px" (click)="loadVariants()">Apply Filter</button>
                         <button class="btn btn-primary" style="padding: 12px" (click)="reset()">Reset</button>
                       </div>
                 </div>
@@ -117,7 +117,7 @@
             <!-- end: Filtration form -->
         </div>
     </div>
-    <div class="content-wrapper" id="content-container">
+    <div class="content-wrapper" id="content-container" #contentContainer>
         <div *ngIf="isLoading" class="spin-loading">
             <div style=" 
 			position: fixed;
