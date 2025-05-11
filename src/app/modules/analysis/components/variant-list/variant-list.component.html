@@ -83,7 +83,8 @@
                             <select class="form-control" placeholder="Filter by Type" name="type"
                                 formControlName="gnomAdSign">
                                 <option value="greater"> > </option>
-                                <option value="lower"> < </option>
+                                <option value="lower">
+                                    < </option>
                             </select>
                         </div>
                         <div class="col-7">
@@ -108,9 +109,10 @@
                         </div>
                     </div>
                     <div class="d-flex gap-2 mt-5">
-                        <button class="btn btn-primary" style="padding: 12px" (click)="loadVariants()">Apply Filter</button>
+                        <button class="btn btn-primary" style="padding: 12px" (click)="loadVariants()">Apply
+                            Filter</button>
                         <button class="btn btn-primary" style="padding: 12px" (click)="reset()">Reset</button>
-                      </div>
+                    </div>
                 </div>
 
             </div>
@@ -261,12 +263,19 @@
                             </thead>
                             <tbody>
                                 <tr *ngFor="let variant of variantsList; let i = index">
-                                    <td class="selection-cell">
-                                        <label class="checkbox checkbox-single"><input type="checkbox"
+                                    <td>
+                                        <div class="
+                                        form-check form-check-sm form-check-custom form-check-solid
+                                      " style="padding: 0 0.75rem;">
+                                            <input class="form-check-input widget-9-check" type="checkbox"
+                                                value="{{variant.id}}" (click)="grouping.selectRow(variant.id)"
+                                                [checked]="grouping.isRowSelected(variant.id)" />
+                                        </div>
+                                        <!-- <label class="checkbox checkbox-single"><input type="checkbox"
                                                 (click)="grouping.selectRow(variant.id)"
                                                 [checked]="grouping.isRowSelected(variant.id)" />
                                             <span></span>
-                                        </label>
+                                        </label> -->
                                     </td>
                                     <!-- <td>{{ variant.id }}</td> -->
                                     <td>
@@ -324,10 +333,10 @@
                                         <span>{{ variant.omimDisease }}</span>
                                     </td>
                                     <td [class.hidden-column]="checkColumnIsSelected('gnomad_AMR')">
-                                        <span>{{ variant.gnomad_AMR }}</span>
+                                        <span>{{ variant.gnomAD_genome_AMR }}</span>
                                     </td>
                                     <td [class.hidden-column]="checkColumnIsSelected('gnomad_AFR')">
-                                        <span>{{ variant.gnomad_AFR }}</span>
+                                        <span>{{ variant.gnomAD_genome_AFR }}</span>
                                     </td>
                                     <td [class.hidden-column]="checkColumnIsSelected('rsid')">
                                         <span>{{ variant.rsid }}</span>

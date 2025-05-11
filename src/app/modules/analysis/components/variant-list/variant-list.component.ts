@@ -186,11 +186,8 @@ export class VariantListComponent {
   loadVariants() {
     this.isLoading = true;
     let filter = this.filter();
-    console.log("filter",filter);
     const sbLoadVariants = this.variantListService.loadVariants(this.paginator.page, this.paginator.pageSize, filter)
       .subscribe((res: any) => {
-        console.log("res",res);
-        
         if (res.status == 'success') {
           this.variantsList = res.data;
           this.paginator.total = res.total;
@@ -217,8 +214,6 @@ export class VariantListComponent {
 
   filter(): any {
     const filter: { [key: string]: any } = {};
-    
-    console.log("this.filterGroup.value",this.filterGroup.value);
     
     const chromosomeCtrl = this.filterGroup.get('chromosome');
     if (chromosomeCtrl && chromosomeCtrl.value) {
