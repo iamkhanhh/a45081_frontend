@@ -10,14 +10,6 @@
     padding: 6px;
 }
 
-.table-variants-selected {
-    tbody {
-        height: 200px;
-        overflow-y: auto;
-        width: 100%;
-    }
-}
-
 :host::ng-deep th.width-150 {
     width: 200px !important;
 }
