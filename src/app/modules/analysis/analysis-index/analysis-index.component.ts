@@ -4,30 +4,30 @@ import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 
 type Tabs =
-  | 'variant_list'
-  | 'variant_report';
+	| 'variant_list'
+	| 'variant_report';
 
 @Component({
-  selector: 'app-analysis-index',
-  templateUrl: './analysis-index.component.html',
-  styleUrl: './analysis-index.component.scss'
+	selector: 'app-analysis-index',
+	templateUrl: './analysis-index.component.html',
+	styleUrl: './analysis-index.component.scss'
 })
 export class AnalysisIndexComponent {
-  analysis_name = 'Analysis Name';
-  id: number;
+	analysis_name = 'Analysis Name';
+	id: number;
 	isLoaded: boolean;
 	type: string;
-  project_id: number;
-  activeTab: Tabs = 'variant_list';
+	project_id: number;
+	activeTab: Tabs = 'variant_list';
 
-  constructor(
+	constructor(
 		public analysisService: AnalysisService,
 		private route: ActivatedRoute,
-    private _location: Location,
+		private _location: Location,
 		private cd: ChangeDetectorRef,
   ) {}
 
-  ngOnInit(): void {
+	ngOnInit(): void {
 		this.id = this.route.snapshot.params.id;
 		this.isLoaded = false;
 		this.getAnalysisName();
@@ -49,13 +49,13 @@ export class AnalysisIndexComponent {
 			})
 	}
 
-  setTab(tab: Tabs) {
-    this.activeTab = tab;
-  }
+	setTab(tab: Tabs) {
+		this.activeTab = tab;
+	}
 
-  activeClass(tab: Tabs) {
-    return tab === this.activeTab ? 'show active' : '';
-  }
+	activeClass(tab: Tabs) {
+		return tab === this.activeTab ? 'show active' : '';
+	}
 
 	backClicked() {
 		this._location.back();

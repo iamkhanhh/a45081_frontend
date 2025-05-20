@@ -8,11 +8,21 @@ import { environment } from 'src/environments/environment';
 })
 export class VariantListService {
 
-    API_URL = `${environment.apiUrl}/variant`;
-
     constructor(private http: HttpClient) { }
 
-    loadVariants(page: number, pageSize: number, data: any) {
-        return this.http.post(`${this.API_URL}?page=${page}&pageSize=${pageSize}`, data, { withCredentials: true });
+    loadVariants(id: number, page: number, pageSize: number, data: any) {
+        return this.http.post(`${environment.apiUrl}/variants/${id}?page=${page}&pageSize=${pageSize}`, data, { withCredentials: true });
+    }
+
+    loadVariantsSelected(id: number) {
+        return this.http.get(`${environment.apiUrl}/variants/get-variants-selected/${id}`, { withCredentials: true });
+    }
+
+    selectVariantToReport(id: number, data: any) {
+        return this.http.post(`${environment.apiUrl}/variants/add-to-report/${id}`, { variants: data }, { withCredentials: true });
+    }
+
+    createReport(id: number, data: any) {
+        return this.http.post(`${environment.apiUrl}/variants/${id}/export-report`, data, { withCredentials: true });
     }
 }

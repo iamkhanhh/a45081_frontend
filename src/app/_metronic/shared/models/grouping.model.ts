@@ -55,7 +55,7 @@ export class GroupingState implements IGroupingState {
     return this;
   }
 
-  getSelectedRows(): number[] {
+  getSelectedRows(): any[] {
     return Array.from(this.selectedRowIds);
   }
 

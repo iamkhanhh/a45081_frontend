@@ -30,7 +30,7 @@ export class VariantListComponent {
   loadingExport: boolean = false;
   filterGroup: FormGroup;
   searchGroup: FormGroup;
-  variantList: any[];
+  // variantList: any[];
   variantsList: any[] = [];
   old_annotation: string[] = [];
   isListShowing = false;
@@ -69,8 +69,6 @@ export class VariantListComponent {
   ) {}
 
   ngOnInit(): void {
-    this.url = `${environment.apiUrl}/variants/${this.id}`;
-    this.variantListService.API_URL = this.url;
     this.filterForm();
     this.loadVariants();
     this.setUpSelect2();
@@ -186,7 +184,7 @@ export class VariantListComponent {
   loadVariants() {
     this.isLoading = true;
     let filter = this.filter();
-    const sbLoadVariants = this.variantListService.loadVariants(this.paginator.page, this.paginator.pageSize, filter)
+    const sbLoadVariants = this.variantListService.loadVariants(this.id, this.paginator.page, this.paginator.pageSize, filter)
       .subscribe((res: any) => {
         if (res.status == 'success') {
           this.variantsList = res.data;
@@ -337,38 +335,39 @@ export class VariantListComponent {
   }
 
   addReport() {
-    // let selectedIds = this.grouping.getSelectedRows();
-    // let selectedFilter = this.variantList.filter((el) => {
-    // 	return selectedIds.includes(el._id)
-    // })
+    let selectedIds = this.grouping.getSelectedRows();
+    
+    let selectedFilter = this.variantsList.filter((el) => {
+    	return selectedIds.includes(el.id)
+    })
 
-    // let data = selectedFilter.map((el) => {
-    // 	let obj = {
-    // 		chrom: "",
-    // 		pos: "",
-    // 		ref: "",
-    // 		alt: "",
-    // 		gene: "",
-    // 		end: ""
-    // 	};
-    // 	obj.chrom = el.chrom;
-    // 	obj.pos = el.position;
-    // 	obj.ref = el.REF;
-    // 	obj.alt = el.ALT;
-    // 	obj.gene = el.gene;
+    let data = selectedFilter.map((el) => {
+    	let obj = {
+    		chrom: "",
+    		pos: "",
+    		ref: "",
+    		alt: "",
+    		gene: "",
+    		end: ""
+    	};
+    	obj.chrom = el.chrom;
+    	obj.pos = el.position;
+    	obj.ref = el.REF;
+    	obj.alt = el.ALT;
+    	obj.gene = el.gene;
 
-    // 	return obj;
-    // })
+    	return obj;
+    })
 
-    // const sb = this.variantListService.selectVariantToReport({ data })
-    // 	.subscribe((res: any) => {
-    // 		if (res.body.status == 'success') {
-    // 			this.toastr.success(res.body.message);
-    // 		} else {
-    // 			this.toastr.error(res.body.message);
-    // 		}
-    // 	})
-    // this.subscriptions.push(sb);
+    const sb = this.variantListService.selectVariantToReport(this.id, data)
+    	.subscribe((res: any) => {
+    		if (res.status == 'success') {
+    			this.toastr.success(res.message);
+    		} else {
+    			this.toastr.error(res.message);
+    		}
+    	})
+    this.subscriptions.push(sb);
   }
 
   exportVariants() {

@@ -38,14 +38,14 @@
     <div class="card-body py-3">
         <div class="tab-content">
             <!-- begin::Tap pane -->
-            <div class="tab-pane fade" [ngClass]="activeClass('variant_list')" id="variant_list">
+            <div class="tab-pane fade" *ngIf="activeTab === 'variant_list'" [ngClass]="activeClass('variant_list')" id="variant_list">
                 <div style="min-height: 800px !important">
                     <app-variant-list [id]="id"></app-variant-list>
                 </div>
             </div>
             <!-- end::Tap pane -->
             <!-- begin::Tap pane -->
-            <div class="tab-pane fade" [ngClass]="activeClass('variant_report')" id="variant_report">
+            <div class="tab-pane fade" *ngIf="activeTab === 'variant_report'" [ngClass]="activeClass('variant_report')" id="variant_report">
                 <div style="min-height: 800px !important">
                     <app-analysis-report-variant [id]="id"></app-analysis-report-variant>
                 </div>

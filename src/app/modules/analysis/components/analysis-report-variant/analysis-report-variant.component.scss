@@ -1,0 +1,85 @@
+.main-wrapper {
+    height: 750px;
+}
+
+.side-bar {
+    height: 700px;
+    overflow: auto;
+    box-shadow: 2px 0px 0px #e0dede;
+    background-color: #fff;
+    padding: 6px;
+}
+
+.table-variants-selected {
+    tbody {
+        height: 200px;
+        overflow-y: auto;
+        width: 100%;
+    }
+}
+
+:host::ng-deep th.width-150 {
+    width: 200px !important;
+}
+
+:host::ng-deep th.width-120 {
+    width: 170px !important;
+}
+
+:host::ng-deep th.width-125 {
+    width: 150px !important
+}
+
+:host::ng-deep th.width-105 {
+    width: 110px !important
+}
+
+:host::ng-deep th.width-110 {
+    width: 130px !important
+}
+
+:host::ng-deep th.width-100 {
+    width: 100px !important
+}
+
+:host::ng-deep span.classification {
+    border: 1px solid transparent !important;
+    padding: 5px 5px !important;
+    font-size: 1rem !important;
+    line-height: 1.5 !important;
+    border-radius: 0.42rem !important;
+}
+
+:host::ng-deep span.drug-response {
+    color: #FFFFFF;
+    background-color: #0BB7AF;
+    border-color: #0BB7AF;
+}
+
+:host::ng-deep span.pathogenic {
+    color: #ffffff;
+    background-color: #ef7a86;
+    border-color: #ef7a86;
+
+}
+
+:host::ng-deep span.likely-pathogenic {
+    color: #F64E60;
+    background-color: #FFE2E5;
+}
+
+:host::ng-deep span.uncertain-significance {
+    color: #3F4254;
+    background-color: #E4E6EF;
+}
+
+:host::ng-deep span.likely-benign {
+    color: #6993FF;
+    background-color: #E1E9FF
+}
+
+:host::ng-deep span.benign {
+    color: #FFFFFF;
+    background-color: #187DE4;
+    border-color: #187DE4;
+}

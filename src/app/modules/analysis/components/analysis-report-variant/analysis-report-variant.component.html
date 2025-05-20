@@ -1,1 +1,170 @@
-<p>analysis-report-variant works!</p>
+<div class="main-wrapper row">
+    <div class="col-2 side-bar">
+
+        <button type="button" class="btn btn-sm btn-light-primary">
+            <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr075.svg'" class="svg-icon svg-icon-3"></span>
+            New Report
+        </button>
+
+        <div class="mt-5">
+            <div class="list-group list-group-light">
+                <button type="button" class="list-group-item list-group-item-action px-3 border-0 active">
+                    Report 1
+                </button>
+                <button type="button" class="list-group-item list-group-item-action px-3 border-0">
+                    Report 2
+                </button>
+                <button type="button" class="list-group-item list-group-item-action px-3 border-0">
+                    Report 3
+                </button>
+                <button type="button" class="list-group-item list-group-item-action px-3 border-0">
+                    Report 4
+                </button>
+                <button type="button" class="list-group-item list-group-item-action px-3 border-0">
+                    Report 5
+                </button>
+              </div>
+        </div>
+    </div>
+    <div class="col-10">
+
+        <div class="table-responsive">
+            <table class="table table-borderless table-vertical-center" style="table-layout: fixed;">
+                <thead>
+                    <tr>
+                        <th class="p-0" style="width: 10%"></th>
+                        <th class="p-0 min-w-140px"></th>
+                    </tr>
+                </thead>
+                <tbody style="word-break: break-all;">
+                    <tr>
+                        <td class="pl-0 text-right">
+                            <div class="text-dark font-weight-bolder mb-1 font-size-lg">Name</div>
+                        </td>
+                        <td>
+                            <div class="col-lg-6">
+                                <input type="text" class="form-control" name="searchText" placeholder="Name"
+                                    value="" /><small class="form-text text-muted"><b>Enter</b> report's name</small>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="pl-0 text-right" style="vertical-align: top;">
+                            <div class="text-dark font-weight-bolder mb-1 font-size-lg">SNV / INDEL</div>
+                        </td>
+                        <td>
+                            <!-- begin::Table container -->
+                            <div class="table-responsive"style="width: 100%; max-height: 500px; overflow-y: auto;">
+                                <!-- begin::Table -->
+                                <table class="table table-row-dashed align-middle gs-0 gy-4 table-variants-selected">
+                                    <!-- begin::Table head -->
+                                    <thead class="sticky-top" style="background: #1b85ff;">
+                                        <tr class="fw-bolder" style="color: white !important;">
+                                            <th class="w-25px" style="padding-left: 12px;">
+                                                <div class="
+                                                    form-check form-check-sm form-check-custom form-check-solid
+                                                    ">
+                                                    <input class="form-check-input" type="checkbox" value="1"
+                                                        data-kt-check="true" data-kt-check-target=".widget-9-check"
+                                                        (click)="grouping.selectAllRows()"
+                                                        [checked]="grouping.checkAreAllRowsSelected()" />
+                                                </div>
+                                            </th>
+                                            <th class="min-w-120px">Gene</th>
+                                            <th class="min-w-120px">Transcript</th>
+                                            <th class="min-w-120px">cDNA</th>
+                                            <th class="min-w-120px">Coverage</th>
+                                            <th class="min-w-120px">gAD(ALL, AFR, AMR)</th>
+                                            <th class="min-w-120px">Classification</th>
+                                            <th class="min-w-120px">ACTIONS</th>
+                                        </tr>
+                                    </thead>
+                                    <!-- end::Table head -->
+                                    <!-- begin::Table body -->
+                                    <tbody>
+                                        <tr *ngFor="let variant of variantSelected">
+                                            <td>
+                                                <div class="
+                                                    form-check form-check-sm form-check-custom form-check-solid
+                                                    ">
+                                                    <input class="form-check-input widget-9-check" type="checkbox"
+                                                        value="{{variant.id}}" (click)="grouping.selectRow(variant.id)"
+                                                        [checked]="grouping.isRowSelected(variant.id)" />
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <p class="text-gray-900 fw-bolder d-block fs-6"
+                                                    style="margin-top: revert;">
+                                                    {{ variant.gene }}
+                                                </p>
+                                            </td>
+                                            <td>
+                                                <p class="text-gray-900 fw-bolder d-block fs-6"
+                                                    style="margin-top: revert;">
+                                                    {{ variant.transcript_id }}
+                                                </p>
+                                            </td>
+                                            <td>
+                                                <p class="text-gray-900 fw-bolder d-block fs-6"
+                                                    style="margin-top: revert;">
+                                                    {{ variant.cnomen }}
+                                                </p>
+                                            </td>
+                                            <td>
+                                                <p class="text-gray-900 fw-bolder d-block fs-6"
+                                                    style="margin-top: revert;">
+                                                    {{ variant.coverage }}
+                                                </p>
+                                            </td>
+                                            <td>
+                                                <p class="text-gray-900 fw-bolder d-block fs-6"
+                                                    style="margin-top: revert;">
+                                                    <span>{{ variant.gnomad }}</span><br>
+                                                    <span>{{ variant.gnomAD_AFR }}</span><br>
+                                                    <span>{{ variant.gnomAD_AMR }}</span>
+                                                </p>
+                                            </td>
+                                            <td>
+                                                <p class="text-gray-900 fw-bolder d-block fs-6 "
+                                                    style="margin-top: revert;">
+                                                    <span [class]="getVariantClass(variant.classification)"
+                                                        class="classification">
+                                                        {{ variant.classification }}</span>
+                                                </p>
+                                            </td>
+                                            <td>
+                                                <a title="Delete workspace"
+                                                    class="btn btn-icon btn-light btn-hover-danger btn-sm"
+                                                    (click)="delete(variant)">
+                                                    <span [inlineSVG]="'./assets/media/svg/icons/General/Trash.svg'"
+                                                        class="svg-icon svg-icon-md svg-icon-danger">
+                                                    </span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <!-- end::Table body -->
+                                </table>
+                                <!-- end::Table -->
+                            </div>
+                            <!-- end::Table container -->
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                        </td>
+                        <td>
+                            <div style="width: fit-content;">
+                                <a (click)="createReport()"
+                                    class="btn btn-primary btn-fixed-height font-weight-bold px-2 px-lg-5 mr-2">
+                                    <span class="d-none d-md-inline">Create Report</span>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
