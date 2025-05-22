@@ -19,4 +19,8 @@ export class AnalysisService {
   getAnalysis(id: number): Observable<any> {
     return this.http.get(`${API_ANALYSIS_URL}/${id}`, { withCredentials: true });
   }
+
+  getQCVCF(id: number): Observable<any> {
+    return this.http.get(`${API_ANALYSIS_URL}/get-qc-vcf/${id}`, { withCredentials: true });
+  }
 }

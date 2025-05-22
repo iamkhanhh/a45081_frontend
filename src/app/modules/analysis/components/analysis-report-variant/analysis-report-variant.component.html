@@ -82,7 +82,14 @@
                                     <!-- end::Table head -->
                                     <!-- begin::Table body -->
                                     <tbody>
-                                        <tr *ngFor="let variant of variantSelected">
+                                        <div *ngIf="isLoading" class="spin-loading">
+                                            <div style=" 
+                                            position: fixed;
+                                            top: 60%;
+                                            left: 60%;
+                                            z-index: 100;" class="spinner-border text-primary"></div>
+                                        </div>
+                                        <tr [hidden]="isLoading" *ngFor="let variant of variantSelected">
                                             <td>
                                                 <div class="
                                                     form-check form-check-sm form-check-custom form-check-solid
@@ -136,9 +143,9 @@
                                                 <a title="Delete workspace"
                                                     class="btn btn-icon btn-light btn-hover-danger btn-sm"
                                                     (click)="delete(variant)">
-                                                    <span [inlineSVG]="'./assets/media/svg/icons/General/Trash.svg'"
-                                                        class="svg-icon svg-icon-md svg-icon-danger">
-                                                    </span>
+                                                    <span [inlineSVG]="
+                                                        './assets/media/icons/duotune/general/gen027.svg'
+                                                    " class="svg-icon svg-icon-3"></span>
                                                 </a>
                                             </td>
                                         </tr>

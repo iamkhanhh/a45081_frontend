@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, Input, Renderer2, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { Variant } from '../../_models/variant.model';
 import { GroupingState, PaginatorState } from 'src/app/_metronic/shared/models';
 import { environment } from 'src/environments/environment';
@@ -15,7 +15,7 @@ import { Select2OptionData } from 'ng-select2';
   templateUrl: './variant-list.component.html',
   styleUrl: './variant-list.component.scss'
 })
-export class VariantListComponent {
+export class VariantListComponent implements OnInit, OnDestroy {
   @Input() id: number;
   @ViewChild('btnShowCol') toggleButton: ElementRef;
   @ViewChild('listColumn') menu: ElementRef;

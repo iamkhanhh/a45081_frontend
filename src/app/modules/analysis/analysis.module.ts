@@ -18,6 +18,8 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
+import { QualityControlComponent } from './components/quality-control/quality-control.component';
+import { SafePipe } from './pipes/safe.pipe';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,9 @@ import { MatButtonModule } from '@angular/material/button';
     AnalysisIndexComponent,
     AnalysisListComponent,
     VariantListComponent,
-    AnalysisReportVariantComponent
+    AnalysisReportVariantComponent,
+    QualityControlComponent,
+    SafePipe
   ],
   imports: [
     CommonModule,

@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 
 type Tabs =
+	| 'quality_control'
 	| 'variant_list'
 	| 'variant_report';
 
@@ -18,7 +19,7 @@ export class AnalysisIndexComponent {
 	isLoaded: boolean;
 	type: string;
 	project_id: number;
-	activeTab: Tabs = 'variant_list';
+	activeTab: Tabs = 'quality_control';
 
 	constructor(
 		public analysisService: AnalysisService,

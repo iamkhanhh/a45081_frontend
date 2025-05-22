@@ -1,0 +1,10 @@
+<div>
+	<div *ngIf="isLoading" class="spin-loading">
+		<div style=" 
+				position: fixed;
+				top: 50%;
+				left: 50%;
+				z-index: 100;" class="spinner-border text-primary"></div>
+	</div>
+	<iframe [hidden]="isLoading" #iframe [src] = "qcUrl | safe" frameBorder="0" width="100%" height="900px"></iframe>
+</div>
