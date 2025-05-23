@@ -25,4 +25,8 @@ export class VariantListService {
     createReport(id: number, data: any) {
         return this.http.post(`${environment.apiUrl}/variants/${id}/export-report`, data, { withCredentials: true });
     }
+
+    deleteSelectedVariant(id: number, variant: any): Observable<any> {
+        return this.http.delete(`${environment.apiUrl}/variants/${id}/delete-selected-variant`, { withCredentials: true, body: variant});
+    }
 }

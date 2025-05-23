@@ -5,6 +5,8 @@ import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { GroupingState } from 'src/app/_metronic/shared/models';
 import { VariantListService } from '../../services/variant-list.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { DeleteSelectedVariantComponent } from '../delete-selected-variant/delete-selected-variant.component';
 
 @Component({
   selector: 'app-analysis-report-variant',
@@ -17,16 +19,18 @@ export class AnalysisReportVariantComponent {
   grouping: GroupingState = new GroupingState();
   isLoading: boolean;
   loadingExport = false;
-  private subscriptions: Subscription[] = [];
   variantSelected: any[];
   url: any;
   htmlString: string;
   htmlData: any;
+  reportName: string = '';
+  
+  private subscriptions: Subscription[] = [];
 
   constructor(
     public variantListService: VariantListService,
     private fb: FormBuilder,
-    // private modalService: NgbModal, 
+    private modalService: NgbModal, 
     private toastr: ToastrService,
     private sanitizer: DomSanitizer,
     private cd: ChangeDetectorRef
@@ -43,7 +47,7 @@ export class AnalysisReportVariantComponent {
         if (res.status == 'success') {
           this.variantSelected = res.data;
           const itemIds = this.variantSelected.map((w: any) => {
-            return w._id;
+            return w.id;
           });
           this.grouping.clearRows(itemIds);
         }
@@ -61,21 +65,15 @@ export class AnalysisReportVariantComponent {
     return `${classification.split(" ").join("-")}`;
   }
 
-  edit(id: number) {
-
-  }
-
   delete(variant: any) {
     console.log(variant)
-
-  }
-
-  deleteSelected() {
-
-  }
-
-  fetchSelected() {
-
+    const modalRef = this.modalService.open(DeleteSelectedVariantComponent, { size: 'md' });
+    modalRef.componentInstance.id = this.id;
+    modalRef.componentInstance.variant = variant;
+    modalRef.result.then(() =>
+      this.loadVariantsSelected(),
+      () => { }
+    );
   }
 
   createReport() {

@@ -4,7 +4,7 @@ import { AnalysisComponent } from './analysis.component';
 import { InlineSVGModule } from 'ng-inline-svg-2';
 import { SharedModule } from 'src/app/_metronic/shared/shared.module';
 import { NgbAlertModule, NgbDatepickerModule, NgbDropdownModule, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AnalysisRoutingModule } from './analysis-routing.module';
 import { AnalysisListComponent } from './analysis-list/analysis-list.component';
 import { WorkspaceModule } from '../workspace/workspace.module';
@@ -20,6 +20,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
 import { QualityControlComponent } from './components/quality-control/quality-control.component';
 import { SafePipe } from './pipes/safe.pipe';
+import { DeleteSelectedVariantComponent } from './components/delete-selected-variant/delete-selected-variant.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { SafePipe } from './pipes/safe.pipe';
     VariantListComponent,
     AnalysisReportVariantComponent,
     QualityControlComponent,
-    SafePipe
+    SafePipe,
+    DeleteSelectedVariantComponent
   ],
   imports: [
     CommonModule,
@@ -51,7 +53,8 @@ import { SafePipe } from './pipes/safe.pipe';
 		NgSelect2Module,
 		MatSliderModule,
 		NgbDropdownModule,
-		MatProgressSpinnerModule
+		MatProgressSpinnerModule,
+    FormsModule
   ]
 })
 export class AnalysisModule { }

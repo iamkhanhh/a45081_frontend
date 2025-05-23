@@ -1,20 +1,19 @@
 export interface IGroupingState {
-  selectedRowIds: Set<number>;
-  itemIds: number[];
+  selectedRowIds: Set<any>;
+  itemIds: any[];
   checkAreAllRowsSelected(): boolean;
-  selectRow(id: number): IGroupingState;
+  selectRow(id: any): IGroupingState;
   // tslint:disable-next-line:variable-name
-  clearRows(_itemIds: number[]): IGroupingState;
-  isRowSelected(id: number): boolean;
+  clearRows(_itemIds: any[]): IGroupingState;
+  isRowSelected(id: any): boolean;
   selectAllRows(): IGroupingState;
-  getSelectedRows(): number[];
-  getSelectedRowsCount(): number;
+  getSelectedRows(): any[];
+  getSelectedRowsCount(): any;
 }
 
 export class GroupingState implements IGroupingState {
-  selectedRowIds: Set<number> = new Set<number>();
+  selectedRowIds: Set<any> = new Set<any>();
   itemIds: any[] = [];
-
 
   checkAreAllRowsSelected(): boolean {
     if (this.itemIds.length === 0) {
@@ -24,7 +23,7 @@ export class GroupingState implements IGroupingState {
     return this.selectedRowIds.size === this.itemIds.length;
   }
 
-  selectRow(id: number): GroupingState {
+  selectRow(id: any): GroupingState {
     if (this.selectedRowIds.has(id)) {
       this.selectedRowIds.delete(id);
     } else {
@@ -34,22 +33,22 @@ export class GroupingState implements IGroupingState {
   }
 
   // tslint:disable-next-line:variable-name
-  clearRows(_itemIds: number[]): GroupingState {
+  clearRows(_itemIds: any[]): GroupingState {
     this.itemIds = _itemIds;
-    this.selectedRowIds = new Set<number>();
+    this.selectedRowIds = new Set<any>();
     return this;
   }
 
-  isRowSelected(id: number): boolean {
+  isRowSelected(id: any): boolean {
     return this.selectedRowIds.has(id);
   }
 
   selectAllRows(): GroupingState {
     const areAllSelected = this.itemIds.length === this.selectedRowIds.size;
     if (areAllSelected) {
-      this.selectedRowIds = new Set<number>();
+      this.selectedRowIds = new Set<any>();
     } else {
-      this.selectedRowIds = new Set<number>();
+      this.selectedRowIds = new Set<any>();
       this.itemIds.forEach(id => this.selectedRowIds.add(id));
     }
     return this;
@@ -59,7 +58,7 @@ export class GroupingState implements IGroupingState {
     return Array.from(this.selectedRowIds);
   }
 
-  getSelectedRowsCount(): number {
+  getSelectedRowsCount(): any {
     return this.selectedRowIds.size;
   }
 }

@@ -38,11 +38,13 @@ export class QualityControlComponent implements OnInit, OnDestroy {
           this.toastr.error(res.message)
         }
         this.isLoading = false;
+        this.cd.detectChanges();
       })
       this.subscriptions.push(sb);
   }
 
   ngOnDestroy() {
+    this.qcUrl = '';
     this.subscriptions.forEach((sb) => sb.unsubscribe());
   }
 }
