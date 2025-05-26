@@ -24,6 +24,7 @@ export class AnalysisReportVariantComponent {
   htmlString: string;
   htmlData: any;
   reportName: string = '';
+  reportId: number = 0;
   
   private subscriptions: Subscription[] = [];
 
@@ -74,6 +75,15 @@ export class AnalysisReportVariantComponent {
       this.loadVariantsSelected(),
       () => { }
     );
+  }
+
+  chooseReport(id: number) {
+    console.log(id);
+    this.reportId = id;
+  }
+
+  getActiveClassReport(id: number) {
+    return this.reportId == id ? 'active' : '';
   }
 
   createReport() {

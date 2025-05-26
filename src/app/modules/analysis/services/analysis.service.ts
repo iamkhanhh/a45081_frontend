@@ -23,4 +23,12 @@ export class AnalysisService {
   getQCVCF(id: number): Observable<any> {
     return this.http.get(`${API_ANALYSIS_URL}/get-qc-vcf/${id}`, { withCredentials: true });
   }
+
+  loadPatientInfor(id: number): Observable<any> {
+    return this.http.get(`${environment.apiUrl}/patient-information/${id}`, { withCredentials: true });
+  }
+
+  savePatientInfor(id: number, data: any): Observable<any> {
+    return this.http.put(`${environment.apiUrl}/patient-information/${id}`, data, { withCredentials: true });
+  }
 }

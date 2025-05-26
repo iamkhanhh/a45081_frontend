@@ -21,6 +21,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { QualityControlComponent } from './components/quality-control/quality-control.component';
 import { SafePipe } from './pipes/safe.pipe';
 import { DeleteSelectedVariantComponent } from './components/delete-selected-variant/delete-selected-variant.component';
+import { AnalysisReportDetailComponent } from './components/analysis-report-detail/analysis-report-detail.component';
+import { PatientInformationComponent } from './components/patient-information/patient-information.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,9 @@ import { DeleteSelectedVariantComponent } from './components/delete-selected-var
     AnalysisReportVariantComponent,
     QualityControlComponent,
     SafePipe,
-    DeleteSelectedVariantComponent
+    DeleteSelectedVariantComponent,
+    AnalysisReportDetailComponent,
+    PatientInformationComponent
   ],
   imports: [
     CommonModule,
@@ -44,7 +48,6 @@ import { DeleteSelectedVariantComponent } from './components/delete-selected-var
     WorkspaceModule,
     NgSelect2Module,
     NgbModalModule,
-		NgbDatepickerModule,
 		MatCardModule,
 		// MatIconModule,
 		MatSelectModule,

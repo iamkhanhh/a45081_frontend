@@ -1,26 +1,27 @@
 <div class="main-wrapper row">
     <div class="col-2 side-bar">
 
-        <button type="button" class="btn btn-sm btn-light-primary">
+        <button type="button" (click)="chooseReport(0)" class="btn btn-sm btn-light-primary">
             <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr075.svg'" class="svg-icon svg-icon-3"></span>
             New Report
         </button>
 
         <div class="mt-5">
+            <p class="fs-4">My Reports:</p>
             <div class="list-group list-group-light">
-                <button type="button" class="list-group-item list-group-item-action px-3 border-0 active">
+                <button type="button" (click)="chooseReport(1)" [ngClass]="getActiveClassReport(1)" class="list-group-item list-group-item-action px-3 border-0">
                     Report 1
                 </button>
-                <button type="button" class="list-group-item list-group-item-action px-3 border-0">
+                <button type="button" (click)="chooseReport(2)" [ngClass]="getActiveClassReport(2)" class="list-group-item list-group-item-action px-3 border-0">
                     Report 2
                 </button>
-                <button type="button" class="list-group-item list-group-item-action px-3 border-0">
+                <button type="button" (click)="chooseReport(3)" [ngClass]="getActiveClassReport(3)" class="list-group-item list-group-item-action px-3 border-0">
                     Report 3
                 </button>
-                <button type="button" class="list-group-item list-group-item-action px-3 border-0">
+                <button type="button" (click)="chooseReport(4)" [ngClass]="getActiveClassReport(4)" class="list-group-item list-group-item-action px-3 border-0">
                     Report 4
                 </button>
-                <button type="button" class="list-group-item list-group-item-action px-3 border-0">
+                <button type="button" (click)="chooseReport(5)" [ngClass]="getActiveClassReport(5)" class="list-group-item list-group-item-action px-3 border-0">
                     Report 5
                 </button>
               </div>
@@ -28,7 +29,7 @@
     </div>
     <div class="col-10">
 
-        <div class="table-responsive">
+        <div *ngIf="reportId == 0" class="table-responsive">
             <table class="table table-borderless table-vertical-center" style="table-layout: fixed;">
                 <thead>
                     <tr>
@@ -171,6 +172,10 @@
                     </tr>
                 </tbody>
             </table>
+        </div>
+
+        <div *ngIf="reportId != 0">
+            <app-analysis-report-detail [id]="reportId" ></app-analysis-report-detail>
         </div>
 
     </div>

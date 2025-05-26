@@ -6,7 +6,8 @@ import { Location } from '@angular/common';
 type Tabs =
 	| 'quality_control'
 	| 'variant_list'
-	| 'variant_report';
+	| 'variant_report'
+	| 'patient_information';
 
 @Component({
 	selector: 'app-analysis-index',

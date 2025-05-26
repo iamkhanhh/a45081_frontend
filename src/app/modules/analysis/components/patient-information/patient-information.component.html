@@ -1,0 +1,128 @@
+<div>
+    <div *ngIf="isLoading" class="spin-loading">
+        <div style=" 
+				position: fixed;
+				top: 50%;
+				left: 50%;
+				z-index: 100;" class="spinner-border text-primary"></div>
+    </div>
+    <div *ngIf="!isLoading" class="content-patient">
+        <form class="form" [formGroup]="patientForm" (ngSubmit)="submit()">
+
+            <div class="row justify-content-between mb-4">
+                <div class="col-lg-4 col-12">
+                    <label class="form-label fw-bolder text-gray-900 fs-6">Patient ID</label>
+                    <input class="form-control form-control-lg form-control-solid" type="text" name="id"
+                        formControlName="id" autocomplete="off" />
+                </div>
+
+                <div class="col-lg-4 col-12">
+                    <label class="form-label fw-bolder text-gray-900 fs-6 required">First Name</label>
+                    <input type="text" class="form-control form-control-lg form-control-solid" name="first_name"
+                        placeholder="Enter patient first name" formControlName="first_name" autocomplete="off"
+                        [class.is-invalid]="isControlInvalid('first_name')" />
+                    <div class="invalid-feedback" *ngIf="controlHasError('required', 'first_name')">
+                        First Name is required!</div>
+                </div>
+
+                <div class="col-lg-4 col-12">
+                    <label class="form-label fw-bolder text-gray-900 fs-6 required">Last Name</label>
+                    <input type="text" class="form-control form-control-lg form-control-solid" name="last_name"
+                        placeholder="Enter patient last name" formControlName="last_name" autocomplete="off"
+                        [class.is-invalid]="isControlInvalid('last_name')" />
+                    <div class="invalid-feedback" *ngIf="controlHasError('required', 'last_name')">Last Name is
+                        required!
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-between mb-4">
+                <div class="col-lg-4 col-12">
+                    <label class="form-label fw-bolder text-gray-900 fs-6 required">Date of Birth</label>
+                    <div style="display: flex;">
+                        <input type="text" name="dob" class="form-control form-control-lg form-control-solid"
+                            autocomplete="off" placeholder="yyyy/mm/dd" ngbDatepicker #d="ngbDatepicker"
+                            formControlName="dob" readonly="true" (click)="d.toggle()"
+                            [class.is-invalid]="isControlInvalid('dob')" />
+                        <button class="btn btn-outline-secondary bi bi-calendar3 input-group-append"
+                            (click)="d.toggle()" type="button"></button>
+                    </div>
+                    <div class="invalid-feedback" *ngIf="controlHasError('required', 'dob')">Dob
+                        is required!</div>
+                </div>
+
+                <div class="col-lg-4 col-12">
+                    <label class="form-label fw-bolder text-gray-900 fs-6 required">Gender</label>
+                    <select class="form-control form-control-lg form-control-solid" name="gender"
+                        formControlName="gender">
+                        <option value=""></option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                    <div class="feedback">Please select <b>Gender</b></div>
+                </div>
+
+                <div class="col-lg-4 col-12">
+                    <label class="form-label fw-bolder text-gray-900 fs-6">Ethnicity</label>
+                    <select class="form-control form-control-lg form-control-solid" name="ethnicity"
+                        formControlName="ethnicity">
+                        <option value=""></option>
+                        <option value="Asian">Asian</option>
+                        <option value="Black">Black or African American</option>
+                        <option value="Caucasian">White / Caucasian</option>
+                        <option value="Unknown">Unknown</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row justify-content-between mb-4">
+                <div class="col-lg-4 col-12">
+                    <label class="form-label fw-bolder text-gray-900 fs-6">Sample's Name</label>
+                    <input type="text" class="form-control form-control-lg form-control-solid" name="sample_name"
+                        formControlName="sample_name" autocomplete="off" />
+                </div>
+
+                <div class="col-lg-4 col-12">
+                    <label class="form-label fw-bolder text-gray-900 fs-6">Created Date</label>
+                    <input type="text" class="form-control form-control-lg form-control-solid" name="createdAt"
+                        formControlName="createdAt" autocomplete="off" />
+                </div>
+
+                <div class="col-lg-4 col-12">
+                    <label class="form-label fw-bolder text-gray-900 fs-6">Sample Type</label>
+                    <select class="form-control form-control-lg form-control-solid" name="sample_type"
+                        formControlName="sample_type">
+                        <option value=""></option>
+                        <option value="DNA">DNA</option>
+                        <option value="Blood">Blood</option>
+                        <option value="Saliva">Saliva</option>
+                        <option value="Hair">Hair</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row justify-content-between mb-4">
+                <div class="col-12">
+                    <label class="form-label fw-bolder text-gray-900 fs-6">Clinical Information</label>
+                    <textarea type="text" rows="3" class="form-control form-control-lg" name="phenotype"
+                        formControlName="phenotype"></textarea>
+                </div>
+            </div>
+
+            <div class="d-grid mb-10">
+                <button type="submit" style="width: 200px; margin: auto;" [disabled]="patientForm.invalid || isLoading"
+                    class="btn btn-primary">
+                    <ng-container *ngIf="!isLoading">
+                        <span class="indicator-label">SAVE</span>
+                    </ng-container>
+                    <ng-container *ngIf="isLoading">
+                        <span class="indicator-progress" [style.display]="'block'">
+                            Please wait...
+                            <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                        </span>
+                    </ng-container>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

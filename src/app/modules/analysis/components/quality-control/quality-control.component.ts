@@ -37,8 +37,10 @@ export class QualityControlComponent implements OnInit, OnDestroy {
         } else {
           this.toastr.error(res.message)
         }
-        this.isLoading = false;
-        this.cd.detectChanges();
+        setTimeout(() => {
+          this.isLoading = false;
+          this.cd.detectChanges();
+        }, 2000);
       })
       this.subscriptions.push(sb);
   }

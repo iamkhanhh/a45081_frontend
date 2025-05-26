@@ -2,7 +2,7 @@
     <!-- begin::Header -->
     <div class="card-header border-0 pt-5">
         <h3 class="card-title align-items-start flex-column">
-            <span class="card-label fw-bolder fs-2 mb-1">Analysis's Detail: <span class="text-primary">{{ analysis_name }}</span></span>
+            <span class="card-label fw-bolder fs-2 mb-1">Analysis Detail: <span class="text-primary">{{ analysis_name }}</span></span>
         </h3>
         <div class="card-toolbar">
             <ul class="nav">
@@ -42,6 +42,18 @@
                         Reports
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="
+                    nav-link
+                    btn btn-sm btn-color-muted btn-active btn-active-light-primary
+                    fw-bolder
+                    px-4
+                    me-1
+                  " data-bs-toggle="tab" [ngClass]="activeClass('patient_information')"
+                        (click)="setTab('patient_information')">
+                        Patient
+                    </a>
+                </li>
             </ul>
         </div>
     </div>
@@ -67,6 +79,13 @@
             <div class="tab-pane fade" *ngIf="activeTab === 'variant_report'" [ngClass]="activeClass('variant_report')" id="variant_report">
                 <div style="min-height: 800px !important">
                     <app-analysis-report-variant [id]="id"></app-analysis-report-variant>
+                </div>
+            </div>
+            <!-- end::Tap pane -->
+            <!-- begin::Tap pane -->
+            <div class="tab-pane fade" *ngIf="activeTab === 'patient_information'" [ngClass]="activeClass('patient_information')" id="patient_information">
+                <div>
+                    <app-patient-information [id]="id"></app-patient-information>
                 </div>
             </div>
             <!-- end::Tap pane -->
