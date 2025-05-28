@@ -24,6 +24,7 @@ import { DeleteSelectedVariantComponent } from './components/delete-selected-var
 import { AnalysisReportDetailComponent } from './components/analysis-report-detail/analysis-report-detail.component';
 import { PatientInformationComponent } from './components/patient-information/patient-information.component';
 import { GeneDetailComponent } from './components/gene-detail/gene-detail.component';
+import { IgvGenomeBrowserComponent } from './components/igv-genome-browser/igv-genome-browser.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { GeneDetailComponent } from './components/gene-detail/gene-detail.compon
     DeleteSelectedVariantComponent,
     AnalysisReportDetailComponent,
     PatientInformationComponent,
-    GeneDetailComponent
+    GeneDetailComponent,
+    IgvGenomeBrowserComponent
   ],
   imports: [
     CommonModule,

@@ -10,6 +10,7 @@ import { Datalist } from '../../ultils/datalist';
 import { Subscription } from 'rxjs';
 import { Select2OptionData } from 'ng-select2';
 import { GeneDetailComponent } from '../gene-detail/gene-detail.component';
+import { IgvGenomeBrowserComponent } from '../igv-genome-browser/igv-genome-browser.component';
 
 @Component({
   selector: 'app-variant-list',
@@ -302,15 +303,15 @@ export class VariantListComponent implements OnInit, OnDestroy {
   }  
 
   openIGVModal(chrom: any, position: any) {
-    // const modalRef = this.modalService.open(IgvModalComponent, { size: 'lg', windowClass: "igv-browser-modal" });
-    // modalRef.componentInstance.chrom = chrom;
-    // modalRef.componentInstance.position = position;
-    // modalRef.componentInstance.id = this.id;
+    const modalRef = this.modalService.open(IgvGenomeBrowserComponent, { size: 'lg', windowClass: "igv-browser-modal" });
+    modalRef.componentInstance.chrom = chrom;
+    modalRef.componentInstance.position = position;
+    modalRef.componentInstance.id = this.id;
 
-    // modalRef.result.then(() => {
-    // 	this.cd.detectChanges(),
-    // 		() => { }
-    // });
+    modalRef.result.then(() => {
+    	this.cd.detectChanges(),
+    		() => { }
+    });
   }
 
   onColumnListControlChanged(list: any) {
