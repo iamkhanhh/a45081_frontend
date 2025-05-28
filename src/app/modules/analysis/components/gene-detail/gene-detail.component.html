@@ -1,0 +1,264 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <div class="modal-title h4" id="example-modal-sizes-title-lg">
+            Gene & Variant Information
+        </div>
+    </div>
+    <div class="overlay overlay-block cursor-default modal-body" style="min-height: 404px;">
+        <ng-container *ngIf="isLoading">
+            <div class="overlay-layer bg-transparent">
+                <div class="spinner spinner-lg spinner-success"></div>
+            </div>
+        </ng-container>
+
+        <ng-container>
+            <ul class="nav">
+                <li class="nav-item">
+                    <a class="
+                    nav-link
+                    btn btn-sm btn-color-muted btn-active btn-active-light-primary
+                    fw-bolder
+                    px-4
+                    me-1
+                  " data-bs-toggle="tab" [ngClass]="activeClass('gene_detail')"
+                        (click)="setTab('gene_detail')">
+                        Gene Detail
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="
+                    nav-link
+                    btn btn-sm btn-color-muted btn-active btn-active-light-primary
+                    fw-bolder
+                    px-4
+                    me-1
+                  " data-bs-toggle="tab" [ngClass]="activeClass('variant_detail')"
+                        (click)="setTab('variant_detail')">
+                        Variant Detail
+                    </a>
+                </li>
+            </ul>
+
+            <!-- <ul id="gene-info-tab" class="nav nav-tabs mb-3" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a (click)="tabClick('variant_detail')"
+                        [ngClass]="tab === 'variant_detail' ? 'nav-link active' : 'nav-link'" id="variant-tab"
+                        data-toggle="tab" role="tab" aria-controls="home" aria-selected="true">Variant Detail</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a (click)="tabClick('gene_detail')"
+                        [ngClass]="tab === 'gene_detail' ? 'nav-link active' : 'nav-link'" id="gene-tab"
+                        data-toggle="tab" role="tab" aria-controls="home" aria-selected="true">Gene Detail</a>
+                </li>
+            </ul> -->
+
+            <div class="tab-content">
+                <div role="tabpanel" [ngClass]="activeTab === 'gene_detail' ? 'tab-pane active' : 'tab-pane'" class="tab-pane"
+                    *ngIf="activeTab === 'gene_detail'">
+                    <div class="row">
+                        <div class="col-sm-2 text-right">Gene name:</div>
+                        <div class="col-sm-10">
+                            <p>{{ gene.full_name }}</p>
+                        </div>
+                    </div>
+
+                    <!-- <div class="row" *ngIf="variant.HGNC_PRE_SYMBOL != '.' && variant.HGNC_PRE_SYMBOL != undefined && variant.HGNC_PRE_SYMBOL != ''">
+                        <div class="col-sm-2 text-right">Previous symbols:</div>
+                        <div class="col-sm-10">
+                            <p>{{ variant.HGNC_PRE_SYMBOL}}</p>
+                        </div>
+                    </div> -->
+
+                    <div class="row">
+                        <div class="col-sm-2 text-right">Synonyms:</div>
+                        <div class="col-sm-10">
+                            <p>{{ gene.synonyms }}</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-2 text-right">Gene function:</div>
+                        <div class="col-sm-10">
+                            <p>{{gene.function}}</p>
+                        </div>
+                    </div>
+                    <div class="row" *ngIf="gene.full_name == null && gene.function == null">
+                        <div class="col-sm-12">This gene doesn't have information.</div>
+                    </div>
+                </div>
+
+                <div role="tabpanel" [ngClass]="activeTab === 'variant_detail' ? 'tab-pane active' : 'tab-pane'"
+                    *ngIf="activeTab === 'variant_detail'">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h5>Variant description</h5>
+                            <div class="row">
+                                <div class="col-md-6 text-right">Transcript:</div>
+                                <div class="col-md-6">{{ variant.transcript_id}} <span
+                                        *ngIf="checkExist(variant.CANONICAL)">(Canonical)</span></div>
+                            </div>
+                            <div class="row" *ngIf="checkExist(variant.Consequence)">
+                                <div class="col-md-6 text-right">Consequence:</div>
+                                <div class="col-md-6">{{ variant.Consequence.split(',').join(', ')}}</div>
+                            </div>
+                            <div class="row" *ngIf="checkExist(variant.cnomen)">
+                                <div class="col-md-6 text-right">HGVSc:</div>
+                                <div class="col-md-6">{{ variant.cnomen}}</div>
+                            </div>
+                            <div class="row" *ngIf="checkExist(variant.pnomen)">
+                                <div class="col-md-6 text-right">HGVSp:</div>
+                                <div class="col-md-6">{{ variant.pnomen}}</div>
+                            </div>
+                            <div class="row" *ngIf="checkExist(variant.EXON)">
+                                <div class="col-md-6 text-right">Exon:</div>
+                                <div class="col-md-6">{{ variant.EXON}}(total)</div>
+                            </div>
+                            <div class="row" *ngIf="checkExist(variant.INTRON)">
+                                <div class="col-md-6 text-right">Intron:</div>
+                                <div class="col-md-6">{{ variant.INTRON}}(total)</div>
+                            </div>
+                            <div class="row" *ngIf="checkExist(variant.DOMAINS)">
+                                <div class="col-md-6 text-right">Domains:</div>
+                                <div class="col-md-6">{{ variant.DOMAINS.split(',').join(', ')}}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 text-right">rsID:</div>
+                                <div class="col-md-6">{{ variant.rsid}}</div>
+                            </div>
+                            <div class="row" *ngIf=" variant.gnomAD_genome_AMR  != '.' ||  variant.gnomADe_AMR != '.' ">
+                                <div class="col-md-6 text-right">gnomAD:</div>
+                                <div class="col-md-6"><a
+                                        href="https://gnomad.broadinstitute.org/variant/{{variant.chrom}}-{{variant.position}}-{{variant.REF}}-{{variant.ALT}}"
+                                        target="_blank">Link</a></div>
+                            </div>
+
+                            <h5 *ngIf="checkExist(variant.CLINSIG)
+                            || checkExist(variant.NEW_CLINSIG)
+                            || checkExist(variant.CLNACC)
+                            || checkExist(variant.SOMATIC)
+                            || checkExist(variant.cosmics)
+                            || checkExist(variant.SIFT_score)
+                            || checkExist(variant.Polyphen2_HDIV_score)
+                            || checkExist(variant.CADD_PHRED)
+                            || checkExist(variant.PUBMED)
+
+                            ">Clinical significance</h5>
+                            <div class="row" *ngIf="checkExist(variant.CLINSIG) || checkExist(variant.NEW_CLINSIG)">
+                                <div class="col-md-6 text-right">ClinVar clinical significance:</div>
+                                <div class="col-md-6">{{ checkExist(variant.NEW_CLINSIG) == false ?
+                                    variant.CLINSIG.split(',').join(', ') : variant.NEW_CLINSIG.split(',').join(', ')}}
+                                </div>
+                            </div>
+                            <div class="row" *ngIf="checkExist(variant.CLNACC)">
+                                <div class="col-md-6 text-right">Review status:</div>
+                                <div class="col-md-6" title="{{variant.review_status}}">
+                                    <span><i
+                                            [ngClass]="variant.gold_stars >= 1 ? 'fa fa-star yellow-star' : 'fa fa-star'"></i></span>
+                                    <span><i
+                                            [ngClass]="variant.gold_stars >= 2 ? 'fa fa-star yellow-star' : 'fa fa-star'"></i></span>
+                                    <span><i
+                                            [ngClass]="variant.gold_stars >= 3 ? 'fa fa-star yellow-star' : 'fa fa-star'"></i></span>
+                                    <span><i
+                                            [ngClass]="variant.gold_stars >= 4 ? 'fa fa-star yellow-star' : 'fa fa-star'"></i></span>
+                                </div>
+                            </div>
+                            <div class="row" *ngIf="checkExist(variant.Clinvar_VARIANT_ID)">
+                                <div class="col-md-6 text-right">Clinvar Variant ID:</div>
+                                <div class="col-md-6">
+                                    <div>
+                                        <a href="https://www.ncbi.nlm.nih.gov/clinvar/variation/{{ variant.Clinvar_VARIANT_ID }}"
+                                            target="_blank">{{variant.Clinvar_VARIANT_ID}}</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" *ngIf="checkExist(variant.SOMATIC)">
+                                <div class="col-md-6 text-right">Somatic status:</div>
+                                <div class="col-md-6">{{ variant.SOMATIC}}</div>
+                            </div>
+                            <div class="row" *ngIf="checkExist(variant.cosmics)">
+                                <div class="col-md-6 text-right">Cosmics:</div>
+                                <div class="col-md-6" [innerHtml]="buildCosmicId(variant.cosmics)"></div>
+                            </div>
+                            <div class="row" *ngIf="checkExist(variant.SIFT_score)">
+                                <div class="col-md-6 text-right">SIFT:</div>
+                                <div class="col-md-6">{{ variant.SIFT_score}}</div>
+                            </div>
+                            <div class="row" *ngIf="checkExist(variant.Polyphen2_HDIV_score)">
+                                <div class="col-md-6 text-right">Polyphen2:</div>
+                                <div class="col-md-6">{{ variant.Polyphen2_HDIV_score}}</div>
+                            </div>
+                            <div class="row" *ngIf="checkExist(variant.CADD_PHRED)">
+                                <div class="col-md-6 text-right">CADD_PHRED:</div>
+                                <div class="col-md-6">{{ variant.CADD_PHRED}}</div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <h5>Allele Frequency</h5>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <table class="table table-bordered gene-table allele-frequency-table"
+                                        style="border: 1px solid #eaeaea !important">
+                                        <thead style="background-color: darkgrey; color: #fff">
+                                            <tr>
+                                                <th width="92px">Population</th>
+                                                <th>gnomAD Exomes</th>
+                                                <th>gnomAD Genomes</th>
+                                                <th>1000g</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>African</td>
+                                                <td>{{ variant.gnomADe_AFR }}</td>
+                                                <td>{{ variant.gnomAD_genome_AFR }}</td>
+                                                <td>{{ variant['1000g_AFR_AF'] }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>American</td>
+                                                <td>{{ variant.gnomADe_AMR }}</td>
+                                                <td>{{ variant.gnomAD_genome_AMR }}</td>
+                                                <td>{{ variant['1000g_AMR_AF'] }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>East Asian</td>
+                                                <td>{{ variant.gnomADe_EAS }}</td>
+                                                <td>{{ variant.gnomAD_genome_EAS }}</td>
+                                                <td>{{ variant['1000g_EAS_AF'] }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>South Asian</td>
+                                                <td>{{ variant.gnomADe_SAS }}</td>
+                                                <td>.</td>
+                                                <td>{{ variant['1000g_SAS_AF'] }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>European</td>
+                                                <td>{{ variant['gnomADe_FIN'] }}</td>
+                                                <td>{{ variant.gnomAD_genome_FIN }}</td>
+                                                <td>{{ variant['1000g_EUR_AF'] }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Other</td>
+                                                <td>{{ variant.gnomADe_OTH }}</td>
+                                                <td>{{ variant.gnomAD_genome_OTH }}</td>
+                                                <td>.</td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td><strong>Total</strong></td>
+                                                <td><strong>{{ variant.gnomADe_ALL }}</strong></td>
+                                                <td><strong>{{ variant.gnomAD_genome_ALL }}</strong></td>
+                                                <td><strong>{{ variant['1000g_AF'] }}</strong></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+</div>

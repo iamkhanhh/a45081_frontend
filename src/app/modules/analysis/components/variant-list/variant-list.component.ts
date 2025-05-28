@@ -9,6 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Datalist } from '../../ultils/datalist';
 import { Subscription } from 'rxjs';
 import { Select2OptionData } from 'ng-select2';
+import { GeneDetailComponent } from '../gene-detail/gene-detail.component';
 
 @Component({
   selector: 'app-variant-list',
@@ -276,9 +277,9 @@ export class VariantListComponent implements OnInit, OnDestroy {
     return filter;
   }  
 
-  search(searchTerm: string) {
-    // this.variantListService.patchState({ searchTerm });
-  }
+  // search(searchTerm: string) {
+  //   this.variantListService.patchState({ searchTerm });
+  // }
 
   formatLabel(value: number) {
     return value;
@@ -420,32 +421,13 @@ export class VariantListComponent implements OnInit, OnDestroy {
     // this.subscriptions.push(sb);
   }
 
-  create() {
-
-  }
-
-  edit(id: number) {
-  }
-
-  delete(id: number) {
-  }
-
-  deleteSelected() {
-  }
-
-  updateStatusForSelected() {
-  }
-
-  fetchSelected() {
-  }
-
   getVariantDetail(variant: Variant) {
-    // const modalRef = this.modalService.open(VariantDetailModalComponent, { size: 'xl' });
-    // modalRef.componentInstance.variant = variant;
-    // modalRef.result.then(() =>
-    // 	this.cd.detectChanges(),
-    // 	() => { }
-    // );
+    const modalRef = this.modalService.open(GeneDetailComponent, { size: 'xl' });
+    modalRef.componentInstance.variant = variant;
+    modalRef.result.then(() =>
+    	this.cd.detectChanges(),
+    	() => { }
+    );
   }
 
   onTagChanged(value: string[] | string) {

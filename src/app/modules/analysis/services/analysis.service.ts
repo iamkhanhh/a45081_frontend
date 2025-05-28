@@ -31,4 +31,8 @@ export class AnalysisService {
   savePatientInfor(id: number, data: any): Observable<any> {
     return this.http.put(`${environment.apiUrl}/patient-information/${id}`, data, { withCredentials: true });
   }
+
+  getGeneDetail(geneName: string): Observable<any> {
+    return this.http.post(`${environment.apiUrl}/analysis/get-gene-detail`, { geneName }, { withCredentials: true });
+  }
 }

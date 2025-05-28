@@ -1,4 +1,5 @@
 export interface Variant {
+	_id?: string;
 	id: string;
 	gene: string;
 	transcript_id: string;

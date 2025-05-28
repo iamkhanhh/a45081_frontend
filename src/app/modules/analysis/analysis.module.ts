@@ -23,6 +23,7 @@ import { SafePipe } from './pipes/safe.pipe';
 import { DeleteSelectedVariantComponent } from './components/delete-selected-variant/delete-selected-variant.component';
 import { AnalysisReportDetailComponent } from './components/analysis-report-detail/analysis-report-detail.component';
 import { PatientInformationComponent } from './components/patient-information/patient-information.component';
+import { GeneDetailComponent } from './components/gene-detail/gene-detail.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { PatientInformationComponent } from './components/patient-information/pa
     SafePipe,
     DeleteSelectedVariantComponent,
     AnalysisReportDetailComponent,
-    PatientInformationComponent
+    PatientInformationComponent,
+    GeneDetailComponent
   ],
   imports: [
     CommonModule,
