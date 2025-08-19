@@ -32,6 +32,15 @@ export class AnalysisListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.filterForm();
     this.loadAnalyses();
+
+    this.analysisService.getStatusUpdate().subscribe((data: any) => {
+      const index = this.analyses.findIndex(a => a.id === data.id);
+      if (index !== -1) {
+        this.analyses[index].status = data.status;
+        this.analyses[index].analyzed = data.analyzed;
+        this.cd.detectChanges();
+      }
+    });
   }
 
   loadAnalyses() {

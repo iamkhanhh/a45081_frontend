@@ -11,6 +11,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthService } from './modules/auth/services/auth.service';
 import { environment } from 'src/environments/environment';
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 // #fake-start#
 import { FakeAPIService } from './_fake/fake-api.service';
 import { ToastrModule } from 'ngx-toastr';
@@ -24,6 +25,7 @@ function appInitializer(authService: AuthService) {
     });
   };
 }
+const config: SocketIoConfig = { url: environment.apiUrl, options: {}  };
 
 @NgModule({
   declarations: [AppComponent],
@@ -31,6 +33,7 @@ function appInitializer(authService: AuthService) {
     BrowserModule,
     BrowserAnimationsModule,
     TranslateModule.forRoot(),
+    SocketIoModule.forRoot(config),
     HttpClientModule,
     ClipboardModule,
     // #fake-start#

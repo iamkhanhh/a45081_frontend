@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Socket } from 'ngx-socket-io';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -10,7 +11,10 @@ const API_SAMPLE_URL = `${environment.apiUrl}/samples`;
 })
 export class SampleService {
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private socket: Socket
+  ) { }
 
   loadSamples(page: number, pageSize: number, formValue: any): Observable<any> {
     return this.http.post(`${API_SAMPLE_URL}/load-samples?page=${page}&pageSize=${pageSize}`, formValue ,{ withCredentials: true });
@@ -67,6 +71,10 @@ export class SampleService {
 
   postFileInfor(data: any) {
     return this.http.post(`${API_SAMPLE_URL}/postFileInfor`, data ,{ withCredentials: true });
+  }
+
+  getStatusUpdate() {
+    return this.socket.fromEvent('sampleStatusUpdate');
   }
 
   public generateRandomString(len: number) {

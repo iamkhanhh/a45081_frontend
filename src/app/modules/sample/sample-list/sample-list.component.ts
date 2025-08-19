@@ -42,6 +42,14 @@ export class SampleListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.filterForm();
     this.loadSamples();
+
+    // this.sampleService.getStatusUpdate().subscribe((data: any) => {
+    //   const index = this.samples.findIndex(a => a.id === data.id);
+    //   if (index !== -1) {
+    //     this.samples[index].status = data.status;
+    //     this.cd.detectChanges();
+    //   }
+    // });
   }
 
   paginate(paginator: PaginatorState) {

@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Socket } from 'ngx-socket-io';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -10,7 +11,10 @@ const API_ANALYSIS_URL = `${environment.apiUrl}/analysis`;
 })
 export class AnalysisService {
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private socket: Socket
+  ) { }
 
   loadAnalyses(page: number, pageSize: number, formValue: any): Observable<any> {
     return this.http.post(`${environment.apiUrl}/analysis/load-analyses?page=${page}&pageSize=${pageSize}`, formValue, { withCredentials: true });
@@ -34,5 +38,9 @@ export class AnalysisService {
 
   getGeneDetail(geneName: string): Observable<any> {
     return this.http.post(`${environment.apiUrl}/analysis/get-gene-detail`, { geneName }, { withCredentials: true });
+  }
+
+  getStatusUpdate() {
+    return this.socket.fromEvent('analysisStatusUpdate');
   }
 }
