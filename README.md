@@ -212,7 +212,7 @@ Project Link: [https://github.com/iamkhanhh/a45081_frontend](https://github.com/
 [license-shield]: https://img.shields.io/github/license/iamkhanhh/a45081_frontend.svg?style=for-the-badge
 [license-url]: https://github.com/iamkhanhh/a45081_frontend/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/linkedin_username
+[linkedin-url]: https://linkedin.com/in/iamkhanh
 [product-screenshot]: https://genetics-s3-prod.s3.ap-southeast-1.amazonaws.com/public/genetic_screenshot.jpeg
 [Angular.io]: https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white
 [Angular-url]: https://angular.io/
