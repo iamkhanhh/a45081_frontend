@@ -37,7 +37,8 @@ export class AnalysisListComponent implements OnInit, OnDestroy {
       const index = this.analyses.findIndex(a => a.id === data.id);
       if (index !== -1) {
         this.analyses[index].status = data.status;
-        this.analyses[index].analyzed = data.analyzed;
+        this.analyses[index].analyzed = data.analyzed || "";
+        this.analyses[index].variants = data.variants || "";
         this.cd.detectChanges();
       }
     });
