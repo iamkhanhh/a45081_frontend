@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 const API_SAMPLE_URL = `${environment.apiUrl}/samples`;
+const API_UPLOAD_URL = `${environment.apiUrl}/uploads`;
 
 @Injectable({
   providedIn: 'root'
@@ -71,6 +72,21 @@ export class SampleService {
 
   postFileInfor(data: any) {
     return this.http.post(`${API_SAMPLE_URL}/postFileInfor`, data ,{ withCredentials: true });
+  }
+
+  createUploadFastQ(data: any) {
+    return this.http.post(`${API_UPLOAD_URL}/fastq`, data ,{ withCredentials: true });
+  }
+
+  updateStatusUploadFastQ(uploadId: number, status: string) {
+    let data = {
+      upload_status: status == 'success' ? 1 : 2
+    }
+    return this.http.patch(`${API_UPLOAD_URL}/fastq/${uploadId}`, data ,{ withCredentials: true });
+  }
+
+  createSampleFastQ(data: any) {
+    return this.http.post(`${API_SAMPLE_URL}/fastq`, data ,{ withCredentials: true });
   }
 
   getStatusUpdate() {

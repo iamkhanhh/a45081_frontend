@@ -17,20 +17,28 @@
                 <label for="fileDropRef" style="cursor: pointer;">Browse for files</label>
             </div>
             <ngb-alert style="margin-top: 1rem;" [dismissible]="false" [type]="'dark'">
-                <span class="svg-icon svg-icon-primary svg-icon-2x mr-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
-                        height="24px" viewBox="0 0 24 24" version="1.1">
-                        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                            <rect x="0" y="0" width="24" height="24" />
-                            <circle fill="#000000" opacity="0.3" cx="12" cy="12" r="10" />
-                            <rect fill="#000000" x="11" y="10" width="2" height="7" rx="1" />
-                            <rect fill="#000000" x="11" y="7" width="2" height="2" rx="1" />
-                        </g>
-                    </svg>
-                </span>
-                <strong>Allowed file format:</strong> fastq
-                <strong>Supported file types:</strong> &#60;Sample_name&#62;_R1_&#60;xxxx&#62; .fq, .fastq (tar, .gz),
-                &#60;Sample_name&#62;_R2_&#60;xxxx&#62; .fq, .fastq (tar, .gz)
+                <div class="row">
+                    <div class="col-1 align-self-center text-center">
+                        <span class="svg-icon svg-icon-primary svg-icon-2x mr-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px"
+                                height="24px" viewBox="0 0 24 24" version="1.1">
+                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <rect x="0" y="0" width="24" height="24" />
+                                    <circle fill="#000000" opacity="0.3" cx="12" cy="12" r="10" />
+                                    <rect fill="#000000" x="11" y="10" width="2" height="7" rx="1" />
+                                    <rect fill="#000000" x="11" y="7" width="2" height="2" rx="1" />
+                                </g>
+                            </svg>
+                        </span>
+                    </div>
+                    <div class="col-11">
+                        <strong>Allowed file format:</strong> fastq
+                        <br>
+                        <strong>Supported file types:</strong> &#60;Sample_name&#62;_R1_&#60;xxxx&#62; .fq, .fastq (tar, .gz),&#60;Sample_name&#62;_R2_&#60;xxxx&#62; .fq, .fastq (tar, .gz)
+                        <br>
+                        <strong>Attention:</strong> Please make sure all fastq files are uploaded before move to samples
+                    </div>
+                </div>
             </ngb-alert>
             <div class="row" cdkDropListGroup>
                 <div class="col-sm-12 col-xl-4">
@@ -93,15 +101,16 @@
                                         <h3>Sample</h3>
                                         <div>
                                             <a (click)="deleteForm(i)"
-                                                class="btn btn-xs btn-icon btn-light btn-hover-primary"><i
-                                                    class="ki ki-close icon-xs text-muted"></i></a>
+                                                class="btn btn-xs btn-icon btn-light btn-hover-primary">
+                                                <app-keenicon name="cross" class="fs-1 me-1" type="solid"></app-keenicon>
+                                            </a>
                                         </div>
                                     </div><br>
                                     <form action="#" class="form form-label-right" [formGroup]="fileForm"
                                         autocomplete="off">
                                         <div class="form-group row">
                                             <div class="col-xl-6">
-                                                <label class="form-label">Sample Name*</label>
+                                                <label class="form-label required">Sample Name</label>
                                                 <input type="text"
                                                     class="form-control form-control-lg form-control-solid"
                                                     name="sampleName" placeholder="Enter sample name"
@@ -113,7 +122,7 @@
                                                     required!</div>
                                             </div>
                                             <div class="col-xl-6">
-                                                <label class="form-label">Patient First Name</label>
+                                                <label class="form-label required">Patient First Name</label>
                                                 <input type="text"
                                                     class="form-control form-control-lg form-control-solid"
                                                     name="firstName" placeholder="Enter patient first name"
@@ -133,7 +142,7 @@
                                             </div>
                                             <div class="col-xl-6">
                                                 <div>
-                                                    <label class="form-label">Patient Last Name</label>
+                                                    <label class="form-label required">Patient Last Name</label>
                                                     <input type="text"
                                                         class="form-control form-control-lg form-control-solid"
                                                         name="lastName" placeholder="Enter patient last name"
@@ -146,7 +155,7 @@
                                                 </div>
                                                 <br>
                                                 <div>
-                                                    <label class="form-label">DOB</label>
+                                                    <label class="form-label required">DOB</label>
                                                     <div style="display: flex;">
                                                         <input type="text" name="dob"
                                                             class="form-control form-control-lg form-control-solid"
@@ -167,7 +176,7 @@
                                         </div>
                                         <div class="form-group row mb-2">
                                             <div class="col-xl-6">
-                                                <label class="form-label">Forward</label>
+                                                <label class="form-label required">Forward</label>
                                                 <div style="padding: 0.5rem" id="forward{{i}}"
                                                     class="example-list drag-box" cdkDropList
                                                     [cdkDropListData]="dragForm[i]['forward']"
@@ -203,7 +212,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-xl-6">
-                                                <label class="form-label">Reverse</label>
+                                                <label class="form-label required">Reverse</label>
                                                 <div style="padding: 0.5rem" id="reverse{{i}}"
                                                     class="example-list drag-box" cdkDropList
                                                     [cdkDropListData]="dragForm[i]['reverse']"
@@ -268,8 +277,8 @@
     <div class="modal-footer">
         <button type="button" class="btn btn-light btn-elevate mr-2" (click)="modal.dismiss()">Cancel</button>
         <ng-container>
-            <button type="submit" class="btn btn-primary btn-elevate" (click)="save()"
-                [disabled]="checkSave()">Upload</button>
+            <button type="submit" class="btn btn-primary btn-elevate" (click)="createSample()"
+                [disabled]="checkSave()">Save</button>
         </ng-container>
         <ng-container *ngIf="isLoading">
             <span class="spinner spinner-primary ml-3 mr-5"></span>

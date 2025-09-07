@@ -3,13 +3,22 @@ import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild 
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { Subscription } from 'rxjs';
+import { concatMap, filter, from, map, Subscription, tap, toArray } from 'rxjs';
+import { SampleService } from '../../services/sample.service';
+import { HttpEventType } from '@angular/common/http';
 
 const DragConfig = {
   dragStartThreshold: 0,
   pointerDirectionChangeThreshold: 5,
   zIndex: 10000
 };
+
+interface DATE_FORMAT {
+  year: number,
+  month: number,
+  day: number
+}
+
 @Component({
   selector: 'app-create-sample-fastq',
   templateUrl: './create-sample-fastq.component.html',
@@ -33,6 +42,7 @@ export class CreateSampleFastqComponent implements OnInit, OnDestroy {
     private toastr: ToastrService,
     private cdr: ChangeDetectorRef,
     private fb: FormBuilder,
+    private readonly sampleService: SampleService,
   ) { }
 
   ngOnInit(): void {
@@ -132,20 +142,201 @@ export class CreateSampleFastqComponent implements OnInit, OnDestroy {
 
   checkDragForm(): boolean {
     return this.dragForm.every(item => item.forward.length > 0 && item.reverse.length > 0);
-  }  
+  }
 
-  checkSave() {
-    // if (this.formGroup.invalid || this.FilesArray.length == 0 || this.isLoading) {
-    //   return true
-    // }
-
+  checkSave() {    
     if (this.formGroup.invalid || this.formGroupLists.length == 0 || this.isLoading || !this.checkDragForm()) {
       return true
     }
+    return false;
   }
 
   save() {
-    console.log('SAVE');
+    this.toastr.success('Start uploading files...');
+    this.files.forEach((e) => {
+      if (!e.isUploaded) {
+        e.isUploaded = true;
+        this.filesUploading.push(e.name);
+      }
+    })
+
+    const uploadFastqFiles = setInterval(() => {
+      if (this.filesUploading.length != 0) {
+        let fileUploadName = this.filesUploading.shift();
+        let pos = this.files.map(el => { return el.name }).indexOf(fileUploadName);
+        this.uploadFile(this.files[pos], pos);
+      }
+      else {
+        clearInterval(uploadFastqFiles);
+      }
+    }, 5000);
+  }
+
+  uploadFile(file: File, index: number) {
+    console.log('Uploading file: ', file);
+
+    const totalSize = file.size;
+    const chunkSize = 10 * 1024 * 1024; // 10MB
+    const numChunks = Math.ceil(totalSize / chunkSize);
+    this.files[index].progress = 10;
+
+    let data = {
+      original_name: file.name,
+      file_size: file.size,
+      file_type: this.files[index].fileType
+    };
+
+    const sb = this.sampleService.createUploadFastQ(data).pipe(
+      concatMap((res: any) => {
+        if (res.status !== 'success') throw new Error(res.message);
+
+        this.files[index].uploadId = res.uploadId;
+        return this.sampleService.startMultipartUpload(file.name);
+      }),
+      concatMap((res: any) => {
+        if (res.status !== 'success') throw new Error(res.message);
+
+        const uploadId = res.data.UploadId;
+        const uploadName = res.data.uploadName;
+        this.files[index].uploadName = uploadName;
+
+        return this.sampleService.generatePresignedUrls(uploadName, uploadId, numChunks).pipe(
+          map((urlRes: any) => {
+            if (urlRes.status !== 'success') throw new Error(urlRes.message);
+            return { urls: urlRes.data.urls, uploadId, uploadName };
+          })
+        );
+      }),
+      concatMap(({ urls, uploadId, uploadName }) =>
+        from(Array.from({ length: numChunks }, (_, i) => i)).pipe(
+          concatMap((i: number) => {
+            const start = i * chunkSize;
+            const end = Math.min(start + chunkSize, totalSize);
+            const chunk = file.slice(start, end);
+            const presignedUrl = urls[i];
+
+            return this.sampleService.uploadSingleFile(presignedUrl, chunk).pipe(
+              tap((event: any) => {
+                if (event.type === HttpEventType.UploadProgress) {
+                  this.files[index].progress = Math.round(((i + event.loaded / event.total!) / numChunks) * 100);
+                }
+              }),
+              filter(event => event.type === HttpEventType.Response),
+              map(event => ({
+                etag: event.headers.get('etag'),
+                PartNumber: i + 1
+              }))
+            );
+          }),
+          toArray(),
+          concatMap(parts => this.sampleService.completeMultipartUpload(uploadName, uploadId, parts)),
+          map(res => ({ res }))
+        )
+      ),
+      concatMap(({ res }) => {
+        if(res.status == "success") {
+            return this.sampleService.updateStatusUploadFastQ(this.files[index].uploadId, 'success')
+        }
+        else {
+            return this.sampleService.updateStatusUploadFastQ(this.files[index].uploadId, 'error')
+        }
+      })
+    ).subscribe({
+      next: (res: any) => {
+        this.files[index].isProcessing = false;
+        if (res.status === 'success') {
+          this.files[index].progress = 100;
+        } else {
+          this.files[index].progress = 100;
+          this.files[index].isError = true;
+          this.toastr.error('Upload failed');
+        }
+      },
+      error: (err) => {
+        this.files[index].isError = true;
+        this.toastr.error('Upload failed');
+        console.error(err);
+      }
+    });
+    this.subscriptions.push(sb);
+  }
+
+  createSample() {
+    this.isLoading = true;
+    if (!this.checkFastqPairValid()) {
+      this.toastr.error('Create sample failed since invalid format!');
+      this.isLoading = false;
+      return false;
+    }
+    let data = [];
+    for (let index in this.formGroupLists) {
+      const fromValue = this.FilesArray.controls[index].value;
+      let temp = {
+        sampleName: fromValue.sampleName,
+        firstName: fromValue.firstName,
+        lastName: fromValue.lastName,
+        dob: this.formatDate(fromValue.dob),
+        phenotype: fromValue.phenotype,
+        file_type: 'fastq',
+        file_size: this.getSampleSize(Number(index)),
+        forward: this.dragForm[index]['forward'].map((el: any) => ({
+          uploadId: el.uploadId,
+          uploadName: el.uploadName
+        })),
+        reverse: this.dragForm[index]['reverse'].map((el: any) => ({
+          uploadId: el.uploadId,
+          uploadName: el.uploadName
+        }))
+      }
+      data.push(temp);
+    }
+    console.log(data);
+
+    const sb = this.sampleService.createSampleFastQ(data).subscribe((res: any) => {
+      if (res.status == 'success') {
+        this.toastr.success('Create samples successfully!');
+      } else {
+        this.toastr.error('Create samples failed!');
+      }
+      this.isLoading = false;
+      this.modal.close();
+    })
+  }
+
+  formatDate(date: DATE_FORMAT): Date {
+    return new Date(date.year, date.month - 1, date.day);
+  }
+
+  checkFastqPairValid() {
+    let check: boolean = false;
+    this.dragForm.forEach(e => {
+      if (e.forward.length == 0 || e.reverse.length == 0) {
+        check = true;
+        e.message = 'Number of files in \'Forward\' and \'Reverse\' must be greater than 0.';
+      }
+      else if (e.forward.length != e.reverse.length) {
+        check = true;
+        e.message = 'The number of files in \'Forward\' must be the same length as the number of files in \'Reverse\'.';
+      }
+      else {
+        e.message = '';
+      }
+    })
+    if (check) {
+      return false;
+    }
+    return true;
+  }
+
+  getSampleSize(index: number) {
+    let totalSizeForward = this.dragForm[index]['forward'].reduce((sum: number, el: any) => {
+      return sum + el.size
+    }, 0);
+    let totalSizeReverse = this.dragForm[index]['reverse'].reduce((sum: number, el: any) => {
+      return sum + el.size
+    }, 0);
+
+    return totalSizeForward + totalSizeReverse
   }
 
   drop(event: CdkDragDrop<any[]>) {
