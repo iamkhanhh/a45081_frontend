@@ -13,6 +13,7 @@ export interface analysis {
   id: number;
   name: string;
   pipeline_name: string;
+  sequencing_type: string;
   createdAt: string;
   updatedAt: string;
   analyzed: string;
