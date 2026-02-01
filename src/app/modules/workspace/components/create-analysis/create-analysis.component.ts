@@ -11,6 +11,7 @@ export interface analysisShort {
   pipeline_id: string;
   sampleName: string;
   assembly: string;
+  sequencingType: string;
   description: string
 }
 @Component({
@@ -104,6 +105,7 @@ export class CreateAnalysisComponent {
     if (!this.id) {
       this.formGroup = this.fb.group({
         genomeBuild: ['hg19', Validators.compose([Validators.required])],
+        sequencingType: ['WES', Validators.compose([Validators.required])],
         pipeLineList: ['', Validators.compose([Validators.required])],
         sampleList: ['', Validators.compose([Validators.required])],
         analysisName: ['', Validators.compose([Validators.required])],
@@ -112,6 +114,7 @@ export class CreateAnalysisComponent {
     } else {
       this.formGroup = this.fb.group({
         genomeBuild: [this.analysis.assembly, Validators.compose([Validators.required])],
+        sequencingType: [this.analysis.sequencingType, Validators.compose([Validators.required])],
         pipeLineList: [this.analysis.pipeline_id, Validators.compose([Validators.required])],
         sampleList: [{ value: this.analysis.sampleName, disabled: true }],
         analysisName: [this.analysis.name, Validators.compose([Validators.required])],
@@ -142,7 +145,8 @@ export class CreateAnalysisComponent {
       p_type: this.formatSampleValue(formData.sampleList, 'file_type'),
       size: this.formatSampleValue(formData.sampleList, 'file_size'),
       description: formData.description,
-      assembly: formData.genomeBuild
+      assembly: formData.genomeBuild,
+      sequencing_type: formData.sequencingType
     }
     const sb = this.workspaceService.createAnalysis(data).subscribe((res: any) => {
       if (res.status == 'success') {
@@ -166,7 +170,8 @@ export class CreateAnalysisComponent {
       name: formData.analysisName,
       pipeline_id: formData.pipeLineList,
       description: formData.description,
-      assembly: formData.genomeBuild
+      assembly: formData.genomeBuild,
+      sequencing_type: formData.sequencingType
     }
     console.log(data);
     if (this.id) {
