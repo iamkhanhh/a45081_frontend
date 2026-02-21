@@ -1,0 +1,37 @@
+<!-- Header -->
+<div class="card-header pe-5" id="kt_drawer_chat_messenger_header">
+  <div class="card-title">
+    <button
+      class="btn btn-sm btn-icon btn-active-light-primary me-3"
+      (click)="onBack.emit()"
+    >
+      <span
+        [inlineSVG]="'./assets/media/icons/duotune/arrows/arr063.svg'"
+        class="svg-icon svg-icon-2"
+      ></span>
+    </button>
+    <div class="d-flex justify-content-center flex-column me-3">
+      <span class="fs-4 fw-bolder text-gray-900 me-1 mb-2 lh-1">
+        <i class="bi bi-robot fs-3 me-2"></i>AI Assistant
+      </span>
+      <div class="mb-0 lh-1">
+        <span class="badge badge-success badge-circle w-10px h-10px me-1"></span>
+        <span class="fs-7 fw-bold text-gray-500">Online</span>
+      </div>
+    </div>
+  </div>
+  <div class="card-toolbar">
+    <div
+      class="btn btn-sm btn-icon btn-active-light-primary"
+      id="kt_drawer_chat_close"
+    >
+      <span
+        [inlineSVG]="'./assets/media/icons/duotune/arrows/arr061.svg'"
+        class="svg-icon svg-icon-2"
+      ></span>
+    </div>
+  </div>
+</div>
+
+<!-- Chat Inner -->
+<app-chatbot-inner [isDrawer]="true"></app-chatbot-inner>

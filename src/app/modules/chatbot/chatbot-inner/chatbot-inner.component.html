@@ -1,0 +1,117 @@
+<!-- Messages area -->
+<div
+  #messagesContainer
+  class="scroll-y me-n5 pe-5"
+  [ngClass]="!isDrawer ? 'h-300px h-lg-auto' : ''"
+  data-kt-element="messages"
+  data-kt-scroll="true"
+  data-kt-scroll-activate="{default: false, lg: true}"
+  data-kt-scroll-max-height="auto"
+  [attr.data-kt-scroll-dependencies]="
+    isDrawer
+      ? '#kt_drawer_chat_messenger_header, #kt_drawer_chat_messenger_footer'
+      : '#kt_header, #kt_toolbar, #kt_footer, #kt_chat_messenger_header, #kt_chat_messenger_footer'
+  "
+  [attr.data-kt-scroll-wrappers]="
+    isDrawer
+      ? '#kt_drawer_chat_messenger_body'
+      : '#kt_content, #kt_chat_messenger_body'
+  "
+  [attr.data-kt-scroll-offset]="isDrawer ? '0px' : '-2px'"
+>
+  <!-- Empty state -->
+  <div *ngIf="(messages$ | async)?.length === 0" class="text-center py-15">
+    <i class="bi bi-chat-dots fs-2x text-gray-400 mb-3 d-block"></i>
+    <p class="text-gray-500 fs-6">Ask me anything about bioinformatics!</p>
+  </div>
+
+  <ng-container *ngFor="let message of messages$ | async">  
+    <div
+      class="d-flex mb-8"
+      [ngClass]="{
+        'justify-content-start': message.role === 'assistant',
+        'justify-content-end': message.role === 'user'
+      }"
+    >
+      <div
+        class="d-flex flex-column"
+        [ngClass]="message.role === 'assistant' ? 'align-items-start' : 'align-items-end'"
+      >
+        <!-- Header: avatar + name -->
+        <div class="d-flex align-items-center mb-2">
+          <ng-container *ngIf="message.role === 'assistant'">
+            <div class="symbol symbol-35px symbol-circle">
+              <span class="symbol-label bg-light-info text-info fw-bolder">
+                <i class="bi bi-robot text-info"></i>
+              </span>
+            </div>
+            <div class="ms-3">
+              <span class="fs-5 fw-bolder text-gray-900">AI Assistant</span>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="message.role === 'user'">
+            <div class="me-3">
+              <span class="fs-5 fw-bolder text-gray-900">You</span>
+            </div>
+            <div class="symbol symbol-35px symbol-circle">
+              <span class="symbol-label bg-light-primary text-primary fw-bolder">
+                <i class="bi bi-person text-primary"></i>
+              </span>
+            </div>
+          </ng-container>
+        </div>
+
+        <!-- Message bubble -->
+        <div
+          class="p-5 rounded fw-bold mw-lg-400px"
+          [ngClass]="message.role === 'assistant'
+            ? 'bg-light-info text-gray-900 text-start'
+            : 'bg-light-primary text-gray-900 text-end'"
+          style="white-space: pre-wrap; word-break: break-word;"
+        >
+          {{ message.content }}
+          <!-- Typing indicator khi đang stream và content rỗng -->
+          <span
+            *ngIf="message.role === 'assistant' && message.content === '' && (isStreaming$ | async)"
+            class="text-muted"
+          >
+            <i class="bi bi-three-dots fs-4"></i>
+          </span>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<!-- Input area -->
+<div
+  class="card-footer pt-4"
+  [id]="isDrawer ? 'kt_drawer_chat_messenger_footer' : 'kt_chat_messenger_footer'"
+>
+  <textarea
+    #messageInput
+    class="form-control form-control-flush mb-3"
+    rows="1"
+    data-kt-element="input"
+    placeholder="How can I help you today?"
+    (keydown)="onKeydown($event)"
+    [disabled]="isStreaming$ | async"
+  ></textarea>
+
+  <div class="d-flex flex-stack">
+    <div class="d-flex align-items-center me-2">
+      <span *ngIf="isStreaming$ | async" class="text-muted fs-7">
+        <i class="bi bi-hourglass-split me-1"></i>AI is thinking...
+      </span>
+    </div>
+    <button
+      class="btn btn-primary"
+      type="button"
+      data-kt-element="send"
+      (click)="submitMessage()"
+      [disabled]="isStreaming$ | async"
+    >
+      Send
+    </button>
+  </div>
+</div>
