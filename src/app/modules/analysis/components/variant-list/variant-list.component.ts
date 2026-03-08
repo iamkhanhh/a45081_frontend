@@ -148,17 +148,13 @@ export class VariantListComponent implements OnInit, OnDestroy {
 
   showColumnList() {
     this.renderer.listen('window', 'click', (e: Event) => {
-      /**
-       * Only run when toggleButton is not clicked
-       * If we don't check this, all clicks (even on the toggle button) gets into this
-       * section which in the result we might never see the menu open!
-       * And the menu itself is checked here, and it's where we check just outside of
-       * the menu and button the condition abbove must close the menu
-       */
-      const target = e.target as Element;
-      let t = (target.classList.contains('mat-list-text') || target.classList.contains('mat-list-item-content') || target.classList.contains('mat-pseudo-checkbox') || target.id == 'dropdownMenu');
+      const targetNode = e.target as Node;
 
-      if (!t) {
+      // If click is inside the toggle button or inside the menu, do nothing (keep menu open)
+      const clickedOnToggle = this.toggleButton && this.toggleButton.nativeElement && this.toggleButton.nativeElement.contains(targetNode);
+      const clickedOnMenu = this.menu && this.menu.nativeElement && this.menu.nativeElement.contains(targetNode);
+
+      if (!clickedOnToggle && !clickedOnMenu) {
         this.isListShowing = false;
         this.cd.detectChanges();
       }
@@ -317,6 +313,9 @@ export class VariantListComponent implements OnInit, OnDestroy {
   onColumnListControlChanged(list: any) {
     let t = list.selectedOptions.selected.map((item: any) => item.value);
     this.setColumnSelected(t);
+    // close dropdown after selection
+    this.isListShowing = false;
+    this.cd.detectChanges();
   }
 
   setColumnSelected(t: any) {
