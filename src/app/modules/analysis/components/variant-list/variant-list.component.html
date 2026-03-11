@@ -179,33 +179,31 @@
                             class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4 overflow-hidden table-vertical-center">
                             <thead class="fw-bolder text-muted">
                                 <tr>
-                                    <th class="selection-cell-header" style="width:50px" data-row-selection="true">
+                                    <th class="selection-cell-header" style="width:48px" data-row-selection="true">
                                         <div class="form-check form-check-sm form-check-custom form-check-solid">
                                             <input class="form-check-input" type="checkbox" value="1" data-kt-check="true"
                                                 data-kt-check-target=".widget-9-check" (click)="grouping.selectAllRows()"
                                                 [checked]="grouping.checkAreAllRowsSelected()" />
                                         </div>
                                     </th>
-                                    <th class="width-100">Gene</th>
-                                    <th class="width-125">Transcript</th>
-                                    <th class="width-110">HGVSc</th>
-                                    <th class="width-100" [class.hidden-column]="checkColumnIsSelected('pnomen')">p.nomen</th>
-                                    <th class="width-100">Coverage</th>
-                                    <th class="width-110">Function</th>
-                                    <th class="width-110">Location</th>
-                                    <th class="width-110">Score</th>
-                                    <th class="width-105">ClinVar</th>
-                                    <th class="width-120">Classification</th>
-                                    <th class="width-120">GNomad_ALL</th>
-                                    <th class="width-150">Omim Disease</th>
-                                    <th class="width-150" [class.hidden-column]="checkColumnIsSelected('gnomad_AMR')">GNomad_AMR</th>
-                                    <th class="width-150" [class.hidden-column]="checkColumnIsSelected('gnomad_AFR')">GNomad_AFR</th>
-                                    <th class="width-120" [class.hidden-column]="checkColumnIsSelected('rsid')">rsid</th>
-                                    <th class="width-150" [class.hidden-column]="checkColumnIsSelected('REF-ALT')">REF - ALT</th>
-                                    <th class="width-120" [class.hidden-column]="checkColumnIsSelected('cosmicID')">Cosmic</th>
-                                    <th class="width-150" [class.hidden-column]="checkColumnIsSelected('position')">Position</th>
-                                    <!-- new th for the toggle button so it's in the same header row and right aligned -->
-                                    <th style="width:50px; text-align: right; position: relative;">
+                                    <th style="width:140px">GENE</th>
+                                    <th style="width:120px">TRANSCRIPT</th>
+                                    <th style="width:110px">REF - ALT</th>
+                                    <th style="width:140px">POSITION <br> RSID</th>
+                                    <th style="width:160px">GNOMAD_ALL<br> GNOMAD_AMR<br> GNOMAD_AFR</th>
+                                    <th style="width:120px">FUNCTION</th>
+                                    <th style="width:120px">LOCATION</th>
+                                    <th style="width:110px">CLINVAR</th>
+                                    <th style="width:130px">CLASSIFICATION</th>
+                                    <th style="width:150px">OMIM DISEASE</th>
+                                    <th style="width:110px" [class.hidden-column]="checkColumnIsSelected('pnomen')">P.NOMEN</th>
+                                    <th style="width:110px" [class.hidden-column]="checkColumnIsSelected('HGVSc')">HGVSc</th>
+                                    <th style="width:110px" [class.hidden-column]="checkColumnIsSelected('coverage')">COVERAGE</th>
+                                    <th style="width:110px" [class.hidden-column]="checkColumnIsSelected('VAR_SCORE')">SCORE</th>
+                                    <th style="width:110px" [class.hidden-column]="checkColumnIsSelected('cosmicID')">COSMIC</th>
+                                    
+                                    <!-- new th for the toggle button -->
+                                    <th style="width:48px; text-align: right; position: relative;">
                                         <button id="dropdownMenu" #btnShowCol class="btn btn-icon btn-sm btn-light-primary" (click)="isListShowing = !isListShowing" (click)="$event.stopPropagation()"
                                             aria-label="Show/Hide Columns" title="Show/Hide Columns">
                                             <app-keenicon *ngIf="!isListShowing" name="plus" class="fs-2"></app-keenicon>
@@ -248,72 +246,42 @@
                                     <td>
                                         <span>{{ variant.transcript_id }}</span>
                                     </td>
+                                    <!-- REF - ALT (3rd col) -->
                                     <td>
-                                        <a href="javascript:void(0)"
-                                            (click)="openIGVModal(variant.chrom, variant.position)">{{ variant.cnomen }}
-                                        </a>
+                                        <span>{{ variant.REF }} &gt; {{ variant.ALT }}</span>
                                     </td>
-                                    <td [class.hidden-column]="checkColumnIsSelected('pnomen')">
-                                        <span>{{ variant.pnomen }}</span>
-                                    </td>
+                                    <!-- Position / RSID (4th col) -->
                                     <td>
-                                        <span>{{ variant.coverage }}</span>
+                                        <div>{{ variant.chrom }}:{{ variant.position }}</div>
+                                        <div >{{ variant.rsid }}</div>
                                     </td>
+                                    <!-- GNomad combined (5th col) -->
                                     <td>
-                                        <span>{{ variant.function }}</span>
+                                        <div>{{ variant.gnomad_ALL }}</div>
+                                        <div>{{ variant.gnomAD_genome_AMR }} &nbsp; {{ variant.gnomAD_genome_AFR }}</div>
                                     </td>
-                                    <td>
-                                        <span>{{ variant.location }}</span>
+                                    <!-- Hidden by default columns -->
+                                    <td class="hidden-column">
+                                        <a href="javascript:void(0)" (click)="openIGVModal(variant.chrom, variant.position)">{{ variant.cnomen }}</a>
                                     </td>
+                                    <td><span>{{ variant.function }}</span></td>
+                                    <td><span>{{ variant.location }}</span></td>
                                     <td>
-                                        <span>{{ variant.VAR_SCORE }}</span>
-                                    </td>
-                                    <td>
-                                        <a href="https://www.ncbi.nlm.nih.gov/clinvar/variation/{{ variant.Clinvar_VARIANT_ID }}"
-                                            target="_blank">{{variant.Clinvar_VARIANT_ID}}</a>
+                                        <a href="https://www.ncbi.nlm.nih.gov/clinvar/variation/{{ variant.Clinvar_VARIANT_ID }}" target="_blank">{{ variant.Clinvar_VARIANT_ID }}</a>
                                         <br>
-                                        <span *ngIf="variant.Clinvar_VARIANT_ID != '.'"><i
-                                                [ngClass]="variant.gold_stars >= 1 ? 'fa fa-star yellow-star' : 'fa fa-star'"></i></span>
-                                        <span *ngIf="variant.Clinvar_VARIANT_ID != '.'"><i
-                                                [ngClass]="variant.gold_stars >= 2 ? 'fa fa-star yellow-star' : 'fa fa-star'"></i></span>
-                                        <span *ngIf="variant.Clinvar_VARIANT_ID != '.'"><i
-                                                [ngClass]="variant.gold_stars >= 3 ? 'fa fa-star yellow-star' : 'fa fa-star'"></i></span>
-                                        <span *ngIf="variant.Clinvar_VARIANT_ID != '.'"><i
-                                                [ngClass]="variant.gold_stars >= 4 ? 'fa fa-star yellow-star' : 'fa fa-star'"></i></span>
+                                        <span *ngIf="variant.Clinvar_VARIANT_ID != '.'"><i [ngClass]="variant.gold_stars >= 1 ? 'fa fa-star yellow-star' : 'fa fa-star'"></i></span>
+                                        <span *ngIf="variant.Clinvar_VARIANT_ID != '.'"><i [ngClass]="variant.gold_stars >= 2 ? 'fa fa-star yellow-star' : 'fa fa-star'"></i></span>
+                                        <span *ngIf="variant.Clinvar_VARIANT_ID != '.'"><i [ngClass]="variant.gold_stars >= 3 ? 'fa fa-star yellow-star' : 'fa fa-star'"></i></span>
+                                        <span *ngIf="variant.Clinvar_VARIANT_ID != '.'"><i [ngClass]="variant.gold_stars >= 4 ? 'fa fa-star yellow-star' : 'fa fa-star'"></i></span>
                                     </td>
-                                    <td>
-                                        <span [class]="getVariantClass(variant.classification)"
-                                            class="classification">{{ variant.classification
-                                            }}</span>
-                                    </td>
-                                    <td>
-                                        <span>{{ variant.gnomad_ALL }}</span>
-                                    </td>
-                                    <td>
-                                        <a href="https://www.omim.org/entry/{{ variant.gene_omim }}"
-                                            target="_blank">{{variant.gene_omim}}</a>
-                                        <br>
-                                        <span>{{ variant.omimDisease }}</span>
-                                    </td>
-                                    <td [class.hidden-column]="checkColumnIsSelected('gnomad_AMR')">
-                                        <span>{{ variant.gnomAD_genome_AMR }}</span>
-                                    </td>
-                                    <td [class.hidden-column]="checkColumnIsSelected('gnomad_AFR')">
-                                        <span>{{ variant.gnomAD_genome_AFR }}</span>
-                                    </td>
-                                    <td [class.hidden-column]="checkColumnIsSelected('rsid')">
-                                        <span>{{ variant.rsid }}</span>
-                                    </td>
-                                    <td [class.hidden-column]="checkColumnIsSelected('REF-ALT')">
-                                        <span>{{ variant.REF }} > {{variant.ALT}}</span>
-                                    </td>
-                                    <td [class.hidden-column]="checkColumnIsSelected('cosmicID')">
-                                        <span>{{ variant.cosmicID }}</span>
-                                    </td>
-                                    <td [class.hidden-column]="checkColumnIsSelected('position')">
-                                        <span>{{ variant.chrom }}:{{ variant.position }}</span>
-                                    </td>
-                                    <!-- <td><span>{{ variant.zygosity }}</span></td> -->
+                                    <td><span [class]="getVariantClass(variant.classification)" class="classification">{{ variant.classification }}</span></td>
+                                    <td><span>{{ variant.omimDisease }}</span></td>
+                                    <td [class.hidden-column]="checkColumnIsSelected('p.pnomen')"><span>{{ variant.pnomen }}</span></td>
+                                    <td [class.hidden-column]="checkColumnIsSelected('cosmicID')"><span>{{ variant.cosmicID }}</span></td>
+                                    <td [class.hidden-column]="checkColumnIsSelected('HGVSc')"><span>{{ variant.HGVSc }}</span></td>
+                                    <td [class.hidden-column]="checkColumnIsSelected('coverage')"><span>{{ variant.coverage }}</span></td>
+                                    <td [class.hidden-column]="checkColumnIsSelected('VAR_SCORE')"><span>{{ variant.VAR_SCORE }}</span></td>
+                                    <!-- toggle-controlled position hidden handled above if needed -->
                                 </tr>
                             </tbody>
                         </table>
