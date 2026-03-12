@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { getCSSVariableValue } from '../../../../../kt/_utils';
 
 @Component({
@@ -7,31 +7,30 @@ import { getCSSVariableValue } from '../../../../../kt/_utils';
 })
 export class ChartsWidget5Component implements OnInit {
   chartOptions: any = {};
+  @Input() pieData: { name: string; data?: number[] }[] | null = null;
   constructor() {}
 
   ngOnInit(): void {
-    this.chartOptions = getChartOptions();
+    this.chartOptions = getChartOptions(this.pieData);
   }
 }
 
-function getChartOptions() {
+function getChartOptions(pieData?: { name: string; data?: number[] }[] | null) {
   const labelColor = getCSSVariableValue('--bs-gray-500')
   const borderColor = getCSSVariableValue('--bs-gray-200')
 
   const baseColor = getCSSVariableValue('--bs-primary')
   const secondaryColor = getCSSVariableValue('--bs-info')
 
+  const series = pieData && pieData.length ? pieData : [
+    { name: 'Missense', data: [45] },
+    { name: 'Synonymous', data: [30] },
+    { name: 'Nonsense', data: [15] },
+    { name: 'Frameshift', data: [10] },
+  ];
+
   return {
-    series: [
-      {
-        name: 'Net Profit',
-        data: [40, 50, 65, 70, 50, 30],
-      },
-      {
-        name: 'Revenue',
-        data: [-30, -40, -55, -60, -40, -20],
-      },
-    ],
+    series: series.map(s => s.data ? s.data[0] : 0),
     chart: {
       fontFamily: 'inherit',
       type: 'bar',
