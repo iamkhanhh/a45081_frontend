@@ -80,6 +80,17 @@ export class AnalysisReportVariantComponent {
   chooseReport(id: number) {
     console.log(id);
     this.reportId = id;
+    if (id > 0) {
+      // build absolute URL to the report docx in assets
+      const fileUrl = `${window.location.origin}/assets/reports/report${id}.docx`;
+      const viewerUrl = `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(fileUrl)}`;
+      // sanitize for binding to iframe
+      this.url = this.sanitizer.bypassSecurityTrustResourceUrl(viewerUrl);
+      // ensure change detection updates the view
+      this.cd.detectChanges();
+    } else {
+      this.url = null;
+    }
   }
 
   getActiveClassReport(id: number) {
