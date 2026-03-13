@@ -23,7 +23,7 @@ export class GeneDetailComponent implements OnInit, OnDestroy {
   @Input() variant: Variant;
   gene: GeneDetail;
   isLoading: boolean = false;
-  activeTab: Tabs = 'gene_detail';
+  activeTab: Tabs = 'variant_detail';
 
   private subscriptions: Subscription[] = [];
 

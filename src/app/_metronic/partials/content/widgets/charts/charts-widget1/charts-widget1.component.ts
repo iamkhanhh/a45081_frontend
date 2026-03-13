@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { getCSSVariableValue } from '../../../../../kt/_utils';
 
 @Component({
@@ -7,30 +7,27 @@ import { getCSSVariableValue } from '../../../../../kt/_utils';
 })
 export class ChartsWidget1Component implements OnInit {
   chartOptions: any = {};
+  @Input() chartData: { name: string; data: number[] }[] | null = null;
   constructor() {}
 
   ngOnInit(): void {
-    this.chartOptions = getChartOptions(350);
+    this.chartOptions = getChartOptions(350, this.chartData);
   }
 }
 
-function getChartOptions(height: number) {
+function getChartOptions(height: number, chartData?: { name: string; data: number[] }[] | null) {
   const labelColor = getCSSVariableValue('--bs-gray-500')
   const borderColor = getCSSVariableValue('--bs-gray-200')
   const baseColor = getCSSVariableValue('--bs-primary')
   const secondaryColor = getCSSVariableValue('--bs-gray-300')
 
+  const series = chartData && chartData.length ? chartData : [
+    { name: 'SNPs', data: [10000, 12000, 9000, 11000, 10500, 9500] },
+    { name: 'Indels', data: [4000, 3500, 3000, 2800, 3200, 3100] },
+  ];
+
   return {
-    series: [
-      {
-        name: 'Net Profit',
-        data: [44, 55, 57, 56, 61, 58],
-      },
-      {
-        name: 'Revenue',
-        data: [76, 85, 101, 98, 87, 105],
-      },
-    ],
+    series: series,
     chart: {
       fontFamily: 'inherit',
       type: 'bar',
