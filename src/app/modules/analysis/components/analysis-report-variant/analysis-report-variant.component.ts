@@ -80,6 +80,18 @@ export class AnalysisReportVariantComponent {
   chooseReport(id: number) {
     console.log(id);
     this.reportId = id;
+    if (id > 0) {
+      // build absolute URL to the report docx in assets
+      // const fileUrl = `${window.location.origin}/assets/reports/report${id}.docx`;
+      const fileUrl = 'https://genetics-s3-prod.s3.ap-southeast-1.amazonaws.com/public/report_EN123.docx';
+      const viewerUrl = `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(fileUrl)}`;
+      // sanitize for binding to iframe
+      this.url = this.sanitizer.bypassSecurityTrustResourceUrl(viewerUrl);
+      // ensure change detection updates the view
+      this.cd.detectChanges();
+    } else {
+      this.url = null;
+    }
   }
 
   getActiveClassReport(id: number) {
@@ -158,5 +170,18 @@ export class AnalysisReportVariantComponent {
 
   ngOnDestroy() {
     this.subscriptions.forEach((sb) => sb.unsubscribe());
+  }
+
+  // programmatically download the currently selected report file under /assets/reports/
+  downloadReport() {
+    if (!this.reportId || this.reportId <= 0) return;
+    const fileUrl = `${window.location.origin}/assets/reports/report${this.reportId}.docx`;
+    const a = document.createElement('a');
+    a.href = fileUrl;
+    a.setAttribute('download', `report${this.reportId}.docx`);
+    // append, click and remove to trigger download
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   }
 }
