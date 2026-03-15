@@ -8,14 +8,17 @@ import { getCSSVariableValue } from '../../../../../kt/_utils';
 export class ChartsWidget5Component implements OnInit {
   chartOptions: any = {};
   @Input() pieData: { name: string; data?: number[] }[] | null = null;
+  @Input() chartType: 'bar' | 'pie' = 'bar';
+  @Input() title: string = '';
+  @Input() subtitle: string = '';
   constructor() {}
 
   ngOnInit(): void {
-    this.chartOptions = getChartOptions(this.pieData);
+    this.chartOptions = getChartOptions(this.pieData, this.chartType);
   }
 }
 
-function getChartOptions(pieData?: { name: string; data?: number[] }[] | null) {
+function getChartOptions(pieData?: { name: string; data?: number[] }[] | null, chartType: 'bar' | 'pie' = 'bar') {
   const labelColor = getCSSVariableValue('--bs-gray-500')
   const borderColor = getCSSVariableValue('--bs-gray-200')
 
@@ -29,8 +32,26 @@ function getChartOptions(pieData?: { name: string; data?: number[] }[] | null) {
     { name: 'Frameshift', data: [10] },
   ];
 
+  if (chartType === 'pie') {
+    return {
+      series: series.map(s => s.data ? s.data[0] : 0),
+      chart: {
+        fontFamily: 'inherit',
+        type: 'pie',
+        height: 350,
+        toolbar: {
+          show: false,
+        },
+      },
+      labels: series.map(s => s.name),
+      legend: {
+        show: true,
+      },
+    };
+  }
+
   return {
-    series: series.map(s => s.data ? s.data[0] : 0),
+    series: series,
     chart: {
       fontFamily: 'inherit',
       type: 'bar',
@@ -43,7 +64,7 @@ function getChartOptions(pieData?: { name: string; data?: number[] }[] | null) {
     plotOptions: {
       bar: {
         horizontal: false,
-        columnWidth: '12%',
+        columnWidth: '55%',
         borderRadius: 5,
       },
     },
@@ -74,7 +95,7 @@ function getChartOptions(pieData?: { name: string; data?: number[] }[] | null) {
       },
     },
     yaxis: {
-      min: -80,
+      min: 0,
       max: 80,
       labels: {
         style: {
