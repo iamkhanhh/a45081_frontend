@@ -4,11 +4,18 @@
     <span class="text-muted fw-bold fs-7">{{ subtitle }}</span>
   </h3>
 <div class="card-body">
-  <div #chartRef id="kt_charts_widget_5_chart" [style.height]="'350px'">
-    <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart" [xaxis]="chartOptions.xaxis"
-      [yaxis]="chartOptions.yaxis" [dataLabels]="chartOptions.dataLabels" [stroke]="chartOptions.stroke"
-      [legend]="chartOptions.legend" [fill]="chartOptions.fill" [states]="chartOptions.states"
-      [tooltip]="chartOptions.tooltip" [colors]="chartOptions.colors" [markers]="chartOptions.markers"
-      [plotOptions]="chartOptions.plotOptions"></apx-chart>
-  </div>
+  <ng-container *ngIf="hasData; else noData">
+    <div #chartRef id="kt_charts_widget_5_chart" [style.height]="'350px'">
+      <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart" [xaxis]="chartOptions.xaxis"
+        [yaxis]="chartOptions.yaxis" [dataLabels]="chartOptions.dataLabels" [stroke]="chartOptions.stroke"
+        [legend]="chartOptions.legend" [fill]="chartOptions.fill" [states]="chartOptions.states"
+        [tooltip]="chartOptions.tooltip" [colors]="chartOptions.colors" [markers]="chartOptions.markers"
+        [plotOptions]="chartOptions.plotOptions"></apx-chart>
+    </div>
+  </ng-container>
+  <ng-template #noData>
+    <div class="d-flex justify-content-center align-items-center w-100" [style.height]="'350px'">
+      <div class="spinner-border text-primary text-opacity-50" role="status"></div>
+    </div>
+  </ng-template>
 </div>

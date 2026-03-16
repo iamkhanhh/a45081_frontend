@@ -7,6 +7,7 @@ import { GroupingState } from 'src/app/_metronic/shared/models';
 import { VariantListService } from '../../services/variant-list.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DeleteSelectedVariantComponent } from '../delete-selected-variant/delete-selected-variant.component';
+import { AnalysisReportDetailService, ReportModel, CreateReportPayload, VariantPayload } from '../../services/analysis-report-detail.service';
 
 @Component({
   selector: 'app-analysis-report-variant',
@@ -20,11 +21,9 @@ export class AnalysisReportVariantComponent {
   isLoading: boolean;
   loadingExport = false;
   variantSelected: any[];
-  url: any;
-  htmlString: string;
-  htmlData: any;
-  reportName: string = '';
+  reportName: string;
   reportId: number = 0;
+  reports: ReportModel[] = [];
   
   private subscriptions: Subscription[] = [];
 
@@ -33,12 +32,24 @@ export class AnalysisReportVariantComponent {
     private fb: FormBuilder,
     private modalService: NgbModal, 
     private toastr: ToastrService,
-    private sanitizer: DomSanitizer,
+    private analysisReportDetailService: AnalysisReportDetailService,
     private cd: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
-    this.loadVariantsSelected()
+    this.loadVariantsSelected();
+    this.reportName = '';
+    this.loadReports();
+  }
+
+  loadReports() {
+    const sb = this.analysisReportDetailService.getAllReports(this.id).subscribe((res) => {
+      if (res) {
+        this.reports = res;
+        this.cd.detectChanges();
+      }
+    });
+    this.subscriptions.push(sb);
   }
 
   loadVariantsSelected() {
@@ -78,20 +89,7 @@ export class AnalysisReportVariantComponent {
   }
 
   chooseReport(id: number) {
-    console.log(id);
     this.reportId = id;
-    if (id > 0) {
-      // build absolute URL to the report docx in assets
-      // const fileUrl = `${window.location.origin}/assets/reports/report${id}.docx`;
-      const fileUrl = 'https://genetics-s3-prod.s3.ap-southeast-1.amazonaws.com/public/report_EN123.docx';
-      const viewerUrl = `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(fileUrl)}`;
-      // sanitize for binding to iframe
-      this.url = this.sanitizer.bypassSecurityTrustResourceUrl(viewerUrl);
-      // ensure change detection updates the view
-      this.cd.detectChanges();
-    } else {
-      this.url = null;
-    }
   }
 
   getActiveClassReport(id: number) {
@@ -99,23 +97,43 @@ export class AnalysisReportVariantComponent {
   }
 
   createReport() {
-    let selectedIds = this.grouping.getSelectedRows();
-    let selectedFilter = this.variantSelected.filter((el) => {
-      return selectedIds.includes(el.id)
-    })
-    // const sb = this.variantListService.createReport({selectedFilter})
-    // .subscribe((res : any) => {
-    //     if(res.body.status == 'success') {
-    //         this.toastr.success(res.body.message);
-    //         this.htmlString = res.body.html;
-    //         this.htmlData = this.sanitizer.bypassSecurityTrustHtml(this.htmlString);
-    //         this.cd.detectChanges();
-    //     } else {
-    //         this.toastr.error(res.body.message);
-    //     }
-    // })
-    // this.subscriptions.push(sb);    
+    if (!this.reportName) {
+        this.toastr.error('Report name is required.');
+        return;
+    }
 
+    const selectedIds = this.grouping.getSelectedRows();
+    if (selectedIds.length === 0) {
+        this.toastr.warning('Please select at least one variant to create a report.', 'No Variants Selected');
+        return;
+    }
+
+    const selectedVariants: VariantPayload[] = this.variantSelected
+      .filter((el) => selectedIds.includes(el.id))
+      .map(variant => ({
+        gene: variant.gene,
+        transcript: variant.transcript_id, // Assuming transcript_id maps to transcript
+        cdna: variant.cnomen, // Assuming cnomen maps to cdna
+        coverage: variant.coverage,
+        gad: `${variant.gnomad} / ${variant.gnomAD_AFR} / ${variant.gnomAD_AMR}`, // Combining these for gad
+        classification: variant.classification
+      }));
+
+    const payload: CreateReportPayload = {
+      report_name: this.reportName,
+      analysisId: this.id, // Assuming 'id' in component is the analysisId
+      variants: selectedVariants
+    };
+
+    const sb = this.analysisReportDetailService.createReport(payload).subscribe((res: ReportModel | undefined) => {
+      if (res) {
+        this.reportName = ''; // Clear report name input
+        this.grouping.clearRows(selectedIds); // Clear selected variants
+        this.loadReports(); // Refresh the list of reports
+        this.chooseReport(res.id); // Optionally select the newly created report
+      }
+    });
+    this.subscriptions.push(sb);
   }
 
   exportReport() {
@@ -170,18 +188,5 @@ export class AnalysisReportVariantComponent {
 
   ngOnDestroy() {
     this.subscriptions.forEach((sb) => sb.unsubscribe());
-  }
-
-  // programmatically download the currently selected report file under /assets/reports/
-  downloadReport() {
-    if (!this.reportId || this.reportId <= 0) return;
-    const fileUrl = `${window.location.origin}/assets/reports/report${this.reportId}.docx`;
-    const a = document.createElement('a');
-    a.href = fileUrl;
-    a.setAttribute('download', `report${this.reportId}.docx`);
-    // append, click and remove to trigger download
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
   }
 }

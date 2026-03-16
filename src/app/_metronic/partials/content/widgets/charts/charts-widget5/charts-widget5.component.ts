@@ -1,36 +1,53 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core';
 import { getCSSVariableValue } from '../../../../../kt/_utils';
 
 @Component({
   selector: 'app-charts-widget5',
   templateUrl: './charts-widget5.component.html',
 })
-export class ChartsWidget5Component implements OnInit {
+export class ChartsWidget5Component implements OnInit, OnChanges {
   chartOptions: any = {};
   @Input() pieData: { name: string; data?: number[] }[] | null = null;
-  @Input() chartType: 'bar' | 'pie' = 'bar';
+  @Input() seriesData: { name: string; data?: number[] }[] | null = null;
+  @Input() chartType: string = 'bar';
   @Input() title: string = '';
   @Input() subtitle: string = '';
+
+  hasData: boolean = false;
+
   constructor() {}
 
   ngOnInit(): void {
-    this.chartOptions = getChartOptions(this.pieData, this.chartType);
+    this.initChart();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.initChart();
+  }
+
+  initChart(): void {
+    const data = this.seriesData && this.seriesData.length ? this.seriesData : this.pieData;
+    if (data && data.length > 0) {
+      this.hasData = true;
+      this.chartOptions = getChartOptions(data, this.chartType);
+    } else {
+      this.hasData = false;
+    }
   }
 }
 
-function getChartOptions(pieData?: { name: string; data?: number[] }[] | null, chartType: 'bar' | 'pie' = 'bar') {
+function getChartOptions(data?: { name: string; data?: number[] }[] | null, chartType: string = 'bar') {
   const labelColor = getCSSVariableValue('--bs-gray-500')
   const borderColor = getCSSVariableValue('--bs-gray-200')
 
   const baseColor = getCSSVariableValue('--bs-primary')
   const secondaryColor = getCSSVariableValue('--bs-info')
+  const successColor = getCSSVariableValue('--bs-success')
+  const warningColor = getCSSVariableValue('--bs-warning')
+  const dangerColor = getCSSVariableValue('--bs-danger')
+  const darkColor = getCSSVariableValue('--bs-dark')
 
-  const series = pieData && pieData.length ? pieData : [
-    { name: 'Missense', data: [45] },
-    { name: 'Synonymous', data: [30] },
-    { name: 'Nonsense', data: [15] },
-    { name: 'Frameshift', data: [10] },
-  ];
+  const series = data || [];
 
   if (chartType === 'pie') {
     return {
@@ -43,6 +60,7 @@ function getChartOptions(pieData?: { name: string; data?: number[] }[] | null, c
           show: false,
         },
       },
+      colors: [baseColor, successColor, warningColor, dangerColor, secondaryColor, darkColor],
       labels: series.map(s => s.name),
       legend: {
         show: true,
@@ -50,11 +68,19 @@ function getChartOptions(pieData?: { name: string; data?: number[] }[] | null, c
     };
   }
 
+  // Tự động tạo mảng nhãn 6 tháng gần nhất cho trục X
+  const last6Months = [];
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date();
+    d.setMonth(d.getMonth() - i);
+    last6Months.push(d.toLocaleString('default', { month: 'short' }));
+  }
+
   return {
     series: series,
     chart: {
       fontFamily: 'inherit',
-      type: 'bar',
+      type: chartType,
       stacked: true,
       height: 350,
       toolbar: {
@@ -80,7 +106,7 @@ function getChartOptions(pieData?: { name: string; data?: number[] }[] | null, c
       colors: ['transparent'],
     },
     xaxis: {
-      categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+      categories: last6Months,
       axisBorder: {
         show: false,
       },
@@ -95,8 +121,6 @@ function getChartOptions(pieData?: { name: string; data?: number[] }[] | null, c
       },
     },
     yaxis: {
-      min: 0,
-      max: 80,
       labels: {
         style: {
           colors: labelColor,
@@ -134,11 +158,11 @@ function getChartOptions(pieData?: { name: string; data?: number[] }[] | null, c
       },
       y: {
         formatter: function (val: number) {
-          return '$' + val + ' thousands';
+          return val;
         },
       },
     },
-    colors: [baseColor, secondaryColor],
+    colors: [baseColor, successColor, warningColor, dangerColor, secondaryColor, darkColor],
     grid: {
       borderColor: borderColor,
       strokeDashArray: 4,

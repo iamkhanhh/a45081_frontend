@@ -1,5 +1,12 @@
 
-<div class="container-fluid">
+<div class="container-fluid ">
+  <!-- Loading overlay -->
+  <div *ngIf="isLoading" class="d-flex justify-content-center align-items-center position-absolute top-0 start-0 w-100 h-100" style="background-color: rgba(255, 255, 255, 0.5); z-index: 10;">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
   <div class="row g-4">
     <div class="col-lg-4">
       <app-stats-widget2
@@ -38,10 +45,10 @@
 
   <div class="row g-4 mt-3">
     <div class="col-lg-6">
-        <app-charts-widget5 class="card" [pieData]="samplesCreatedData" [title]="'Samples Created Over Time'" [subtitle]="'Number of samples created in the last 6 months'"></app-charts-widget5>
+        <app-charts-widget5 class="card" [chartType]="'area'" [seriesData]="samplesCreatedData" [title]="'Samples Created Over Time'" [subtitle]="'Number of samples created in the last 6 months'"></app-charts-widget5>
     </div>
     <div class="col-lg-6">
-        <app-charts-widget5 class="card" [pieData]="analysesCreatedData" [title]="'Analyses Created Over Time'" [subtitle]="'Number of analyses created in the last 6 months'"></app-charts-widget5>
+        <app-charts-widget5 class="card" [chartType]="'area'" [seriesData]="analysesCreatedData" [title]="'Analyses Created Over Time'" [subtitle]="'Number of analyses created in the last 6 months'"></app-charts-widget5>
     </div>
   </div>
 

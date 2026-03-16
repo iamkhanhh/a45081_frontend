@@ -9,20 +9,8 @@
         <div class="mt-5">
             <p class="fs-4">My Reports:</p>
             <div class="list-group list-group-light">
-                <button type="button" (click)="chooseReport(1)" [ngClass]="getActiveClassReport(1)" class="list-group-item list-group-item-action px-3 border-0">
-                    Report 1
-                </button>
-                <button type="button" (click)="chooseReport(2)" [ngClass]="getActiveClassReport(2)" class="list-group-item list-group-item-action px-3 border-0">
-                    Report 2
-                </button>
-                <button type="button" (click)="chooseReport(3)" [ngClass]="getActiveClassReport(3)" class="list-group-item list-group-item-action px-3 border-0">
-                    Report 3
-                </button>
-                <button type="button" (click)="chooseReport(4)" [ngClass]="getActiveClassReport(4)" class="list-group-item list-group-item-action px-3 border-0">
-                    Report 4
-                </button>
-                <button type="button" (click)="chooseReport(5)" [ngClass]="getActiveClassReport(5)" class="list-group-item list-group-item-action px-3 border-0">
-                    Report 5
+                <button *ngFor="let report of reports" type="button" (click)="chooseReport(report.id)" [ngClass]="getActiveClassReport(report.id)" class="list-group-item list-group-item-action px-3 border-0">
+                    {{ report.report_name }}
                 </button>
               </div>
         </div>
@@ -175,18 +163,7 @@
         </div>
 
         <div *ngIf="reportId != 0">
-            <app-analysis-report-detail [id]="reportId" ></app-analysis-report-detail>
-            <!-- embed office viewer inline using iframe, bound to sanitized url -->
-            <div class="d-flex justify-content-end mb-2">
-                <button class="btn btn-outline-primary me-2" (click)="downloadReport()">Download Report</button>
-                <a *ngIf="url" [href]="url" target="_blank" class="btn btn-primary">Open in New Tab</a>
-            </div>
-            <div class="card card-xxl-stretch mb-4">
-                <div class="card-body" style="height: 80vh; padding: 0;">
-                    <iframe *ngIf="url" [src]="url" style="width:100%; height:100%; border:0;" frameborder="0"></iframe>
-                    <div *ngIf="!url" class="p-3">No report available</div>
-                </div>
-            </div>
+            <app-analysis-report-detail [id]="reportId"></app-analysis-report-detail>
         </div>
 
     </div>
