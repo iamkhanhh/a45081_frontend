@@ -1,117 +1,65 @@
-<div class="container-fluid">
 
-  <div class="row g-4">
-    <!-- Sequencing Quality (left) -->
-    <div class="col-lg-4">
-      <div class="card card-xxl-stretch mb-4">
-        <div class="card-body">
-          <h5 class="card-title">Sequencing Quality</h5>
-          <div class="d-flex justify-content-between align-items-center my-3">
-            <div>
-              <div class="text-muted">Total Reads</div>
-              <div class="fs-3 fw-bold">120M</div>
-            </div>
-            <div>
-              <div class="text-muted">Mapping Rate</div>
-              <div class="fs-3 fw-bold">98.5%</div>
-            </div>
-          </div>
-          <div class="d-flex justify-content-between align-items-center my-3">
-            <div>
-              <div class="text-muted">Coverage Depth</div>
-              <div class="fs-3 fw-bold">45x</div>
-            </div>
-            <div>
-              <div class="text-muted">GC Content</div>
-              <div class="fs-3 fw-bold">42%</div>
-            </div>
-          </div>
-          <hr />
-          <div class="mt-3">
-            <h6 class="text-muted mb-2">Quality Score Distribution</h6>
-            <app-chart-coverage-ng class="card card-xxl-stretch" [chartLabels]="['SampA','SampB','SampC','SampD','SampE']" [chartDataValues]="[45,60,38,50,70]"></app-chart-coverage-ng>
-          </div>
-        </div>
-      </div>
+<div class="container-fluid ">
+  <!-- Loading overlay -->
+  <div *ngIf="isLoading" class="d-flex justify-content-center align-items-center position-absolute top-0 start-0 w-100 h-100" style="background-color: rgba(255, 255, 255, 0.5); z-index: 10;">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
     </div>
-
-    <!-- Variant Overview (center) -->
-    <div class="col-lg-4">
-      <div class="card card-xxl-stretch mb-4">
-        <div class="card-body">
-          <h5 class="card-title">Variant Overview</h5>
-          <div class="row text-center my-3">
-            <div class="col">
-              <div class="text-muted">Total Variants</div>
-              <div class="fs-3 fw-bold">2,315,000</div>
-            </div>
-            <div class="col">
-              <div class="text-muted">High Conf.</div>
-              <div class="fs-3 fw-bold">1,850,000</div>
-            </div>
-          </div>
-
-          <div class="row my-3">
-            <div class="col-4 text-muted">SNPs</div>
-            <div class="col-8 text-end fw-bold">200,000</div>
-            <div class="col-4 text-muted">Insertions</div>
-            <div class="col-8 text-end fw-bold">200,000</div>
-            <div class="col-4 text-muted">Deletions</div>
-            <div class="col-8 text-end fw-bold text-danger">150,000</div>
-          </div>
-
-          <hr />
-          <h6 class="text-muted">Variant Types</h6>
-          <app-chart-variant-counts-ng class="card card-xxl-stretch mt-3" [labels]="['SNPs','Ins','Del']" [values]="[200000,200000,150000]"></app-chart-variant-counts-ng>
-        </div>
-      </div>
-    </div>
-
-    <!-- Variants by Chromosome (right) -->
-    <div class="col-lg-4">
-      <div class="card card-xxl-stretch mb-4">
-        <div class="card-body">
-          <h5 class="card-title">Variants by Chromosome</h5>
-          <div class="mt-3">
-            <app-chart-chromosome-ng class="card card-xxl-stretch" [labels]="['chr1','chr2','chr3','chrX','chrY']" [values]="[120000,90000,75000,30000,5000]"></app-chart-chromosome-ng>
-          </div>
-        </div>
-      </div>
-    </div>
-
-
   </div>
 
-  <!-- Bottom row: Top genes and Variant impact -->
+  <div class="row g-4">
+    <div class="col-lg-4">
+      <app-stats-widget2
+        class="card card-xl-stretch mb-xl-8"
+        [title]="'Total Workspaces'"
+        [description]="totalWorkspaces"
+      ></app-stats-widget2>
+    </div>
+    <div class="col-lg-4">
+      <app-stats-widget2
+        class="card card-xl-stretch mb-xl-8"
+        [title]="'Total Analyses'"
+        [description]="totalAnalyses"
+      ></app-stats-widget2>
+    </div>
+    <div class="col-lg-4">
+      <app-stats-widget2
+        class="card card-xl-stretch mb-xl-8"
+        [title]="'Total Samples'"
+        [description]="totalSamples"
+      ></app-stats-widget2>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-lg-4">
+        <app-charts-widget5 class="card" [chartType]="'pie'" [pieData]="analysesStatusData" [title]="'Analyses Status'" [subtitle]="'Breakdown of analysis statuses'"></app-charts-widget5>
+    </div>
+    <div class="col-lg-4">
+        <app-charts-widget5 class="card" [chartType]="'pie'" [pieData]="sampleFileTypeData" [title]="'Sample File Types'" [subtitle]="'Distribution of VCF and FASTQ files'"></app-charts-widget5>
+    </div>
+    <div class="col-lg-4">
+        <app-charts-widget5 class="card" [chartType]="'pie'" [pieData]="sampleAssemblyData" [title]="'Sample Assemblies'" [subtitle]="'Distribution of hg19 and hg38 assemblies'"></app-charts-widget5>
+    </div>
+  </div>
+
   <div class="row g-4 mt-3">
     <div class="col-lg-6">
-      <div class="card card-xxl-stretch mb-4">
-        <div class="card-body">
-          <h5 class="card-title">Top Mutated Genes</h5>
-          <ol class="list-group list-group-flush mt-3">
-            <li class="list-group-item d-flex justify-content-between align-items-center">BRCA1 <span class="badge bg-secondary">56</span></li>
-            <li class="list-group-item d-flex justify-content-between align-items-center">TP53 <span class="badge bg-secondary">42</span></li>
-            <li class="list-group-item d-flex justify-content-between align-items-center">EGFR <span class="badge bg-secondary">33</span></li>
-          </ol>
-        </div>
-      </div>
+        <app-charts-widget5 class="card" [chartType]="'area'" [seriesData]="samplesCreatedData" [title]="'Samples Created Over Time'" [subtitle]="'Number of samples created in the last 6 months'"></app-charts-widget5>
     </div>
-
     <div class="col-lg-6">
-      <div class="card card-xxl-stretch mb-4">
-        <div class="card-body">
-          <h5 class="card-title">Variant Impact</h5>
-          <div class="d-flex justify-content-center mt-3">
-            <app-chart-top-genes-ng class="w-75" [labels]="['BRCA1','TP53','EGFR']" [values]="[56,42,33]"></app-chart-top-genes-ng>
-          </div>
-          <div class="mt-3 d-flex justify-content-around text-muted">
-            <div>Missense <strong>45%</strong></div>
-            <div>Synonymous <strong>30%</strong></div>
-            <div>Nonsense <strong>15%</strong></div>
-            <div>Frameshift <strong>10%</strong></div>
-          </div>
-        </div>
-      </div>
+        <app-charts-widget5 class="card" [chartType]="'area'" [seriesData]="analysesCreatedData" [title]="'Analyses Created Over Time'" [subtitle]="'Number of analyses created in the last 6 months'"></app-charts-widget5>
+    </div>
+  </div>
+
+  <div class="row g-4 mt-3">
+    <div class="col-lg-12">
+        <app-lists-widget1
+            class="card"
+            [title]="'Recent analyses'"
+            [subtitle]="'10 most recent analyses'"
+            [items]="recentAnalyses"
+        ></app-lists-widget1>
     </div>
   </div>
 </div>

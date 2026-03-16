@@ -9,20 +9,8 @@
         <div class="mt-5">
             <p class="fs-4">My Reports:</p>
             <div class="list-group list-group-light">
-                <button type="button" (click)="chooseReport(1)" [ngClass]="getActiveClassReport(1)" class="list-group-item list-group-item-action px-3 border-0">
-                    Report 1
-                </button>
-                <button type="button" (click)="chooseReport(2)" [ngClass]="getActiveClassReport(2)" class="list-group-item list-group-item-action px-3 border-0">
-                    Report 2
-                </button>
-                <button type="button" (click)="chooseReport(3)" [ngClass]="getActiveClassReport(3)" class="list-group-item list-group-item-action px-3 border-0">
-                    Report 3
-                </button>
-                <button type="button" (click)="chooseReport(4)" [ngClass]="getActiveClassReport(4)" class="list-group-item list-group-item-action px-3 border-0">
-                    Report 4
-                </button>
-                <button type="button" (click)="chooseReport(5)" [ngClass]="getActiveClassReport(5)" class="list-group-item list-group-item-action px-3 border-0">
-                    Report 5
+                <button *ngFor="let report of reports" type="button" (click)="chooseReport(report.id)" [ngClass]="getActiveClassReport(report.id)" class="list-group-item list-group-item-action px-3 border-0">
+                    {{ report.report_name }}
                 </button>
               </div>
         </div>
@@ -175,7 +163,7 @@
         </div>
 
         <div *ngIf="reportId != 0">
-            <app-analysis-report-detail [id]="reportId" ></app-analysis-report-detail>
+            <app-analysis-report-detail [id]="reportId"></app-analysis-report-detail>
         </div>
 
     </div>
