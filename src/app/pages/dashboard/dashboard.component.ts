@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { ListItem } from '../../_metronic/partials/content/widgets/lists/lists-widget1/lists-widget1.component';
 import { ModalConfig, ModalComponent } from '../../_metronic/partials';
 import { DashboardService, DashboardData } from './dashboard.service';
 import { Subscription } from 'rxjs';
@@ -23,7 +22,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   analysesCreatedData: { name: string; data: number[] }[] = [];
 
   // Thuộc tính cho widget danh sách
-  recentAnalyses: ListItem[] = [];
+  recentAnalyses: any[] = [];
 
   isLoading = false;
   private subscriptions: Subscription[] = [];
@@ -43,7 +42,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const loadingSub = this.dashboardService.isLoading$.subscribe(res => {
       this.isLoading = res;
-      this.cdr.detectChanges(); // Ép Angular cập nhật lại View ngay lập tức
+      this.cdr.detectChanges(); 
     });
     this.subscriptions.push(loadingSub);
 
@@ -54,7 +53,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         } catch (error) {
           console.error('Lỗi khi map dữ liệu từ API:', error);
         }
-        this.cdr.detectChanges(); // Ép Angular cập nhật dữ liệu mới lên Dashboard
+        this.cdr.detectChanges(); 
       }
     });
     this.subscriptions.push(dataSub);
@@ -100,11 +99,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }];
 
     // 4. Chuyển đổi dữ liệu cho danh sách các phân tích gần đây
-    this.recentAnalyses = data.recentAnalyses.map(analysis => ({
-      icon: './assets/media/icons/duotune/general/gen022.svg',
-      title: analysis.name,
-      subtitle: `Workspace: ${analysis.workspaceName} | Status: ${analysis.status}`
-    }));
+    this.recentAnalyses = data.recentAnalyses;
   }
 
   async openModal() {
