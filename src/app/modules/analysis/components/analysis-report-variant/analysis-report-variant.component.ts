@@ -7,6 +7,7 @@ import { GroupingState } from 'src/app/_metronic/shared/models';
 import { VariantListService } from '../../services/variant-list.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DeleteSelectedVariantComponent } from '../delete-selected-variant/delete-selected-variant.component';
+import { DeleteSelectedReportComponent } from '../delete-selected-variant/delete-selected-report.component';
 import { AnalysisReportDetailService, ReportModel, CreateReportPayload, VariantPayload } from '../../services/analysis-report-detail.service';
 
 @Component({
@@ -94,6 +95,21 @@ export class AnalysisReportVariantComponent {
 
   getActiveClassReport(id: number) {
     return this.reportId == id ? 'active' : '';
+  }
+
+  deleteReport(report: any) {
+    const modalRef = this.modalService.open(DeleteSelectedReportComponent, { size: 'md' });
+    modalRef.componentInstance.id = report.id;
+    modalRef.componentInstance.report = report; // Cung cấp object report cho Modal
+    
+    modalRef.result.then((success) => {
+      if (success) {
+        this.loadReports(); // Refresh the list of reports
+        if (this.reportId === report.id) {
+          this.chooseReport(0); // Back to "New Report" view if current report is deleted
+        }
+      }
+    }, () => { /* User cancelled/dismissed */ });
   }
 
   createReport() {

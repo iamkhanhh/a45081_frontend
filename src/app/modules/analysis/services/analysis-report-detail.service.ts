@@ -145,7 +145,32 @@ export class AnalysisReportDetailService implements OnDestroy {
     );
   }
 
-  // TODO: Implement deleteReport methods, updateReport
+  /**
+   * Deletes a report by its ID.
+   * @param reportId The ID of the report to delete.
+   * @returns An Observable indicating success or failure.
+   */
+  deleteReport(reportId: number): Observable<boolean> {
+    this.isLoadingSubject.next(true);
+    const url = `${this.apiUrl}/${reportId}`;
+    return this.http.delete<ApiResponse<any>>(url, { withCredentials: true }).pipe(
+      map(response => {
+        if (response.status === 'success') {
+          this.toastr.success(response.message || 'Report deleted successfully', 'Success');
+          return true;
+        } else {
+          this.toastr.error(response.message, 'Error');
+          return false;
+        }
+      }),
+      catchError(err => {
+        console.error(`Error deleting report with ID ${reportId}:`, err);
+        this.toastr.error(err.error?.message || 'Failed to delete report.', 'Error');
+        return of(false);
+      }),
+      finalize(() => this.isLoadingSubject.next(false))
+    );
+  }
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());

@@ -6,8 +6,8 @@
 <div class="card-body">
   <ng-container *ngIf="hasData; else noData">
     <div #chartRef id="kt_charts_widget_5_chart" [style.height]="'350px'">
-      <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart" [xaxis]="chartOptions.xaxis"
-        [yaxis]="chartOptions.yaxis" [dataLabels]="chartOptions.dataLabels" [stroke]="chartOptions.stroke"
+      <apx-chart [series]="chartOptions.series" [labels]="chartOptions.labels" [chart]="chartOptions.chart" [xaxis]="chartOptions.xaxis"
+        [yaxis]="chartOptions.yaxis" [dataLabels]="chartOptions.dataLabels" [stroke]="chartOptions.stroke" 
         [legend]="chartOptions.legend" [fill]="chartOptions.fill" [states]="chartOptions.states"
         [tooltip]="chartOptions.tooltip" [colors]="chartOptions.colors" [markers]="chartOptions.markers"
         [plotOptions]="chartOptions.plotOptions"></apx-chart>

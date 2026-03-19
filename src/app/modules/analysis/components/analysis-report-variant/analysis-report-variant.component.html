@@ -9,9 +9,16 @@
         <div class="mt-5">
             <p class="fs-4">My Reports:</p>
             <div class="list-group list-group-light">
-                <button *ngFor="let report of reports" type="button" (click)="chooseReport(report.id)" [ngClass]="getActiveClassReport(report.id)" class="list-group-item list-group-item-action px-3 border-0">
-                    {{ report.report_name }}
-                </button>
+                <div *ngFor="let report of reports" 
+                     class="list-group-item list-group-item-action px-3 border-0 d-flex justify-content-between align-items-center" 
+                     [ngClass]="getActiveClassReport(report.id)"
+                     style="cursor: pointer;"
+                     (click)="chooseReport(report.id)">
+                    <span class="text-truncate me-2">{{ report.report_name }}</span>
+                    <button class="btn btn-icon btn-active-light-danger btn-sm w-25px h-25px flex-shrink-0" (click)="deleteReport(report); $event.stopPropagation()" title="Delete Report">
+                        <span [inlineSVG]="'./assets/media/icons/duotune/general/gen027.svg'" class="svg-icon svg-icon-3"></span>
+                    </button>
+                </div>
               </div>
         </div>
     </div>
