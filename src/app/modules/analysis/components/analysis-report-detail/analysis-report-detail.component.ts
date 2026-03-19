@@ -14,7 +14,8 @@ export class AnalysisReportDetailComponent implements OnChanges, OnDestroy {
   url: SafeResourceUrl | null = null;
   isLoading = false;
   private report: ReportModel | undefined;
-  private subscriptions: Subscription[] = [];
+  
+  private reportSubscription: Subscription | undefined;
 
   constructor(
     private analysisReportDetailService: AnalysisReportDetailService,
@@ -33,21 +34,23 @@ export class AnalysisReportDetailComponent implements OnChanges, OnDestroy {
   }
 
   loadReport(reportId: number): void {
+    // Hủy request cũ nếu người dùng đang chuyển nhanh giữa các report
+    if (this.reportSubscription) {
+      this.reportSubscription.unsubscribe();
+    }
+
     this.isLoading = true;
     this.url = null;
-    const sub = this.analysisReportDetailService.getReportById(reportId).subscribe(
+    this.reportSubscription = this.analysisReportDetailService.getReportById(reportId).subscribe(
       (report) => {
-        this.isLoading = false;
-        if (report) {
-          this.report = report;
-          // TODO: The fileUrl should come from the API response. Using a placeholder for now.
-          const fileUrl = 'https://genetics-s3-prod.s3.ap-southeast-1.amazonaws.com/public/report_EN123.docx';
-          const viewerUrl = `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(fileUrl)}`;
-          this.url = this.sanitizer.bypassSecurityTrustResourceUrl(viewerUrl);
-        } else {
-          this.toastr.error('Failed to load report data.');
-          this.url = null;
+        if (!report) {
+          return;
         }
+        this.isLoading = false;
+        this.report = report;
+        const fileUrl = report.download_url;
+        const viewerUrl = `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(fileUrl)}`;
+        this.url = this.sanitizer.bypassSecurityTrustResourceUrl(viewerUrl);
         this.cd.detectChanges();
       },
       () => {
@@ -57,7 +60,6 @@ export class AnalysisReportDetailComponent implements OnChanges, OnDestroy {
         this.cd.detectChanges();
       }
     );
-    this.subscriptions.push(sub);
   }
 
   downloadReport(): void {
@@ -68,6 +70,8 @@ export class AnalysisReportDetailComponent implements OnChanges, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach(sub => sub.unsubscribe());
+    if (this.reportSubscription) {
+      this.reportSubscription.unsubscribe();
+    }
   }
 }
