@@ -30,6 +30,7 @@ export class VariantListComponent implements OnInit, OnDestroy {
   paginator: PaginatorState = new PaginatorState();
   grouping: GroupingState = new GroupingState();
   loadingExport: boolean = false;
+  omimExpanded: boolean[] = [];
   filterGroup: FormGroup;
   searchGroup: FormGroup;
   // variantList: any[];
@@ -50,13 +51,11 @@ export class VariantListComponent implements OnInit, OnDestroy {
   };
 
   columnsName: any[] = [
-    { name: 'GnomAD_AMR', isSelected: false, columnVal: 'gnomad_AMR' },
-    { name: 'GnomAD_AFR', isSelected: false, columnVal: 'gnomad_AFR' },
-    { name: 'rsID', isSelected: false, columnVal: 'rsid' },
     { name: 'P.Nomen', isSelected: false, columnVal: 'pnomen' },
-    { name: 'REF-ALT', isSelected: false, columnVal: 'REF-ALT' },
     { name: 'Cosmic', isSelected: false, columnVal: 'cosmicID' },
-    { name: 'Position', isSelected: false, columnVal: 'position' }
+    { name: 'HGVSc', isSelected: false, columnVal: 'HGVSc' },
+    { name: 'Coverage', isSelected: false, columnVal: 'coverage' },
+    { name: 'Score', isSelected: false, columnVal: 'VAR_SCORE' }
   ];
 
   private subscriptions: Subscription[] = [];
@@ -302,10 +301,11 @@ export class VariantListComponent implements OnInit, OnDestroy {
     }
   }  
 
-  openIGVModal(chrom: any, position: any) {
-    const modalRef = this.modalService.open(IgvGenomeBrowserComponent, { size: 'lg', windowClass: "igv-browser-modal" });
+  openIGVModal(chrom: string, position: number, geneName: string) {
+    const modalRef = this.modalService.open(IgvGenomeBrowserComponent, { size: 'xl', windowClass: "igv-browser-modal" });
     modalRef.componentInstance.chrom = chrom;
     modalRef.componentInstance.position = position;
+    modalRef.componentInstance.geneName = geneName;
     modalRef.componentInstance.id = this.id;
 
     modalRef.result.then(() => {
@@ -476,6 +476,10 @@ export class VariantListComponent implements OnInit, OnDestroy {
     // 	})
     // 	this.old_annotation = current
     // }
+  }
+
+  expandOmim(i: number) {
+    this.omimExpanded[i] = !this.omimExpanded[i];
   }
 
 }

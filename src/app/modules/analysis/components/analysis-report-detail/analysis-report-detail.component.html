@@ -1,1 +1,18 @@
-<h1>Report ID: {{ id }}</h1>
+<div *ngIf="isLoading" class="d-flex justify-content-center align-items-center" style="height: 80vh;">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+
+<div [hidden]="isLoading">
+    <div class="d-flex justify-content-end mb-2">
+        <button class="btn btn-outline-primary me-2" (click)="downloadReport()">Download Report</button>
+        <a *ngIf="url" [href]="url" target="_blank" class="btn btn-primary">Open in New Tab</a>
+    </div>
+    <div class="card card-xxl-stretch mb-4">
+        <div class="card-body" style="height: 80vh; padding: 0;">
+            <iframe *ngIf="url" [src]="url" style="width:100%; height:100%; border:0;" frameborder="0"></iframe>
+            <div *ngIf="!url" class="p-3">No report available. Select a report to view.</div>
+        </div>
+    </div>
+</div>

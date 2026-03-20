@@ -7,26 +7,29 @@ import { getCSSVariableValue } from '../../../../../kt/_utils';
 export class MixedWidget10Component implements OnInit {
   @Input() chartColor: string = '';
   @Input() chartHeight: string;
+  @Input() seriesData: number[] | null = null;
   chartOptions: any = {};
 
   constructor() {}
 
   ngOnInit(): void {
-    this.chartOptions = getChartOptions(this.chartHeight, this.chartColor);
+    this.chartOptions = getChartOptions(this.chartHeight, this.chartColor, this.seriesData);
   }
 }
 
-function getChartOptions(chartHeight: string, chartColor: string) {
+function getChartOptions(chartHeight: string, chartColor: string, seriesData?: number[] | null) {
   const labelColor = getCSSVariableValue('--bs-gray-800');
   const strokeColor = getCSSVariableValue('--bs-gray-300');
   const baseColor = getCSSVariableValue('--bs-' + chartColor);
   const lightColor = getCSSVariableValue('--bs-' + chartColor + '-light');
 
+  const data = seriesData && seriesData.length ? seriesData : [15, 25, 15, 40, 20, 50];
+
   return {
     series: [
       {
-        name: 'Net Profit',
-        data: [15, 25, 15, 40, 20, 50],
+        name: 'Quality',
+        data: data,
       },
     ],
     chart: {

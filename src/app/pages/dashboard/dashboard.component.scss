@@ -1,0 +1,56 @@
+/* Ensure row columns stretch to equal height so cards align */
+.row.g-4 {
+  align-items: stretch; /* bootstrap .row is flex, this makes children stretch */
+}
+
+.card.card-xxl-stretch {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.card.card-xxl-stretch > .card-body {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Chart wrapper should use available space without forcing huge fixed height */
+.chart-wrapper {
+  width: 100%;
+  /* allow chart area to grow but avoid excessive min height */
+  min-height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+/* Let canvas size adapt; prefer max-height instead of forcing exact height */
+.chart-wrapper canvas {
+  max-width: 100% !important;
+  max-height: 260px !important;
+  height: auto !important;
+  width: 100% !important;
+}
+
+/* small responsive tweaks */
+@media (max-width: 991px) {
+  .chart-wrapper { min-height: 120px; }
+  .chart-wrapper canvas { max-height: 180px !important; }
+}
+
+.dashboard-top-row > .col-lg-4,
+.dashboard-top-row > .col-lg-8 {
+  display: flex;
+  flex-direction: column;
+}
+
+/* cap card body vertical spacing to avoid large empty areas */
+.dashboard-top-row .card-body {
+  padding-bottom: 1rem;
+}
+
+/* ensure bottom row cards align */
+.row.g-4.mt-3 > .col-lg-6 { display: flex; flex-direction: column; }
+.row.g-4.mt-3 .card.card-xxl-stretch { margin-bottom: 0; }
