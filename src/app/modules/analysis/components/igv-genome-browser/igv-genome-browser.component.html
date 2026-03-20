@@ -5,8 +5,7 @@
         </div>
     </div>
     <div class="modal-body">
-        <h1>Analysis ID: {{ id }}</h1>
-        <h1>chrom: {{ chrom }}</h1>
-        <h1>position: {{ position }}</h1>
+        <p class="">Gene: {{geneName}} | Position: {{chrom}}:{{position}} | Assembly: {{analysis?.assembly || ''}}</p>
+        <div #igv></div>
     </div>
 </div>

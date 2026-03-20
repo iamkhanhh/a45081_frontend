@@ -43,4 +43,8 @@ export class AnalysisService {
   getStatusUpdate() {
     return this.socket.fromEvent('analysisStatusUpdate');
   }
+
+  getIgvInfo(id: number): Observable<any> {
+    return this.http.get(`${API_ANALYSIS_URL}/igv-info/${id}`, { withCredentials: true });
+  }
 }
