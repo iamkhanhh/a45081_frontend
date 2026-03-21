@@ -16,6 +16,7 @@ export interface ReportModel {
 }
 
 export interface VariantPayload {
+  id: string;
   gene: string;
   transcript: string;
   cdna: string;

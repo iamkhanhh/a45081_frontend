@@ -69,7 +69,7 @@ export class AnalysisReportVariantComponent {
         }
         this.isLoading = false;
         this.cd.detectChanges();
-
+        
       })
     this.subscriptions.push(sbLoadVariants);
   }
@@ -127,6 +127,7 @@ export class AnalysisReportVariantComponent {
     const selectedVariants: VariantPayload[] = this.variantSelected
       .filter((el) => selectedIds.includes(el.id))
       .map(variant => ({
+        id: variant.id,
         gene: variant.gene,
         transcript: variant.transcript_id, // Assuming transcript_id maps to transcript
         cdna: variant.cnomen, // Assuming cnomen maps to cdna
