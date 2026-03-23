@@ -194,10 +194,14 @@
                         </td>
                         <td>
                             <div style="width: fit-content;">
-                                <a (click)="createReport()"
-                                    class="btn btn-primary btn-fixed-height font-weight-bold px-2 px-lg-5 mr-2">
-                                    <span class="d-none d-md-inline">Create Report</span>
-                                </a>
+                                <button type="button" (click)="createReport()"
+                                    class="btn btn-primary btn-fixed-height font-weight-bold px-2 px-lg-5 mr-2"
+                                    [disabled]="isCreatingReport">
+                                    <span *ngIf="!isCreatingReport" class="d-none d-md-inline">Create Report</span>
+                                    <span *ngIf="isCreatingReport" class="indicator-progress" style="display: block;">
+                                        Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                                    </span>
+                                </button>
                             </div>
                         </td>
                     </tr>
