@@ -31,6 +31,11 @@ const Routing: Routes = [
     loadChildren: () =>
       import('./builder/builder.module').then((m) => m.BuilderModule),
   },
+  {
+    path: 'pricing',
+    loadChildren: () =>
+      import('./pricing/pricing.module').then((m) => m.PricingModule),
+  },
   // {
   //   path: 'crafted/pages/profile',
   //   loadChildren: () =>

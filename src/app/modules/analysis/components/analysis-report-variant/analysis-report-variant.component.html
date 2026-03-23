@@ -34,31 +34,67 @@
                 </thead>
                 <tbody style="word-break: break-all;">
                     <tr>
-                        <td class="pl-0 text-right">
-                            <div class="text-dark font-weight-bolder mb-1 font-size-lg">Name</div>
+                        <td class="pl-0 text-right" style="vertical-align: middle;">
+                            <div class="text-dark mb-1" style="font-weight: 800; font-size: 1rem;">Name</div>
                         </td>
                         <td>
-                            <div class="col-lg-6">
-                                <input type="text" [(ngModel)]="reportName" class="form-control" name="reportName" placeholder="Name"
-                                     /><small class="form-text text-muted"><b>Enter</b> report's name</small>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <input type="text" [(ngModel)]="reportName" class="form-control" name="reportName" placeholder="Name" />
+                                    <small class="form-text text-muted"><b>Enter</b> report's name</small>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="d-flex">
+                                        <input type="text" [(ngModel)]="pubmedSearchQuery" class="form-control me-2" name="pubmedSearch" placeholder="Search PubMed reports" (keyup.enter)="searchPubmed()" />
+                                        <button type="button" class="btn btn-primary" style="white-space: nowrap;" (click)="searchPubmed()">Search</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- Pubmed Results Table -->
+                    <tr *ngIf="pubmedResults && pubmedResults.length > 0">
+                        <td class="pl-0 text-right mt-3" style="vertical-align: top;">
+                            <div class="text-dark mb-1" style="font-weight: 800; font-size: 1rem;">References</div>
+                        </td>
+                        <td>
+                            <div class="table-responsive" style="max-height: 300px; overflow-y: auto; border: 1px solid #e4e6ef; border-radius: 0.475rem;">
+                                <table class="table table-row-dashed align-middle gs-0 gy-4 mb-0">
+                                    <thead class="sticky-top" style="background: #1b85ff; z-index: 1;">
+                                        <tr class="fw-bolder" style="color: white !important;">
+                                            <th class="min-w-50px ps-4">ID</th>
+                                            <th class="min-w-200px">TITLE</th>
+                                            <th class="min-w-150px">AUTHORS</th>
+                                            <th class="min-w-100px pe-4">DATE</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let article of pubmedResults">
+                                            <td class="ps-4">{{ article.id }}</td>
+                                            <td>{{ article.title }}</td>
+                                            <td>{{ article.authors }}</td>
+                                            <td class="pe-4">{{ article.date }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </td>
                     </tr>
                     <tr>
-                        <td class="pl-0 text-right" style="vertical-align: top;">
-                            <div class="text-dark font-weight-bolder mb-1 font-size-lg">SNV / INDEL</div>
+                        <td class="pl-0 text-right mt-3" style="vertical-align: top;">
+                            <div class="text-dark mb-1" style="font-weight: 800; font-size: 1rem;">SNV / INDEL</div>
                         </td>
                         <td>
                             <!-- begin::Table container -->
-                            <div class="table-responsive"style="width: 100%; max-height: 500px; overflow-y: auto;">
+                            <div class="table-responsive" style="width: 100%; max-height: 500px; overflow-y: auto; border: 1px solid #e4e6ef; border-radius: 0.475rem;">
                                 <!-- begin::Table -->
                                 <table class="table table-row-dashed align-middle gs-0 gy-4 table-variants-selected">
                                     <!-- begin::Table head -->
                                     <thead class="sticky-top" style="background: #1b85ff;">
                                         <tr class="fw-bolder" style="color: white !important;">
-                                            <th class="w-25px" style="padding-left: 12px;">
+                                            <th class="w-25px ps-4" >
                                                 <div class="
-                                                    form-check form-check-sm form-check-custom form-check-solid
+                                                    form-check form-check-sm form-check-custom form-check-solid padding-left-8px
                                                     ">
                                                     <input class="form-check-input" type="checkbox" value="1"
                                                         data-kt-check="true" data-kt-check-target=".widget-9-check"
@@ -86,9 +122,9 @@
                                             z-index: 100;" class="spinner-border text-primary"></div>
                                         </div>
                                         <tr [hidden]="isLoading" *ngFor="let variant of variantSelected">
-                                            <td>
+                                            <td class="ps-4">
                                                 <div class="
-                                                    form-check form-check-sm form-check-custom form-check-solid
+                                                    form-check form-check-sm form-check-custom form-check-solid justify-content-center
                                                     ">
                                                     <input class="form-check-input widget-9-check" type="checkbox"
                                                         value="{{variant.id}}" (click)="grouping.selectRow(variant.id)"

@@ -20,6 +20,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   sampleAssemblyData: { name: string; data: number[] }[] = [];
   samplesCreatedData: { name: string; data: number[] }[] = [];
   analysesCreatedData: { name: string; data: number[] }[] = [];
+  lastSixMonths: string[] = [];
 
   // Thuộc tính cho widget danh sách
   recentAnalyses: any[] = [];
@@ -97,6 +98,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       name: 'Analyses',
       data: data.analysisLastSixMonths
     }];
+    this.lastSixMonths = data.lastSixMonths || [];
 
     // 4. Chuyển đổi dữ liệu cho danh sách các phân tích gần đây
     this.recentAnalyses = data.recentAnalyses;

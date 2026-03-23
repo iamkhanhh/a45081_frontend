@@ -25,10 +25,19 @@ export interface VariantPayload {
   classification: string;
 }
 
+export interface ReferencePayload {
+  id: string;
+  date: string;
+  source: string;
+  title: string;
+  authors: string[];
+}
+
 export interface CreateReportPayload {
   report_name: string;
   analysisId: number;
   variants: VariantPayload[];
+  references: ReferencePayload[];
 }
 
 export interface ApiResponse<T> {
@@ -129,8 +138,7 @@ export class AnalysisReportDetailService implements OnDestroy {
       map(response => {
         if (response.status === 'success') {
           this.toastr.success(response.message, 'Success');
-          // Note: This service method returns the created report.
-          // The component calling this method should handle refreshing the list of reports.
+
           return response.data;
         } else {
           this.toastr.error(response.message, 'Error');
@@ -168,6 +176,30 @@ export class AnalysisReportDetailService implements OnDestroy {
         console.error(`Error deleting report with ID ${reportId}:`, err);
         this.toastr.error(err.error?.message || 'Failed to delete report.', 'Error');
         return of(false);
+      }),
+      finalize(() => this.isLoadingSubject.next(false))
+    );
+  }
+
+  /**
+   * Search PubMed by PMID
+   * @param pmid The PubMed ID to search
+   * @returns An Observable of the search result
+   */
+  searchPubmed(pmid: string): Observable<any> {
+    this.isLoadingSubject.next(true);
+    const url = `${environment.apiUrl}/search/references?pmid=${pmid}`;
+    return this.http.get<any>(url, { withCredentials: true }).pipe(
+      map(response => {
+        if (response && response.status === 'success') {
+          return response.data;
+        }
+        return response; // Fallback if API doesn't use the standard ApiResponse wrapper
+      }),
+      catchError(err => {
+        console.error(`Error fetching PubMed data for PMID ${pmid}:`, err);
+        this.toastr.error(err.error?.message || 'Failed to fetch PubMed data.', 'Error');
+        return of(null);
       }),
       finalize(() => this.isLoadingSubject.next(false))
     );

@@ -12,6 +12,7 @@ export class ChartsWidget5Component implements OnInit, OnChanges {
   @Input() chartType: string = 'bar';
   @Input() title: string = '';
   @Input() subtitle: string = '';
+  @Input() xAxisCategories: string[] = [];
 
   hasData: boolean = false;
 
@@ -29,14 +30,14 @@ export class ChartsWidget5Component implements OnInit, OnChanges {
     const data = this.seriesData && this.seriesData.length ? this.seriesData : this.pieData;
     if (data && data.length > 0) {
       this.hasData = true;
-      this.chartOptions = getChartOptions(data, this.chartType);
+      this.chartOptions = getChartOptions(data, this.chartType, this.xAxisCategories);
     } else {
       this.hasData = false;
     }
   }
 }
 
-function getChartOptions(data?: { name: string; data?: number[] }[] | null, chartType: string = 'bar') {
+function getChartOptions(data?: { name: string; data?: number[] }[] | null, chartType: string = 'bar', categories: string[] = []) {
   const labelColor = getCSSVariableValue('--bs-gray-500')
   const borderColor = getCSSVariableValue('--bs-gray-200')
 
@@ -64,16 +65,18 @@ function getChartOptions(data?: { name: string; data?: number[] }[] | null, char
       labels: series.map(s => s.name),
       legend: {
         show: true,
+        position: 'bottom',
+        height: 100,
+        formatter: function (seriesName: string, opts: any) {
+          return seriesName.length > 20 ? seriesName.substring(0, 20) + '...' : seriesName;
+        }
       },
+      plotOptions: {
+        pie: {
+          customScale: 1
+        }
+      }
     };
-  }
-
-  // Tự động tạo mảng nhãn 6 tháng gần nhất cho trục X
-  const last6Months = [];
-  for (let i = 5; i >= 0; i--) {
-    const d = new Date();
-    d.setMonth(d.getMonth() - i);
-    last6Months.push(d.toLocaleString('default', { month: 'short' }));
   }
 
   return {
@@ -106,7 +109,7 @@ function getChartOptions(data?: { name: string; data?: number[] }[] | null, char
       colors: ['transparent'],
     },
     xaxis: {
-      categories: last6Months,
+      categories: categories,
       axisBorder: {
         show: false,
       },
