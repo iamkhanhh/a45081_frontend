@@ -64,7 +64,17 @@ function getChartOptions(data?: { name: string; data?: number[] }[] | null, char
       labels: series.map(s => s.name),
       legend: {
         show: true,
+        position: 'bottom',
+        height: 100,
+        formatter: function (seriesName: string, opts: any) {
+          return seriesName.length > 20 ? seriesName.substring(0, 20) + '...' : seriesName;
+        }
       },
+      plotOptions: {
+        pie: {
+          customScale: 1
+        }
+      }
     };
   }
 

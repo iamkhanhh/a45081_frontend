@@ -25,6 +25,8 @@ export class AnalysisReportVariantComponent {
   reportName: string;
   reportId: number = 0;
   reports: ReportModel[] = [];
+  pubmedSearchQuery: string = '';
+  pubmedResults: any[] = [];
   
   private subscriptions: Subscription[] = [];
 
@@ -112,6 +114,19 @@ export class AnalysisReportVariantComponent {
     }, () => { /* User cancelled/dismissed */ });
   }
 
+  searchPubmed() {
+    if (!this.pubmedSearchQuery) return;
+    
+    const sb = this.analysisReportDetailService.searchPubmed(this.pubmedSearchQuery).subscribe((res: any) => {
+      if (res) {
+        // Ensure the results are an array for the *ngFor loop in the template
+        this.pubmedResults = Array.isArray(res) ? res : [res];
+        this.cd.detectChanges();
+      }
+    });
+    this.subscriptions.push(sb);
+  }
+
   createReport() {
     if (!this.reportName) {
         this.toastr.error('Report name is required.');
@@ -139,7 +154,14 @@ export class AnalysisReportVariantComponent {
     const payload: CreateReportPayload = {
       report_name: this.reportName,
       analysisId: this.id, // Assuming 'id' in component is the analysisId
-      variants: selectedVariants
+      variants: selectedVariants,
+      references: this.pubmedResults.map(ref => ({
+        id: ref.id,
+        date: ref.date,
+        source: ref.source,
+        title: ref.title,
+        authors: ref.authors
+      }))
     };
 
     const sb = this.analysisReportDetailService.createReport(payload).subscribe((res: ReportModel | undefined) => {

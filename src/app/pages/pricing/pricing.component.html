@@ -1,0 +1,114 @@
+<div class="card">
+  <div class="card-body p-lg-17">
+    <div class="text-center mb-18">
+      <h3 class="fs-2hx text-dark mb-5">Choose Your Plan</h3>
+      <div class="fs-5 text-muted fw-bold">
+        Select the best plan that fits your genetic annotation and analysis needs.
+      </div>
+    </div>
+
+    <div class="row g-10">
+      <!-- Basic Plan -->
+      <div class="col-xl-4">
+        <div class="d-flex h-100 align-items-center">
+          <div class="w-100 d-flex flex-column flex-center rounded-3 bg-light bg-opacity-75 py-15 px-10 cursor-pointer border border-2 plan-card"
+               [ngClass]="{'border-primary shadow-sm': selectedPlan === 'Basic', 'border-gray-400': selectedPlan !== 'Basic'}"
+               (click)="selectPlan('Basic')">
+            <div class="mb-7 text-center">
+              <h1 class="text-dark mb-5 fw-bolder">Basic</h1>
+              <div class="text-gray-400 fw-bold mb-5">Perfect for exploring</div>
+              <div class="text-center">
+                <span class="fs-3x fw-bolder text-primary">$</span>
+                <span class="fs-3x fw-bolder text-primary">0</span>
+                <span class="fs-7 fw-bold text-muted">/ month</span>
+              </div>
+            </div>
+            <div class="w-100 mb-10">
+              <div class="d-flex align-items-center mb-5">
+                <span class="fw-bold fs-6 text-gray-800 flex-grow-1 pe-3">Upload and analyze 3 samples per day</span>
+                <i class="fa-solid fa-check-circle fs-1 text-success"></i>
+              </div>
+              <div class="d-flex align-items-center mb-5">
+                <span class="fw-bold fs-6 text-gray-400 flex-grow-1 pe-3">Quality Control tab</span>
+                <i class="fa-solid fa-times-circle fs-1 text-muted"></i>
+              </div>
+              <div class="d-flex align-items-center mb-5">
+                <span class="fw-bold fs-6 text-gray-400 flex-grow-1 pe-3">Report tab</span>
+                <i class="fa-solid fa-times-circle fs-1 text-muted"></i>
+              </div>
+            </div>
+            <button class="btn btn-lg w-100 btn-light-success">Your Current Plan</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Standard Plan -->
+      <div class="col-xl-4">
+        <div class="d-flex h-100 align-items-center">
+          <div class="w-100 d-flex flex-column flex-center rounded-3 bg-light bg-opacity-75 py-15 px-10 cursor-pointer border border-2 plan-card"
+               [ngClass]="{'border-primary shadow-sm': selectedPlan === 'Standard', 'border-gray-400': selectedPlan !== 'Standard'}"
+               (click)="selectPlan('Standard')">
+            <div class="mb-7 text-center">
+              <h1 class="text-dark mb-5 fw-bolder">Standard</h1>
+              <div class="text-gray-400 fw-bold mb-5">For researchers & small labs</div>
+              <div class="text-center">
+                <span class="fs-3x fw-bolder text-primary">$</span>
+                <span class="fs-3x fw-bolder text-primary">49</span>
+                <span class="fs-7 fw-bold text-muted">/ month</span>
+              </div>
+            </div>
+            <div class="w-100 mb-10">
+              <div class="d-flex align-items-center mb-5">
+                <span class="fw-bold fs-6 text-gray-800 flex-grow-1 pe-3">Upload and analyze 10 samples per day</span>
+                <i class="fa-solid fa-check-circle fs-1 text-success"></i>
+              </div>
+              <div class="d-flex align-items-center mb-5">
+                <span class="fw-bold fs-6 text-gray-800 flex-grow-1 pe-3">Quality Control tab</span>
+                <i class="fa-solid fa-check-circle fs-1 text-success"></i>
+              </div>
+              <div class="d-flex align-items-center mb-5">
+                <span class="fw-bold fs-6 text-gray-800 flex-grow-1 pe-3">Report tab</span>
+                <i class="fa-solid fa-check-circle fs-1 text-success"></i>
+              </div>
+            </div>
+            <button class="btn btn-lg w-100 btn-primary">Upgrade</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Premium Plan -->
+      <div class="col-xl-4">
+        <div class="d-flex h-100 align-items-center">
+          <div class="w-100 d-flex flex-column flex-center rounded-3 bg-light bg-opacity-75 py-15 px-10 cursor-pointer border border-2 plan-card"
+               [ngClass]="{'border-primary shadow-sm': selectedPlan === 'Premium', 'border-gray-400': selectedPlan !== 'Premium'}"
+               (click)="selectPlan('Premium')">
+            <div class="mb-7 text-center">
+              <h1 class="text-dark mb-5 fw-bolder">Premium</h1>
+              <div class="text-gray-400 opacity-75 fw-bold mb-5">For clinical applications</div>
+              <div class="text-center">
+                <span class="fs-3x fw-bolder text-primary">$</span>
+                <span class="fs-3x fw-bolder text-primary">99</span>
+                <span class="fs-7 fw-bold text-muted ">/ month</span>
+              </div>
+            </div>
+            <div class="w-100 mb-10">
+              <div class="d-flex align-items-center mb-5">
+                <span class="fw-bold fs-6 text-gray-800 flex-grow-1 pe-3">Unlimited uploads and analysis</span>
+                <i class="fa-solid fa-check-circle fs-1 text-success"></i>
+              </div>
+              <div class="d-flex align-items-center mb-5">
+                <span class="fw-bold fs-6 text-gray-800 flex-grow-1 pe-3">Quality Control tab</span>
+                <i class="fa-solid fa-check-circle fs-1 text-success"></i>
+              </div>
+              <div class="d-flex align-items-center mb-5">
+                <span class="fw-bold fs-6 text-gray-800 flex-grow-1 pe-3">Report tab</span>
+                <i class="fa-solid fa-check-circle fs-1 text-success"></i>
+              </div>
+            </div>
+            <button class="btn btn-lg w-100 btn-primary">Upgrade</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
