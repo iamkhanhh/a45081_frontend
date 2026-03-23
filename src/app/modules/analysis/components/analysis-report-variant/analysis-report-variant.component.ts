@@ -27,6 +27,7 @@ export class AnalysisReportVariantComponent {
   reports: ReportModel[] = [];
   pubmedSearchQuery: string = '';
   pubmedResults: any[] = [];
+  isCreatingReport: boolean = false;
   
   private subscriptions: Subscription[] = [];
 
@@ -139,6 +140,8 @@ export class AnalysisReportVariantComponent {
         return;
     }
 
+    this.isCreatingReport = true;
+
     const selectedVariants: VariantPayload[] = this.variantSelected
       .filter((el) => selectedIds.includes(el.id))
       .map(variant => ({
@@ -165,12 +168,14 @@ export class AnalysisReportVariantComponent {
     };
 
     const sb = this.analysisReportDetailService.createReport(payload).subscribe((res: ReportModel | undefined) => {
+      this.isCreatingReport = false;
       if (res) {
         this.reportName = ''; // Clear report name input
         this.grouping.clearRows(selectedIds); // Clear selected variants
         this.loadReports(); // Refresh the list of reports
         this.chooseReport(res.id); // Optionally select the newly created report
       }
+      this.cd.detectChanges();
     });
     this.subscriptions.push(sb);
   }
