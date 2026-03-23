@@ -45,10 +45,10 @@
 
   <div class="row g-4 mt-3">
     <div class="col-lg-6">
-        <app-charts-widget5 class="card" [chartType]="'area'" [seriesData]="samplesCreatedData" [title]="'Samples Created Over Time'" [subtitle]="'Number of samples created in the last 6 months'"></app-charts-widget5>
+        <app-charts-widget5 class="card" [chartType]="'area'" [seriesData]="samplesCreatedData" [xAxisCategories]="lastSixMonths" [title]="'Samples Created Over Time'" [subtitle]="'Number of samples created in the last 6 months'"></app-charts-widget5>
     </div>
     <div class="col-lg-6">
-        <app-charts-widget5 class="card" [chartType]="'area'" [seriesData]="analysesCreatedData" [title]="'Analyses Created Over Time'" [subtitle]="'Number of analyses created in the last 6 months'"></app-charts-widget5>
+        <app-charts-widget5 class="card" [chartType]="'area'" [seriesData]="analysesCreatedData" [xAxisCategories]="lastSixMonths" [title]="'Analyses Created Over Time'" [subtitle]="'Number of analyses created in the last 6 months'"></app-charts-widget5>
     </div>
   </div>
 

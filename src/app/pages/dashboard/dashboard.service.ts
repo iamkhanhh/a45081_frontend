@@ -25,6 +25,7 @@ export interface DashboardData {
   samplesbyAsembly: { [key: string]: number }; 
   samplesLastSixMonths: number[];
   analysisLastSixMonths: number[];
+  lastSixMonths: string[];
   recentAnalyses: RecentAnalysis[];
 }
 
