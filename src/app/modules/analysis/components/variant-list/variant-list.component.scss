@@ -157,24 +157,34 @@
 }
 
 .filter-wrapper {
-    position: relative;
-    border: 0;
-    border: 1px solid #dee2e6;
-    // box-shadow: -1px 2px 14px 0px #adb5bd;
-    //   display: flex;
-    flex-direction: row;
-    width: 15%;
-    background-color: #fff;
-    margin-right: 10px;
-    padding: 20px;
-    height: 100%;
-    transition: transform 0.5s ease;
-    z-index: 999;
+  position: relative;
+  border: 1px solid #dee2e6;
+  background-color: #fff;
+  margin-right: 10px;
+  /* Padding được chuyển vào .filter-container bên trong */
+  height: 100%;
+  z-index: 999;
+  width: 250px;
+  flex-shrink: 0;
+  transition: width 0.3s ease, margin-right 0.3s ease, border-width 0.3s ease;
+  /* Xóa overflow: hidden để nút toggle không bị ẩn */
+}
+
+.filter-wrapper.collapsed {
+  width: 0;
+  margin-right: 0;
+  border-width: 0;
+
+  /* Ẩn nội dung bên trong khi thu gọn */
+  .filter-container {
+    padding: 0;
+    opacity: 0;
+  }
 }
 
 .content-wrapper {
-    width: 85%;
-    transition: transform 0.5s ease;
+  flex-grow: 1;
+  min-width: 0;
 }
 
 .filter-header {
@@ -189,8 +199,15 @@
     display: flex;
 }
 
-.filter-body {
-    width: 100%;
+/* Style cho container chứa nội dung filter */
+.filter-container {
+  padding: 20px;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden; /* Ẩn nội dung của form khi thu gọn */
+  opacity: 1;
+  transition: opacity 0.3s ease, padding 0.3s ease;
 }
 
 .filter-object {

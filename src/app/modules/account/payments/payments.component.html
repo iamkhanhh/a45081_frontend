@@ -1,0 +1,130 @@
+<div class="card">
+  <div class="card-header border-0 pt-6">
+    <div class="card-title">
+      <h2>Payments History</h2>
+    </div>
+  </div>
+  <div class="card-body pt-0">
+    <!--begin::Loading-->
+    <div *ngIf="isLoading" class="d-flex justify-content-center p-10">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+    <!--end::Loading-->
+
+    <!--begin::Error-->
+    <div *ngIf="error && !isLoading" class="d-flex justify-content-center p-10">
+      <div class="alert alert-danger" role="alert">
+        {{ error }}
+      </div>
+    </div>
+    <!--end::Error-->
+
+    <!--begin::Table-->
+    <div *ngIf="!isLoading && !error" class="table-responsive">
+      <table class="table align-middle table-row-dashed fs-6 gy-5">
+        <thead>
+          <tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
+            <th class="min-w-80px">ID</th>
+            <th class="min-w-125px">ORDER ID</th>
+            <th class="min-w-125px">PLAN</th>
+            <th class="min-w-125px">AMOUNT</th>
+            <th class="min-w-100px">STATUS</th>
+            <th class="min-w-125px">PAID AT</th>
+            <th class="text-end min-w-100px">ACTIONS</th>
+          </tr>
+        </thead>
+        <tbody class="text-gray-600 fw-bold">
+          <tr *ngFor="let payment of payments">
+            <td>{{ payment.id }}</td>
+            <td>
+              <span class="text-gray-800">{{ payment.orderCode }}</span>
+            </td>
+            <td>{{ payment.description }}</td>
+            <td>{{ payment.amount | currency:'VND' }}</td>
+            <td>
+              <span class="badge" [ngClass]="getStatusClass(payment.status)">
+                {{ payment.status }}
+              </span>
+            </td>
+            <td>
+              <span *ngIf="payment.paidAt; else unpaid">
+                {{ payment.paidAt | date:'medium' }}
+              </span>
+              <ng-template #unpaid>
+                <span class="text-muted">Unpaid</span>
+              </ng-template>
+            </td>
+            <td class="text-end">
+              <button (click)="viewPayment(payment, paymentDetailModal)" class="btn btn-light btn-active-light-primary btn-sm">
+                View
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="payments.length === 0">
+            <td colspan="7" class="text-center text-muted py-10">
+              No payment history found.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!--end::Table-->
+  </div>
+</div>
+
+<!--begin::Modal-->
+<ng-template #paymentDetailModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Payment Details</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body" *ngIf="selectedPayment">
+    <div class="row mb-4">
+      <label class="col-lg-4 fw-bold text-muted">Order ID:</label>
+      <div class="col-lg-8">
+        <span class="fw-bolder fs-6 text-gray-800">{{ selectedPayment.orderCode }}</span>
+      </div>
+    </div>
+    <div class="row mb-4">
+      <label class="col-lg-4 fw-bold text-muted">Plan:</label>
+      <div class="col-lg-8">
+        <span class="fw-bolder fs-6 text-gray-800">{{ selectedPayment.description }}</span>
+      </div>
+    </div>
+    <div class="row mb-4">
+      <label class="col-lg-4 fw-bold text-muted">Amount:</label>
+      <div class="col-lg-8">
+        <span class="fw-bolder fs-6 text-gray-800">{{ selectedPayment.amount | currency:'VND' }}</span>
+      </div>
+    </div>
+    <div class="row mb-4">
+      <label class="col-lg-4 fw-bold text-muted">Status:</label>
+      <div class="col-lg-8">
+        <span class="badge" [ngClass]="getStatusClass(selectedPayment.status)">{{ selectedPayment.status }}</span>
+      </div>
+    </div>
+    <div class="row mb-4">
+      <label class="col-lg-4 fw-bold text-muted">Created At:</label>
+      <div class="col-lg-8">
+        <span class="fw-bolder fs-6 text-gray-800">{{ selectedPayment.createdAt | date:'full' }}</span>
+      </div>
+    </div>
+    <div class="row mb-4">
+      <label class="col-lg-4 fw-bold text-muted">Paid At:</label>
+      <div class="col-lg-8">
+        <span *ngIf="selectedPayment.paidAt; else unpaidModal" class="fw-bolder fs-6 text-gray-800">
+          {{ selectedPayment.paidAt | date:'full' }}
+        </span>
+        <ng-template #unpaidModal><span class="fw-bold text-muted">Unpaid</span></ng-template>
+      </div>
+    </div>
+    <div class="row mb-4" *ngIf="selectedPayment.status === 'PENDING' && selectedPayment.checkoutUrl">
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Close</button>
+  </div>
+</ng-template>
+<!--end::Modal-->

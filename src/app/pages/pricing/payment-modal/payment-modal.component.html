@@ -1,0 +1,51 @@
+<div class="modal-container" (click)="closeOnBackdropClick($event)">
+  <!-- Left Side -->
+  <div class="payment-panel">
+    <div class="left-panel">
+      <div class="d-flex justify-content-between align-items-center mb-5 w-100">
+        <h2 class="fw-bolder m-0">Complete your payment</h2>
+        <button type="button" class="btn btn-icon btn-sm btn-active-light-primary" (click)="close()">
+          <i class="fa-solid fa-times fs-2"></i>
+        </button>
+      </div>
+
+      <p class="text-muted fw-bold fs-6 mb-8">Scan with your banking app to complete the payment.</p>
+
+      <div class="qr-code-wrapper mb-5">
+        <qrcode [qrdata]="data.qrCode" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
+      </div>
+
+      <div class="d-flex flex-column">
+        <div class="d-flex justify-content-center align-items-center mb-3">
+          <span class="text-muted me-2">Payment status:</span>
+          <span class="badge badge-light-warning">Waiting for confirmation</span>
+        </div>
+        <div class="text-muted fw-bold mt-2">Order Code: {{ data.orderCode }}</div>
+
+        <button class="btn btn-light-primary mt-8" (click)="refreshQrCode()" [disabled]="isRefreshing">
+          <span *ngIf="isRefreshing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          <span *ngIf="!isRefreshing">Refresh QR code</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Right Side -->
+    <div class="right-panel">
+      <div class="summary-card">
+        <h3 class="fw-bolder mb-5">{{ data.plan.name }} Plan</h3>
+
+        <div class="feature-list mb-10">
+          <div *ngFor="let feature of data.plan.features" class="feature-item">
+            <i class="fa-solid fa-check-circle fs-4 text-success me-3"></i>
+            <span class="fw-bold fs-6 text-gray-800 feature-text">{{ feature.name }}</span>
+          </div>
+        </div>
+
+        <div class="total-payment">
+          <span class="fw-bold text-gray-600">Total Payment</span>
+          <span class="fw-bolder fs-4 text-dark">{{ data.plan.price | number }} VNĐ</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

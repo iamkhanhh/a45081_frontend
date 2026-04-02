@@ -1,0 +1,71 @@
+.modal-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1050; // Bootstrap modal z-index
+}
+
+.payment-panel {
+  display: flex;
+  background-color: var(--bs-body-bg);
+  border-radius: 16px;
+  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.15);
+  max-width: 900px;
+  width: 90%;
+  overflow: hidden;
+}
+
+.left-panel, .right-panel {
+  padding: 2.5rem;
+}
+
+.left-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border-right: 1px solid var(--bs-border-color);
+}
+
+.right-panel {
+  flex-basis: 350px;
+  background-color: var(--bs-light-bg-subtle);
+}
+
+.qr-code-wrapper {
+  border: 1px solid var(--bs-border-color);
+  border-radius: 12px;
+  padding: 1rem;
+  background-color: #fff;
+}
+
+.summary-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.feature-list {
+  flex-grow: 1;
+  .feature-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+}
+
+.total-payment {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px dashed var(--bs-border-color);
+  padding-top: 1.5rem;
+  margin-top: 1.5rem;
+}
