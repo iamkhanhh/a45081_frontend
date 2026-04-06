@@ -190,17 +190,16 @@
                                     <th style="width:140px">TRANSCRIPT</th>
                                     <th style="width:110px">REF - ALT</th>
                                     <th style="width:140px">POSITION <br> RSID</th>
+                                    <th style="width:220px">HGVSc <br> HGVSp</th>
+                                    <th style="width:110px">COVERAGE</th>
                                     <th style="width:150px">GNOMAD_ALL <br> GNOMAD_AMR <br> GNOMAD_AFR</th>
-                                    <th style="width:120px">FUNCTION</th>
-                                    <th style="width:120px">LOCATION</th>
+                                    <th style="width:120px">FUNCTION <br> LOCATION</th>
                                     <th style="width:110px">CLINVAR</th>
                                     <th style="width:164px">CLASSIFICATION</th>
                                     <th style="width:180px">OMIM DISEASE</th>
-                                    <th style="width:110px" [class.hidden-column]="checkColumnIsSelected('pnomen')">P.NOMEN</th>
-                                    <th style="width:110px" [class.hidden-column]="checkColumnIsSelected('HGVSc')">HGVSc</th>
-                                    <th style="width:110px" [class.hidden-column]="checkColumnIsSelected('coverage')">COVERAGE</th>
+                                    <th style="width:110px" [class.hidden-column]="checkColumnIsSelected('p.nomen')">P.NOMEN <br> C.NOMEN</th>
                                     <th style="width:110px" [class.hidden-column]="checkColumnIsSelected('VAR_SCORE')">SCORE</th>
-                                    <th style="width:110px" [class.hidden-column]="checkColumnIsSelected('cosmicID')">COSMIC</th>
+                                    <th style="width:110px" [class.hidden-column]="checkColumnIsSelected('Cosmic')">COSMIC</th>
                                     
 
                                     <!-- new th for the toggle button -->
@@ -253,19 +252,14 @@
                                         <a href="javascript:void(0)" (click)="openIGVModal(variant.chrom, variant.position, variant.gene)">{{ variant.chrom }}:{{ variant.position }}</a> <br>
                                         <a href="https://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs={{ variant.rsid }}" target="_blank">{{ variant.rsid }}</a>
                                     </td>
+                                    <td><span>{{ variant.HGVSc }} <br> {{ variant.HGVSp }}</span></td>
+                                    <td><span>{{ variant.coverage }}</span></td>
                                     <td>
                                         <div>{{ variant.gnomad_ALL }}</div>
                                         <div>{{ variant.gnomAD_genome_AMR }}</div>
                                         <div>{{ variant.gnomAD_genome_AFR }}</div>
                                     </td>
-                                    <!-- Hidden by default columns -->
-                                    <td class="hidden-column">
-                                        <div>{{ variant.cnomen }}</div>
-                                    </td>
-                                    <td class="hidden-column"><span>{{ variant.coverage }}</span></td>
-                                    <td class="hidden-column"><span>{{ variant.VAR_SCORE }}</span></td>
-                                    <td><span>{{ variant.function }}</span></td>
-                                    <td><span>{{ variant.location }}</span></td>
+                                    <td><span>{{ variant.function }} <br> {{ variant.location }}</span></td>
                                     <td>
                                         <a href="https://www.ncbi.nlm.nih.gov/clinvar/variation/{{ variant.Clinvar_VARIANT_ID }}" target="_blank">{{ variant.Clinvar_VARIANT_ID }}</a>
                                         <br>
@@ -284,11 +278,9 @@
                                             {{ omimExpanded[i] ? 'Less' : 'More' }}
                                         </button>
                                     </td>
-                                    <td [class.hidden-column]="checkColumnIsSelected('p.pnomen')"><span>{{ variant.pnomen }}</span></td>
-                                    <td [class.hidden-column]="checkColumnIsSelected('cosmicID')"><span>{{ variant.cosmicID }}</span></td>
-                                    <td [class.hidden-column]="checkColumnIsSelected('HGVSc')"><span>{{ variant.HGVSc }}</span></td>
-                                    <td [class.hidden-column]="checkColumnIsSelected('coverage')"><span>{{ variant.coverage }}</span></td>
+                                    <td [class.hidden-column]="checkColumnIsSelected('p.nomen')"><span>{{ variant.pnomen }} <br> {{ variant.cnomen }}</span></td>
                                     <td [class.hidden-column]="checkColumnIsSelected('VAR_SCORE')"><span>{{ variant.VAR_SCORE === '.' ? '.' : (+variant.VAR_SCORE | number:'1.0-3') }}</span></td>
+                                    <td [class.hidden-column]="checkColumnIsSelected('Cosmic')"><span>{{ variant.cosmicID }}</span></td>
                                     <!-- toggle-controlled position hidden handled above if needed -->
                                 </tr>
                             </tbody>
