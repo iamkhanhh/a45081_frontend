@@ -51,11 +51,11 @@ export class VariantListComponent implements OnInit, OnDestroy {
   };
 
   columnsName: any[] = [
-    { name: 'P.Nomen', isSelected: false, columnVal: 'pnomen' },
-    { name: 'Cosmic', isSelected: false, columnVal: 'cosmicID' },
-    { name: 'HGVSc', isSelected: false, columnVal: 'HGVSc' },
-    { name: 'Coverage', isSelected: false, columnVal: 'coverage' },
-    { name: 'Score', isSelected: false, columnVal: 'VAR_SCORE' }
+    { name: 'p.nomen', isSelected: false, columnVal: 'p.nomen' },
+    { name: 'Cosmic', isSelected: false, columnVal: 'Cosmic' },
+    // { name: 'HGVSc', isSelected: false, columnVal: 'HGVSc' },
+    // { name: 'Coverage', isSelected: false, columnVal: 'coverage' },
+    { name: 'VAR_SCORE', isSelected: false, columnVal: 'VAR_SCORE' }
   ];
 
   private subscriptions: Subscription[] = [];
