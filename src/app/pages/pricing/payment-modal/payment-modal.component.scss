@@ -39,25 +39,207 @@
   background-color: var(--bs-light-bg-subtle);
 }
 
+.right-panel {
+  flex-grow: 1; // Allow right panel to take available space
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; // Push total to bottom
+  padding: 2.5rem;
+  background-color: var(--bs-light-bg-subtle); // Use a subtle background for distinction
+}
+
 .qr-code-wrapper {
   border: 1px solid var(--bs-border-color);
   border-radius: 12px;
   padding: 1rem;
   background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .summary-card {
   display: flex;
   flex-direction: column;
   height: 100%;
+  gap: 1.5rem; // Spacing between sections
 }
 
-.feature-list {
+/* Header */
+.summary-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+
+  h2 {
+    font-size: 1.5rem; // Larger title
+    font-weight: 700;
+    color: var(--bs-gray-800);
+    margin: 0;
+  }
+}
+
+.summary-chip {
+  background-color: var(--bs-primary-light); // Light primary background
+  color: var(--bs-primary); // Primary text color
+  padding: 0.3rem 0.8rem;
+  border-radius: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* Plan Card */
+.plan-list {
+  margin-bottom: 1.5rem;
+}
+
+.plan-card {
+  background-color: var(--bs-white);
+  border: 1px solid var(--bs-border-color);
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  &--active {
+    border-color: var(--bs-primary); // Highlight active plan
+    box-shadow: 0 0 0 2px rgba(var(--bs-primary-rgb), 0.2);
+  }
+}
+
+.plan-card__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.plan-card__content {
   flex-grow: 1;
+
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--bs-gray-800);
+    margin: 0;
+  }
+
+  p {
+    font-size: 0.9rem;
+    color: var(--bs-gray-600);
+    margin: 0.25rem 0 0;
+  }
+}
+
+.plan-card__title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.plan-badge {
+  background-color: var(--bs-success-light);
+  color: var(--bs-success);
+  padding: 0.2rem 0.6rem;
+  border-radius: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.plan-price-wrap {
+  text-align: right;
+}
+
+.plan-price {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--bs-gray-900);
+}
+
+.plan-price-caption {
+  font-size: 0.8rem;
+  color: var(--bs-gray-500);
+}
+
+/* Features */
+.feature-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-left: 0; // Remove default ul/ol padding
+  margin-bottom: 0; // Remove default ul/ol margin
+
   .feature-item {
     display: flex;
     align-items: center;
-    margin-bottom: 1rem;
+    font-size: 0.95rem;
+    color: var(--bs-gray-700);
+
+    .feature-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background-color: var(--bs-success); // Green dot
+      border-radius: 50%;
+      margin-right: 0.75rem;
+      flex-shrink: 0; // Prevent dot from shrinking
+    }
+  }
+}
+
+/* Divider */
+.summary-divider {
+  border-top: 1px dashed var(--bs-border-color);
+  margin: 1.5rem 0;
+}
+
+/* Summary Lines */
+.summary-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+
+  .summary-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1rem;
+    color: var(--bs-gray-700);
+
+    strong {
+      font-weight: 600;
+      color: var(--bs-gray-800);
+    }
+  }
+}
+
+/* Total */
+.summary-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--bs-border-color);
+  margin-top: auto; // Push to the bottom of the flex container
+
+  .summary-total__label {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--bs-gray-800);
+  }
+
+  .summary-total__caption {
+    font-size: 0.85rem;
+    color: var(--bs-gray-500);
+  }
+
+  .summary-total__amount {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--bs-primary); // Highlight total amount
   }
 }
 

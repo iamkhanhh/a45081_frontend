@@ -1,9 +1,22 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { catchError, map } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { forkJoin, of } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { PricingService } from './pricing.service';
 import { PaymentModalComponent } from './payment-modal/payment-modal.component';
+import { PaymentModalData } from './payment-modal/payment-modal.component';
+
+export interface Plan {
+  id: number;
+  name: string;
+  planType: string;
+  price: number;
+  description?: string;
+  features: string[];
+  dailyUploadLimit: number | string;
+  dailyAnalysisLimit: number | string;
+  duration?: string;
+}
 
 @Component({
   selector: 'app-pricing',
@@ -11,27 +24,13 @@ import { PaymentModalComponent } from './payment-modal/payment-modal.component';
   styleUrls: ['./pricing.component.scss']
 })
 export class PricingComponent implements OnInit {
-  plans: any[] = [];
+  plans: Plan[] = [];
   currentSubscription: any = null;
   upsellPlan: any = null;
   selectedPlanId: number | null = null;
   isUpdating: boolean = false;
   isLoading: boolean = false;
   error: string | null = null;
-
-  // This is potentially used for the payment modal
-  private planFeatures: { [key: string]: { name: string, included: boolean }[] } = {
-    'Standard': [
-      { name: 'Upload and analyze 10 samples per day', included: true },
-      { name: 'Quality Control tab', included: true },
-      { name: 'Report tab', included: true },
-    ],
-    'Premium': [
-      { name: 'Unlimited uploads and analysis', included: true },
-      { name: 'Quality Control tab', included: true },
-      { name: 'Report tab', included: true },
-    ]
-  };
 
   constructor(
     private pricingService: PricingService,
@@ -47,43 +46,75 @@ export class PricingComponent implements OnInit {
     this.selectedPlanId = planId;
   }
 
+  isCurrentPlan(planType: string): boolean {
+    return this.currentSubscription?.plan?.planType === planType;
+  }
+
+  isHigherPlan(planType: string): boolean {
+    const order: Record<string, number> = { 'BASIC': 0, 'STANDARD': 1, 'PREMIUM': 2 };
+    const currentType = this.currentSubscription?.plan?.planType;
+    return order[currentType] > order[planType];
+  }
+
+  getPlanByType(planType: string): Plan | undefined {
+    return this.plans.find(p => p.planType === planType);
+  }
+
   loadPlans() {
     this.isLoading = true;
-    this.pricingService.getPlans().pipe(
-      catchError(error => {
-        console.error('Failed to fetch plans:', error);
-        this.error = 'Failed to load pricing plans. Please try again later.';
-        this.isLoading = false;
-        return of({ data: [] });
-      })
-    ).subscribe((res: any) => {
+
+    forkJoin({
+      plans: this.pricingService.getPlans().pipe(
+        catchError(error => {
+          console.error('Failed to fetch plans:', error);
+          return of({ data: [] });
+        })
+      ),
+      subscription: this.pricingService.getSubscription().pipe(
+        catchError(error => {
+          console.error('Failed to fetch subscription:', error);
+          return of(null);
+        })
+      )
+    }).subscribe(({ plans, subscription }) => {
       this.isLoading = false;
-      const plans = res?.data || res;
-      if (plans && plans.length > 0) {
-        this.plans = plans;
 
-        // NOTE: In a real application, currentSubscription would be fetched from a user service.
-        // Here we mock it for demonstration purposes.
-        const basicPlan = this.plans.find(p => p.name === 'Basic');
-        if (basicPlan) {
-          this.currentSubscription = { plan: basicPlan };
-          this.selectedPlanId = basicPlan.id;
-        }
+      const planList = plans?.data || plans;
+      if (planList && planList.length > 0) {
+        this.plans = planList;
 
-        // NOTE: The upsell plan logic would be more sophisticated in a real app.
-        const standardPlan = this.plans.find(p => p.name === 'Standard');
+        const standardPlan = this.plans.find(p => p.planType === 'STANDARD');
         if (standardPlan) {
           this.upsellPlan = standardPlan;
         }
-
-        this.cdr.detectChanges();
       }
+
+      const currentPlan = subscription?.data?.plan || subscription?.data;
+      if (currentPlan) {
+        this.currentSubscription = { plan: currentPlan };
+        this.selectedPlanId = currentPlan.id;
+        this.pricingService.setCurrentPlan(currentPlan);
+      } else {
+        // Fallback: đọc từ localStorage nếu API lỗi
+        const stored = this.pricingService['currentPlanSubject'].getValue();
+        if (stored) {
+          this.currentSubscription = { plan: stored };
+          this.selectedPlanId = stored.id;
+        }
+      }
+
+      this.cdr.detectChanges();
     });
   }
 
-  updatePlan(planId: number, event: Event) {
+  updatePlan(planId: number | undefined, event: Event) {
     event.stopPropagation();
-    
+
+    if (!planId) {
+      this.error = 'Selected plan not found.';
+      return;
+    }
+
     const plan = this.plans.find(p => p.id === planId);
     if (!plan) {
       this.error = 'Selected plan not found.';
@@ -98,18 +129,24 @@ export class PricingComponent implements OnInit {
       next: (res: any) => {
         this.isUpdating = false;
 
-        const planDataForModal = {
+        const planDataForModal: PaymentModalData['plan'] = {
           name: plan.name,
           price: plan.price,
-          features: this.planFeatures[plan.name] || (plan.features || []).map((f: string) => ({ name: f, included: true }))
+          features: (plan.features || []).map((f: string) => ({ name: f, included: true })),
+          dailyUploadLimit: plan.dailyUploadLimit,
+          dailyAnalysisLimit: plan.dailyAnalysisLimit,
         };
 
-        this.dialog.open(PaymentModalComponent, {
+        const expirationDate = new Date();
+        expirationDate.setDate(expirationDate.getDate() + 30);
+
+        this.dialog.open<PaymentModalComponent, PaymentModalData>(PaymentModalComponent, {
           width: '800px',
           data: {
             ...res,
             plan: planDataForModal,
-            planId: planId
+            planId: planId,
+            expirationDate: expirationDate
           }
         });
         this.cdr.detectChanges();

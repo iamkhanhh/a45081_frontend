@@ -18,8 +18,8 @@
               <h1 class="text-dark mb-5 fw-bolder">Basic</h1>
               <div class="text-gray-400 fw-bold mb-5">Perfect for exploring</div>
               <div class="text-center">
-                <span class="fs-3x fw-bolder text-primary">{{ 0}}</span>
-              <span class="fs-3x fw-bolder text-primary"> VNĐ</span>
+                <span class="fs-3x fw-bolder text-primary">0</span>
+                <span class="fs-3x fw-bolder text-primary"> VNĐ</span>
                 <span class="fs-7 fw-bold text-muted">/ month</span>
               </div>
             </div>
@@ -37,7 +37,14 @@
                 <i class="fa-solid fa-times-circle fs-1 text-muted"></i>
               </div>
             </div>
-            <button class="btn btn-lg w-100 btn-light-success">Your Current Plan</button>
+            <button class="btn btn-lg w-100"
+              [ngClass]="isCurrentPlan('BASIC') ? 'btn-light-success' : (isHigherPlan('BASIC') ? 'btn-light-secondary' : 'btn-primary')"
+              [disabled]="isCurrentPlan('BASIC') || isHigherPlan('BASIC') || isUpdating"
+              (click)="!isCurrentPlan('BASIC') && !isHigherPlan('BASIC') ? updatePlan(getPlanByType('BASIC')?.id, $event) : null">
+              <span *ngIf="isCurrentPlan('BASIC')">Your Current Plan</span>
+              <span *ngIf="isHigherPlan('BASIC')">Not Available</span>
+              <span *ngIf="!isCurrentPlan('BASIC') && !isHigherPlan('BASIC')">Update Plan</span>
+            </button>
           </div>
         </div>
       </div>
@@ -52,8 +59,8 @@
               <h1 class="text-dark mb-5 fw-bolder">Standard</h1>
               <div class="text-gray-400 fw-bold mb-5">For researchers & small labs</div>
               <div class="text-center">
-              <span class="fs-3x fw-bolder text-primary">{{ plans[0]?.price | number }}</span>
-              <span class="fs-3x fw-bolder text-primary"> VNĐ</span>
+                <span class="fs-3x fw-bolder text-primary">{{ (plans[0] || {}).price | number }}</span>
+                <span class="fs-3x fw-bolder text-primary"> VNĐ</span>
                 <span class="fs-7 fw-bold text-muted">/ month</span>
               </div>
             </div>
@@ -71,9 +78,13 @@
                 <i class="fa-solid fa-check-circle fs-1 text-success"></i>
               </div>
             </div>
-            <button class="btn btn-lg w-100 btn-primary" (click)="updatePlan(1, $event)" [disabled]="isUpdating">
-              <span *ngIf="isUpdating && selectedPlanId === 1" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-              <span *ngIf="!(isUpdating && selectedPlanId === 1)">Update Plan</span>
+            <button class="btn btn-lg w-100"
+              [ngClass]="isCurrentPlan('STANDARD') ? 'btn-light-success' : 'btn-primary'"
+              [disabled]="isCurrentPlan('STANDARD') || isUpdating"
+              (click)="!isCurrentPlan('STANDARD') ? updatePlan(getPlanByType('STANDARD')?.id, $event) : null">
+              <span *ngIf="isUpdating && selectedPlanId === getPlanByType('STANDARD')?.id" class="spinner-border spinner-border-sm"></span>
+              <span *ngIf="isCurrentPlan('STANDARD')">Your Current Plan</span>
+              <span *ngIf="!isCurrentPlan('STANDARD') && !(isUpdating && selectedPlanId === getPlanByType('STANDARD')?.id)">Update Plan</span>
             </button>
           </div>
         </div>
@@ -89,9 +100,9 @@
               <h1 class="text-dark mb-5 fw-bolder">Premium</h1>
               <div class="text-gray-400 opacity-75 fw-bold mb-5">For clinical applications</div>
               <div class="text-center">
-              <span class="fs-3x fw-bolder text-primary">{{ plans[1]?.price | number }}</span>
-              <span class="fs-3x fw-bolder text-primary"> VNĐ</span>
-                <span class="fs-7 fw-bold text-muted ">/ month</span>
+                <span class="fs-3x fw-bolder text-primary">{{ (plans[1] || {}).price | number }}</span>
+                <span class="fs-3x fw-bolder text-primary"> VNĐ</span>
+                <span class="fs-7 fw-bold text-muted">/ month</span>
               </div>
             </div>
             <div class="w-100 mb-10">
@@ -108,14 +119,19 @@
                 <i class="fa-solid fa-check-circle fs-1 text-success"></i>
               </div>
             </div>
-            <button class="btn btn-lg w-100 btn-primary" (click)="updatePlan(2, $event)" [disabled]="isUpdating">
-              <span *ngIf="isUpdating && selectedPlanId === 2" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-              <span *ngIf="!(isUpdating && selectedPlanId === 2)">Update Plan</span>
+            <button class="btn btn-lg w-100"
+              [ngClass]="isCurrentPlan('PREMIUM') ? 'btn-light-success' : 'btn-primary'"
+              [disabled]="isCurrentPlan('PREMIUM') || isUpdating"
+              (click)="!isCurrentPlan('PREMIUM') ? updatePlan(getPlanByType('PREMIUM')?.id, $event) : null">
+              <span *ngIf="isUpdating && selectedPlanId === getPlanByType('PREMIUM')?.id" class="spinner-border spinner-border-sm"></span>
+              <span *ngIf="isCurrentPlan('PREMIUM')">Your Current Plan</span>
+              <span *ngIf="!isCurrentPlan('PREMIUM') && !(isUpdating && selectedPlanId === getPlanByType('PREMIUM')?.id)">Update Plan</span>
             </button>
           </div>
         </div>
       </div>
     </div>
+
     <div class="alert alert-danger mt-10" role="alert" *ngIf="error">
       {{ error }}
     </div>

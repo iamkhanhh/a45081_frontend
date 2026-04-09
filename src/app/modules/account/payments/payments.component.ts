@@ -45,6 +45,27 @@ export class PaymentsComponent implements OnInit, OnDestroy {
 
     this.unsubscribe.push(sub);
   }
+  pageSize = 10;
+  currentPage = 1;
+
+  get pagedPayments() {
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.payments.slice(start, start + this.pageSize);
+  }
+
+  get totalPages() {
+    const count = Math.ceil(this.payments.length / this.pageSize);
+    return Array.from({ length: count }, (_, i) => i + 1);
+  }
+
+  goToPage(page: number) {
+    if (page < 1 || page > this.totalPages.length) return;
+    this.currentPage = page;
+  }
+
+  min(a: number, b: number) {
+    return Math.min(a, b);
+  }
 
   viewPayment(payment: any, content: any): void {
     this.selectedPayment = payment;
@@ -55,7 +76,7 @@ export class PaymentsComponent implements OnInit, OnDestroy {
     if (!status) return 'badge-light-secondary';
 
     switch (status.toUpperCase()) {
-      case 'SUCCESS':
+      case 'PAID':
         return 'badge badge-light-success';
       case 'PENDING':
         return 'badge badge-light-warning';
