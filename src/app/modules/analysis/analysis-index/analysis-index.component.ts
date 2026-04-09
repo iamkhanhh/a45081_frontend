@@ -9,6 +9,9 @@ type Tabs =
 	| 'variant_report'
 	| 'patient_information';
 
+const BASIC_RESTRICTED_TABS: Tabs[] = ['quality_control', 'variant_report'];
+const PLAN_KEY = 'current_subscription_plan';
+
 @Component({
 	selector: 'app-analysis-index',
 	templateUrl: './analysis-index.component.html',
@@ -20,38 +23,48 @@ export class AnalysisIndexComponent {
 	isLoaded: boolean;
 	type: string;
 	project_id: number;
-	activeTab: Tabs = 'quality_control';
+	activeTab: Tabs = 'variant_list';
+	isBasicPlan: boolean = true; 
 
 	constructor(
 		public analysisService: AnalysisService,
 		private route: ActivatedRoute,
 		private _location: Location,
 		private cd: ChangeDetectorRef,
-  ) {}
+	) {}
 
 	ngOnInit(): void {
 		this.id = this.route.snapshot.params.id;
 		this.isLoaded = false;
+		this.loadPlan();
 		this.getAnalysisName();
-
 	}
+	private loadPlan(): void {
+		const stored = localStorage.getItem(PLAN_KEY);
+		if (!stored) {
+			this.isBasicPlan = true;
+			return;
+		}
+		const plan = JSON.parse(stored);
+		this.isBasicPlan = plan.planType === 'BASIC';
+	}
+
 
 	getAnalysisName() {
 		this.analysisService.getAnalysis(this.id)
 			.subscribe((res: any) => {
 				if (res.status == 'success') {
-					this.project_id = res.data.project_id
+					this.project_id = res.data.project_id;
 					this.analysis_name = res.data.name;
 					this.type = res.data.type;
-				} else {
 				}
 				this.isLoaded = true;
 				this.cd.detectChanges();
-
 			})
 	}
 
 	setTab(tab: Tabs) {
+		if (this.isBasicPlan && BASIC_RESTRICTED_TABS.includes(tab)) return;
 		this.activeTab = tab;
 	}
 

@@ -1,5 +1,5 @@
 <div class="main-wrapper">
-    <div class="filter-wrapper" id="aside" #aside style="min-width: 200px;">
+    <div class="filter-wrapper" id="aside" #aside [class.collapsed]="!asideState">
         <span (click)="toggleAside()"
             class="aside-toggle btn btn-icon btn-primary btn-hover-primary shadow-sm custom-aside-btn"
             id="kt_aside_toggle" #asideToggle data-toggle="tooltip" data-placement="right" data-container="body"

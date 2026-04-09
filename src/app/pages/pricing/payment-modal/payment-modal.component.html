@@ -1,0 +1,135 @@
+<div class="modal-container" (click)="closeOnBackdropClick($event)">
+  <!-- Left Side -->
+  <div class="payment-panel">
+    <div class="left-panel">
+      <div class="d-flex justify-content-between align-items-center mb-5 w-100">
+        <h2 class="fw-bolder m-0">Complete your payment</h2>
+        <button type="button" class="btn btn-icon btn-sm btn-active-light-primary" (click)="close()">
+          <i class="fa-solid fa-times fs-2"></i>
+        </button>
+      </div>
+
+      <p class="text-muted fw-bold fs-6 mb-8">Scan with your banking app to complete the payment.</p>
+
+      <div class="qr-code-wrapper mb-5">
+        <qrcode [qrdata]="data.qrCode" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
+      </div>
+
+      <!-- Countdown Timer -->
+      <div class="d-flex justify-content-center align-items-center mb-3">
+        <span class="text-muted me-2">QR code expires in:</span>
+        <span class="fw-bolder fs-5 text-danger">{{ countdownDisplay }}</span>
+      </div>
+
+      <div class="d-flex flex-column">
+        <div class="d-flex justify-content-center align-items-center mb-3">
+          <span class="text-muted me-2">Payment status:</span>
+          <span class="badge badge-light-warning">Waiting for confirmation</span>
+        </div>
+        <div class="text-muted fw-bold mt-2">Order Code: {{ data.orderCode }}</div>
+
+        <button class="btn btn-light-primary mt-8" (click)="refreshQrCode()" [disabled]="isRefreshing">
+          <span *ngIf="isRefreshing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          <span *ngIf="!isRefreshing">Refresh QR code</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Right Side -->
+<div class="right-panel">
+  <aside class="summary-card">
+
+    <!-- HEADER -->
+    <div class="summary-card__header">
+      <h2>Order summary</h2>
+      <span class="summary-chip">Subscription</span>
+    </div>
+
+    <!-- PLAN CARD -->
+    <div class="plan-list">
+      <article class="plan-card plan-card--active">
+
+        <div class="plan-card__top">
+          <div class="plan-card__content">
+            <div class="plan-card__title-row">
+              <h3>{{ data.plan.name }}</h3>
+              <span class="plan-badge">Current</span>
+            </div>
+
+            <p>{{'Best plan for your needs' }}</p>
+          </div>
+
+          <div class="plan-price-wrap">
+            <div class="plan-price">
+              {{ data.plan.price | number }}đ
+            </div>
+            <div class="plan-price-caption">
+              one-time payment
+            </div>
+          </div>
+        </div>
+
+        <!-- FEATURES -->
+        <div class="feature-list">
+          <div class="feature-item">
+            <span class="feature-dot"></span>
+            <span>{{ data.plan.dailyUploadLimit == -1 ? 'Unlimited' : data.plan.dailyUploadLimit }} daily uploads</span>
+          </div>
+
+          <div class="feature-item">
+            <span class="feature-dot"></span>
+            <span>{{ data.plan.dailyAnalysisLimit == -1 ? 'Unlimited' : data.plan.dailyAnalysisLimit }} daily analyses</span>
+          </div>
+
+          <div *ngFor="let feature of data.plan.features" class="feature-item">
+            <span class="feature-dot"></span>
+            <span>{{ feature.name }}</span>
+          </div>
+        </div>
+
+      </article>
+    </div>
+
+    <!-- DIVIDER -->
+    <div class="summary-divider"></div>
+
+    <!-- SUMMARY -->
+    <div class="summary-lines">
+      <div class="summary-line">
+        <span>Selected plan</span>
+        <strong>{{ data.plan.name }}</strong>
+      </div>
+
+      <div class="summary-line">
+        <span>Subtotal</span>
+        <strong>{{ data.plan.price | number }}đ</strong>
+      </div>
+
+      <div class="summary-line">
+        <span>Service fee</span>
+        <strong>0đ</strong>
+      </div>
+
+      <div class="summary-line">
+        <span>Expires on</span>
+        <strong>{{ data.expirationDate | date: 'mediumDate' }}</strong>
+      </div>
+    </div>
+
+    <!-- TOTAL -->
+    <div class="summary-total">
+      <div>
+        <div class="summary-total__label">Total payment</div>
+        <div class="summary-total__caption">
+          Secure payment for {{ data.plan.name }} plan access
+        </div>
+      </div>
+
+      <div class="summary-total__amount">
+        {{ data.plan.price | number }}đ
+      </div>
+    </div>
+
+  </aside>
+</div>
+</div>

@@ -4,6 +4,7 @@ import { Observable, BehaviorSubject, of, Subscription } from 'rxjs';
 import { map, catchError, finalize } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from 'src/environments/environment';
+import { PricingService } from 'src/app/pages/pricing/pricing.service';
 
 // Define interfaces for clarity and type safety
 export interface ReportModel {
@@ -65,7 +66,8 @@ export class AnalysisReportDetailService implements OnDestroy {
 
   constructor(
     private http: HttpClient,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private pricingService: PricingService
   ) { }
 
   /**
@@ -89,6 +91,17 @@ export class AnalysisReportDetailService implements OnDestroy {
       catchError(err => {
         console.error('Error fetching all reports:', err);
         this.toastr.error(err.error?.message || 'Failed to fetch reports.', 'Error');
+        if (err.status === 403) {
+          this.pricingService.fetchCurrentPlan().subscribe({
+            next: () => {
+              window.location.reload();
+            },
+            error: (planErr) => {
+              console.error('Lỗi khi cập nhật gói cước:', planErr);
+            }
+          });
+        }
+
         return of(undefined);
       }),
       finalize(() => this.isLoadingSubject.next(false))

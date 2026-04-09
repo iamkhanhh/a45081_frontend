@@ -12,14 +12,14 @@
       <div class="col-xl-4">
         <div class="d-flex h-100 align-items-center">
           <div class="w-100 d-flex flex-column flex-center rounded-3 bg-light bg-opacity-75 py-15 px-10 cursor-pointer border border-2 plan-card"
-               [ngClass]="{'border-primary shadow-sm': selectedPlan === 'Basic', 'border-gray-400': selectedPlan !== 'Basic'}"
-               (click)="selectPlan('Basic')">
+               [ngClass]="{'border-primary shadow-sm': selectedPlanId === 0, 'border-gray-400': selectedPlanId !== 0}"
+               (click)="selectPlan(0)">
             <div class="mb-7 text-center">
               <h1 class="text-dark mb-5 fw-bolder">Basic</h1>
               <div class="text-gray-400 fw-bold mb-5">Perfect for exploring</div>
               <div class="text-center">
-                <span class="fs-3x fw-bolder text-primary">$</span>
                 <span class="fs-3x fw-bolder text-primary">0</span>
+                <span class="fs-3x fw-bolder text-primary"> VNĐ</span>
                 <span class="fs-7 fw-bold text-muted">/ month</span>
               </div>
             </div>
@@ -37,7 +37,14 @@
                 <i class="fa-solid fa-times-circle fs-1 text-muted"></i>
               </div>
             </div>
-            <button class="btn btn-lg w-100 btn-light-success">Your Current Plan</button>
+            <button class="btn btn-lg w-100"
+              [ngClass]="isCurrentPlan('BASIC') ? 'btn-light-success' : (isHigherPlan('BASIC') ? 'btn-light-secondary' : 'btn-primary')"
+              [disabled]="isCurrentPlan('BASIC') || isHigherPlan('BASIC') || isUpdating"
+              (click)="!isCurrentPlan('BASIC') && !isHigherPlan('BASIC') ? updatePlan(getPlanByType('BASIC')?.id, $event) : null">
+              <span *ngIf="isCurrentPlan('BASIC')">Your Current Plan</span>
+              <span *ngIf="isHigherPlan('BASIC')">Not Available</span>
+              <span *ngIf="!isCurrentPlan('BASIC') && !isHigherPlan('BASIC')">Update Plan</span>
+            </button>
           </div>
         </div>
       </div>
@@ -46,14 +53,14 @@
       <div class="col-xl-4">
         <div class="d-flex h-100 align-items-center">
           <div class="w-100 d-flex flex-column flex-center rounded-3 bg-light bg-opacity-75 py-15 px-10 cursor-pointer border border-2 plan-card"
-               [ngClass]="{'border-primary shadow-sm': selectedPlan === 'Standard', 'border-gray-400': selectedPlan !== 'Standard'}"
-               (click)="selectPlan('Standard')">
+               [ngClass]="{'border-primary shadow-sm': selectedPlanId === 1, 'border-gray-400': selectedPlanId !== 1}"
+               (click)="selectPlan(1)">
             <div class="mb-7 text-center">
               <h1 class="text-dark mb-5 fw-bolder">Standard</h1>
               <div class="text-gray-400 fw-bold mb-5">For researchers & small labs</div>
               <div class="text-center">
-                <span class="fs-3x fw-bolder text-primary">$</span>
-                <span class="fs-3x fw-bolder text-primary">49</span>
+                <span class="fs-3x fw-bolder text-primary">{{ (plans[0] || {}).price | number }}</span>
+                <span class="fs-3x fw-bolder text-primary"> VNĐ</span>
                 <span class="fs-7 fw-bold text-muted">/ month</span>
               </div>
             </div>
@@ -71,7 +78,14 @@
                 <i class="fa-solid fa-check-circle fs-1 text-success"></i>
               </div>
             </div>
-            <button class="btn btn-lg w-100 btn-primary">Upgrade</button>
+            <button class="btn btn-lg w-100"
+              [ngClass]="isCurrentPlan('STANDARD') ? 'btn-light-success' : 'btn-primary'"
+              [disabled]="isCurrentPlan('STANDARD') || isUpdating"
+              (click)="!isCurrentPlan('STANDARD') ? updatePlan(getPlanByType('STANDARD')?.id, $event) : null">
+              <span *ngIf="isUpdating && selectedPlanId === getPlanByType('STANDARD')?.id" class="spinner-border spinner-border-sm"></span>
+              <span *ngIf="isCurrentPlan('STANDARD')">Your Current Plan</span>
+              <span *ngIf="!isCurrentPlan('STANDARD') && !(isUpdating && selectedPlanId === getPlanByType('STANDARD')?.id)">Update Plan</span>
+            </button>
           </div>
         </div>
       </div>
@@ -80,15 +94,15 @@
       <div class="col-xl-4">
         <div class="d-flex h-100 align-items-center">
           <div class="w-100 d-flex flex-column flex-center rounded-3 bg-light bg-opacity-75 py-15 px-10 cursor-pointer border border-2 plan-card"
-               [ngClass]="{'border-primary shadow-sm': selectedPlan === 'Premium', 'border-gray-400': selectedPlan !== 'Premium'}"
-               (click)="selectPlan('Premium')">
+               [ngClass]="{'border-primary shadow-sm': selectedPlanId === 2, 'border-gray-400': selectedPlanId !== 2}"
+               (click)="selectPlan(2)">
             <div class="mb-7 text-center">
               <h1 class="text-dark mb-5 fw-bolder">Premium</h1>
               <div class="text-gray-400 opacity-75 fw-bold mb-5">For clinical applications</div>
               <div class="text-center">
-                <span class="fs-3x fw-bolder text-primary">$</span>
-                <span class="fs-3x fw-bolder text-primary">99</span>
-                <span class="fs-7 fw-bold text-muted ">/ month</span>
+                <span class="fs-3x fw-bolder text-primary">{{ (plans[1] || {}).price | number }}</span>
+                <span class="fs-3x fw-bolder text-primary"> VNĐ</span>
+                <span class="fs-7 fw-bold text-muted">/ month</span>
               </div>
             </div>
             <div class="w-100 mb-10">
@@ -105,10 +119,22 @@
                 <i class="fa-solid fa-check-circle fs-1 text-success"></i>
               </div>
             </div>
-            <button class="btn btn-lg w-100 btn-primary">Upgrade</button>
+            <button class="btn btn-lg w-100"
+              [ngClass]="isCurrentPlan('PREMIUM') ? 'btn-light-success' : 'btn-primary'"
+              [disabled]="isCurrentPlan('PREMIUM') || isUpdating"
+              (click)="!isCurrentPlan('PREMIUM') ? updatePlan(getPlanByType('PREMIUM')?.id, $event) : null">
+              <span *ngIf="isUpdating && selectedPlanId === getPlanByType('PREMIUM')?.id" class="spinner-border spinner-border-sm"></span>
+              <span *ngIf="isCurrentPlan('PREMIUM')">Your Current Plan</span>
+              <span *ngIf="!isCurrentPlan('PREMIUM') && !(isUpdating && selectedPlanId === getPlanByType('PREMIUM')?.id)">Update Plan</span>
+            </button>
           </div>
         </div>
       </div>
     </div>
+
+    <div class="alert alert-danger mt-10" role="alert" *ngIf="error">
+      {{ error }}
+    </div>
+
   </div>
 </div>

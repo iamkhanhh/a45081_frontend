@@ -17,6 +17,7 @@ import { AnalysisWorkspaceChartComponent } from './overview/components/analysis-
 import { InlineSVGModule } from 'ng-inline-svg-2';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { ReactiveFormsModule } from '@angular/forms';
+import { PaymentsComponent } from './payments/payments.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     EmailPreferencesComponent,
     NotificationsComponent,
     SignInMethodComponent,
-    AnalysisWorkspaceChartComponent
+    AnalysisWorkspaceChartComponent,
+    PaymentsComponent
   ],
   imports: [
     CommonModule,
