@@ -3,15 +3,13 @@ FROM node:20-slim AS builder
 
 WORKDIR /app
 
-ENV NODE_ENV=development
-
 COPY package*.json ./
-RUN npm install --legacy-peer-deps
+RUN npm install --legacy-peer-deps --include=dev
 
 COPY . .
 
 # Build production (output vào dist/)
-RUN npm run build -- --configuration production
+RUN ./node_modules/.bin/ng build --configuration production
 
 # ─── Stage 2: Serve bằng Nginx ───────────────────────────
 FROM nginx:alpine
