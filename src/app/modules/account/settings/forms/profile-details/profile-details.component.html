@@ -2,7 +2,7 @@
   <div class="card-header border-0 cursor-pointer" role="button" data-bs-toggle="collapse"
     data-bs-target="#kt_account_profile_details" aria-expanded="true" aria-controls="kt_account_profile_details">
     <div class="card-title m-0">
-      <h3 class="fw-bolder m-0">Profile Details</h3>
+      <h3 class="fw-bolder m-0">{{'PROFILE.PROFILE_DETAIL' | translate}}</h3>
     </div>
   </div>
   <div id="kt_account_profile_details" class="collapse show">
@@ -20,7 +20,7 @@
           </div>
         </div> -->
         <div class="row mb-6">
-          <label class="col-lg-4 col-form-label required fw-bold fs-6">Full Name</label>
+          <label class="col-lg-4 col-form-label required fw-bold fs-6">{{'PROFILE.FULL_NAME' | translate}}</label>
           <div class="col-lg-8">
             <div class="row">
               <div class="col-lg-6 fv-row">
@@ -52,7 +52,8 @@
           </div>
         </div>
         <div class="row mb-6">
-          <label class="col-lg-4 col-form-label required fw-bold fs-6">Email</label>
+          <label class="col-lg-4 col-form-label required fw-bold fs-6">{{'PROFILE.EMAIL' | translate}}
+            </label>
           <div class="col-lg-8 fv-row">
             <input type="email" class="form-control form-control-lg form-control-solid" placeholder="Email" name="email"
               autocomplete="nope" [class.is-invalid]="isControlInvalid('email')" formControlName="email" />
@@ -63,14 +64,14 @@
           </div>
         </div>
         <div class="row mb-6">
-          <label class="col-lg-4 col-form-label fw-bold fs-6">Institution</label>
+          <label class="col-lg-4 col-form-label fw-bold fs-6">{{'PROFILE.INSTITUTION' | translate}}</label>
           <div class="col-lg-8 fv-row">
             <input type="text" class="form-control form-control-lg form-control-solid" placeholder="Institution"
               name="institution" formControlName="institution" />
           </div>
         </div>
         <div class="row mb-6">
-          <label class="col-lg-4 col-form-label fw-bold fs-6">Phone Number</label>
+          <label class="col-lg-4 col-form-label fw-bold fs-6">{{'PROFILE.PHONE' | translate}}</label>
           <div class="col-lg-8 fv-row">
             <input type="text" class="form-control form-control-lg form-control-solid" placeholder="Institution"
               mask='000-000-0000' placeholder="000-000-0000" autocomplete="off"
@@ -81,7 +82,7 @@
           </div>
         </div>
         <div class="row mb-6">
-          <label class="col-lg-4 col-form-label fw-bold fs-6">Address</label>
+          <label class="col-lg-4 col-form-label fw-bold fs-6">{{'PROFILE.ADDRESS' | translate}}</label>
           <div class="col-lg-8 fv-row">
             <input type="text" class="form-control form-control-lg form-control-solid" placeholder="Address"
               name="address" formControlName="address" />
@@ -90,7 +91,7 @@
       </div>
       <div class="card-footer d-flex justify-content-end py-6 px-9">
         <button type="button" class="btn btn-primary" [disabled]="isLoading" (click)="saveSettings()">
-          <ng-container *ngIf="!isLoading">Save Changes</ng-container>
+          <ng-container *ngIf="!isLoading">{{'PROFILE.SAVE_CHANGES' | translate}}</ng-container>
           <ng-container *ngIf="isLoading">
             <span clas="indicator-progress" [style.display]="'block'">
               Please wait...{{ " " }}

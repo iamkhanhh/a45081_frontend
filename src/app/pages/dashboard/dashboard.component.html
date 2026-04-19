@@ -11,21 +11,21 @@
     <div class="col-lg-4">
       <app-stats-widget2
         class="card card-xl-stretch mb-xl-8"
-        [title]="'Total Workspaces'"
+        [title]="'DASHBOARD.TOTAL_WORKSPACES' | translate"
         [description]="totalWorkspaces"
       ></app-stats-widget2>
     </div>
     <div class="col-lg-4">
       <app-stats-widget2
         class="card card-xl-stretch mb-xl-8"
-        [title]="'Total Analyses'"
+        [title]="'DASHBOARD.TOTAL_ANALYSES' | translate"
         [description]="totalAnalyses"
       ></app-stats-widget2>
     </div>
     <div class="col-lg-4">
       <app-stats-widget2
         class="card card-xl-stretch mb-xl-8"
-        [title]="'Total Samples'"
+        [title]="'DASHBOARD.TOTAL_SAMPLES' | translate"
         [description]="totalSamples"
       ></app-stats-widget2>
     </div>
@@ -33,22 +33,22 @@
 
   <div class="row g-4">
     <div class="col-lg-4">
-        <app-charts-widget5 class="card" [chartType]="'pie'" [pieData]="analysesStatusData" [title]="'Analyses Status'" [subtitle]="'Breakdown of analysis statuses'"></app-charts-widget5>
+        <app-charts-widget5 class="card" [chartType]="'pie'" [pieData]="analysesStatusData" [title]="'DASHBOARD.ANALYSES_STATUS' | translate" [subtitle]="'DASHBOARD.ANALYSES_STATUS_DESC' | translate"></app-charts-widget5>
     </div>
     <div class="col-lg-4">
-        <app-charts-widget5 class="card" [chartType]="'pie'" [pieData]="sampleFileTypeData" [title]="'Sample File Types'" [subtitle]="'Distribution of VCF and FASTQ files'"></app-charts-widget5>
+        <app-charts-widget5 class="card" [chartType]="'pie'" [pieData]="sampleFileTypeData" [title]="'DASHBOARD.SAMPLES_FILE_TYPE' | translate" [subtitle]="'DASHBOARD.SAMPLES_FILE_TYPE_DESC' | translate"></app-charts-widget5>
     </div>
     <div class="col-lg-4">
-        <app-charts-widget5 class="card" [chartType]="'pie'" [pieData]="sampleAssemblyData" [title]="'Sample Assemblies'" [subtitle]="'Distribution of hg19 and hg38 assemblies'"></app-charts-widget5>
+        <app-charts-widget5 class="card" [chartType]="'pie'" [pieData]="sampleAssemblyData" [title]="'DASHBOARD.SAMPLES_ASSEMBLY' | translate" [subtitle]="'DASHBOARD.SAMPLES_ASSEMBLY_DESC' | translate"></app-charts-widget5>
     </div>
   </div>
 
   <div class="row g-4 mt-3">
     <div class="col-lg-6">
-        <app-charts-widget5 class="card" [chartType]="'area'" [seriesData]="samplesCreatedData" [xAxisCategories]="lastSixMonths" [title]="'Samples Created Over Time'" [subtitle]="'Number of samples created in the last 6 months'"></app-charts-widget5>
+        <app-charts-widget5 class="card" [chartType]="'area'" [seriesData]="samplesCreatedData" [xAxisCategories]="lastSixMonths" [title]="'DASHBOARD.SAMPLES_CREATED' | translate" [subtitle]="'DASHBOARD.SAMPLES_CREATED_DESC' | translate"></app-charts-widget5>
     </div>
     <div class="col-lg-6">
-        <app-charts-widget5 class="card" [chartType]="'area'" [seriesData]="analysesCreatedData" [xAxisCategories]="lastSixMonths" [title]="'Analyses Created Over Time'" [subtitle]="'Number of analyses created in the last 6 months'"></app-charts-widget5>
+        <app-charts-widget5 class="card" [chartType]="'area'" [seriesData]="analysesCreatedData" [xAxisCategories]="lastSixMonths" [title]="'DASHBOARD.ANALYSES_CREATED' | translate" [subtitle]="'DASHBOARD.ANALYSES_CREATED_DESC' | translate"></app-charts-widget5>
     </div>
   </div>
 
@@ -56,8 +56,8 @@
     <div class="col-lg-12">
         <app-lists-widget1
             class="card"
-            [title]="'Recent analyses'"
-            [subtitle]="'10 most recent analyses'"
+            [title]="'DASHBOARD.RECENT_ANALYSES' | translate"
+            [subtitle]="'DASHBOARD.RECENT_ANALYSES_DESC' | translate"
             [items]="recentAnalyses"
         ></app-lists-widget1>
     </div>

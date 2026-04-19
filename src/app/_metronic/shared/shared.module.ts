@@ -5,6 +5,7 @@ import { PaginatorComponent } from './paginator/paginator.component';
 import { SortIconComponent } from './sort-icon/sort-icon.component';
 import { InlineSVGModule } from 'ng-inline-svg-2';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { FormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     InlineSVGModule,
-    FormsModule
+    FormsModule,
+    TranslateModule
   ],
   exports: [
     KeeniconComponent,

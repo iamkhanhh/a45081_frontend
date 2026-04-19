@@ -18,6 +18,7 @@ import { InlineSVGModule } from 'ng-inline-svg-2';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { ReactiveFormsModule } from '@angular/forms';
 import { PaymentsComponent } from './payments/payments.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { PaymentsComponent } from './payments/payments.component';
     SharedModule,
     InlineSVGModule,
     NgApexchartsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    TranslateModule
   ],
 })
 export class AccountModule {}

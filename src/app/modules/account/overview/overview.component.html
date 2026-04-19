@@ -1,7 +1,7 @@
 <div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
   <div class="card-header cursor-pointer">
     <div class="card-title m-0">
-      <h3 class="fw-bolder m-0">Profile Details</h3>
+      <h3 class="fw-bolder m-0">{{'PROFILE.PROFILE_DETAIL' | translate}}</h3>
     </div>
 
     <a
@@ -14,7 +14,7 @@
 
   <div class="card-body p-9">
     <div class="row mb-7">
-      <label class="col-lg-4 fw-bold text-muted">Full Name</label>
+      <label class="col-lg-4 fw-bold text-muted">{{'PROFILE.FULL_NAME' | translate}}</label>
 
       <div class="col-lg-8">
         <span class="fw-bolder fs-6 text-gray-900">{{ data.first_name }} {{ data.last_name }}</span>
@@ -23,7 +23,7 @@
 
     <div class="row mb-7">
       <label class="col-lg-4 fw-bold text-muted">
-        Email
+        {{'PROFILE.EMAIL' | translate}}
         <i
           class="fas fa-exclamation-circle ms-1 fs-7"
           data-bs-toggle="tooltip"
@@ -39,7 +39,7 @@
     </div>
 
     <div class="row mb-7">
-      <label class="col-lg-4 fw-bold text-muted">Institution</label>
+      <label class="col-lg-4 fw-bold text-muted">{{'PROFILE.INSTITUTION' | translate}}</label>
 
       <div class="col-lg-8 fv-row">
         <span class="fw-bold fs-6">{{ data.institution }}</span>
@@ -48,7 +48,7 @@
 
     <div class="row mb-7">
       <label class="col-lg-4 fw-bold text-muted">
-        Contact Phone
+        {{'PROFILE.PHONE' | translate}}
       </label>
 
       <div class="col-lg-8 d-flex align-items-center">
@@ -57,7 +57,7 @@
     </div>
 
     <div class="row mb-7">
-      <label class="col-lg-4 fw-bold text-muted">Address</label>
+      <label class="col-lg-4 fw-bold text-muted">{{'PROFILE.ADDRESS' | translate}}</label>
 
       <div class="col-lg-8 fv-row">
         <span class="fw-bold fs-6">{{ data.address }}</span>

@@ -2,13 +2,16 @@
   <!-- begin::Header -->
   <div class="card-header border-0 pt-5">
     <h3 class="card-title align-items-start flex-column">
-      <span class="card-label fw-bolder fs-2 mb-1">My Workspaces</span>
+      <span class="card-label fw-bolder fs-2 mb-1">{{ 'WORKSPACE.MY_WORKSPACE' | translate }}</span>
     </h3>
     <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover"
       title="Click to create a new workspace">
       <button (click)="newWorkspace()" class="btn btn-sm btn-light-primary">
-        <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr075.svg'" class="svg-icon svg-icon-3"></span>
-        New Workspace
+        <span
+          [inlineSVG]="'./assets/media/icons/duotune/arrows/arr075.svg'"
+          class="svg-icon svg-icon-3 me-2"
+        ></span>
+        {{ 'WORKSPACE.NEW_WORKSPACE' | translate }}
       </button>
     </div>
   </div>
@@ -20,7 +23,7 @@
       <div class="form-group row" [formGroup]="filterGroup">
         <div class="col-lg-3" >
           <input type="text" class="form-control" name="searchText" placeholder="Search" value=""
-            formControlName="searchTerm" /><small class="form-text text-muted"><b>Search</b> in name</small>
+            formControlName="searchTerm" /><small class="form-text text-muted"><b>{{ 'FILTER.SEARCH_BY_NAME' | translate }}</b></small>
         </div>
         <div class="col-lg-3">
           <div style="display: flex;">
@@ -31,7 +34,7 @@
                 (click)="d.toggle()"/>
             <button class="btn btn-outline-secondary bi bi-calendar3 input-group-append" (click)="d.toggle()" type="button"></button>
         </div>
-          <small class="form-text text-muted"><b>Filter</b> by Created At</small>
+          <small class="form-text text-muted"><b>{{ 'FILTER.FILTER_BY_CREATED_DATE' | translate }}</b></small>
         </div>
       </div>
     </div>
@@ -78,13 +81,13 @@
                 />
               </div>
             </th>
-            <th class="min-w-120px">ID</th>
-            <th class="min-w-120px">NAME</th>
-            <th class="min-w-120px">PIPELINE</th>
-            <th class="min-w-120px">NUMBER</th>
-            <th class="min-w-120px">LAST MODIFIED</th>
-            <th class="min-w-120px">CREATED AT</th>
-            <th class="min-w-100px text-end">ACTIONS</th>
+              <th class="min-w-120px">{{ 'WORKSPACE.ID' | translate }}</th>
+              <th class="min-w-120px">{{ 'WORKSPACE.NAME' | translate }}</th>
+              <th class="min-w-120px">{{ 'WORKSPACE.PIPELINE' | translate }}</th>
+              <th class="min-w-120px">{{ 'WORKSPACE.NUMBER' | translate }}</th>
+              <th class="min-w-120px">{{ 'WORKSPACE.LAST_MODIFIED' | translate }}</th>
+              <th class="min-w-120px">{{ 'WORKSPACE.CREATED_AT' | translate }}</th>
+              <th class="min-w-100px text-end">{{ 'WORKSPACE.ACTIONS' | translate }}</th>
           </tr>
         </thead>
         <!-- end::Table head -->

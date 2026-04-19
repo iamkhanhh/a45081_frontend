@@ -8,14 +8,14 @@
       <div class="card-toolbar">
         <a routerLink="/workspaces/list" class="btn btn-sm btn-light-primary">
           <i class="fa fa-arrow-left"></i>
-          Back
+          {{ 'WORKSPACE.BACK' | translate }}
         </a>
       </div>
       <div class="card-toolbar" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-trigger="hover"
         title="Click to create a new workspace">
         <button (click)="newAnalysis()" class="btn btn-sm btn-light-primary">
           <span [inlineSVG]="'./assets/media/icons/duotune/arrows/arr075.svg'" class="svg-icon svg-icon-3"></span>
-          New Analysis
+          {{ 'WORKSPACE.NEW_ANALYSIS' | translate }}
         </button>
       </div>
     </div>
@@ -93,15 +93,15 @@
                   [checked]="grouping.checkAreAllRowsSelected()" />
               </div>
             </th>
-            <th class="min-w-50px">ID</th>
-            <th class="min-w-120px">ANALYSIS NAME</th>
-            <th class="min-w-120px">TYPE</th>
-            <th class="min-w-120px">ASSEMBLY</th>
-            <th class="min-w-120px">ANALYZED</th>
-            <th class="min-w-120px">VARIANTS</th>
-            <th class="min-w-120px">STATUS</th>
-            <th class="min-w-120px">CREATED</th>
-            <th class="min-w-50px text-end">ACTIONS</th>
+            <th class="min-w-50px">{{'WORKSPACE.ID' | translate}}</th>
+            <th class="min-w-120px">{{'WORKSPACE.ANALYST_NAME' | translate}}</th>
+            <th class="min-w-120px">{{'WORKSPACE.TYPE' | translate}}</th>
+            <th class="min-w-120px">{{'WORKSPACE.ASSEMBLY' | translate}}</th>
+            <th class="min-w-120px">{{'WORKSPACE.ANALYZED' | translate}}</th>
+            <th class="min-w-120px">{{'WORKSPACE.VARIANTS' | translate}}</th>
+            <th class="min-w-120px">{{'WORKSPACE.STATUS' | translate}}</th>
+            <th class="min-w-120px">{{'WORKSPACE.CREATED_AT' | translate}}</th>
+            <th class="min-w-50px text-end">{{'WORKSPACE.ACTIONS' | translate}}</th>
           </tr>
         </thead>
         <!-- end::Table head -->
