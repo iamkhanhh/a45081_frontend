@@ -12,10 +12,7 @@ import { AppComponent } from './app.component';
 import { AuthService } from './modules/auth/services/auth.service';
 import { environment } from 'src/environments/environment';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
-// #fake-start#
-import { FakeAPIService } from './_fake/fake-api.service';
 import { ToastrModule } from 'ngx-toastr';
-// #fake-end#
 
 function appInitializer(authService: AuthService) {
   return () => {
@@ -36,14 +33,6 @@ const config: SocketIoConfig = { url: environment.apiUrl, options: {}  };
     SocketIoModule.forRoot(config),
     HttpClientModule,
     ClipboardModule,
-    // #fake-start#
-    environment.isMockEnabled
-      ? HttpClientInMemoryWebApiModule.forRoot(FakeAPIService, {
-          passThruUnknownUrl: true,
-          dataEncapsulation: false,
-        })
-      : [],
-    // #fake-end#
     AppRoutingModule,
     InlineSVGModule.forRoot(),
     ToastrModule.forRoot(),
