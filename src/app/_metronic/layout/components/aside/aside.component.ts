@@ -8,7 +8,6 @@ import {
 import { NavigationCancel, NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { LayoutService } from '../../core/layout.service';
-import { environment } from './../../../../../environments/environment';
 import {
   MenuComponent,
   DrawerComponent,
@@ -25,7 +24,6 @@ export class AsideComponent implements OnInit, OnDestroy {
   asideTheme: string = '';
   asideMinimize: boolean = false;
   asideMenuCSSClasses: string = '';
-  appPreviewDocsUrl: string = environment.appPreviewDocsUrl;
   @ViewChild('ktAsideScroll', { static: true }) ktAsideScroll: ElementRef;
   private unsubscribe: Subscription[] = [];
 

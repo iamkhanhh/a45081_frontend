@@ -14,6 +14,16 @@ export const routes: Routes = [
       import('./modules/errors/errors.module').then((m) => m.ErrorsModule),
   },
   {
+    path: 'about',
+    loadChildren: () =>
+      import('./pages/about/about.module').then((m) => m.AboutModule),
+  },
+  {
+    path: 'term-of-service',
+    loadChildren: () =>
+      import('./pages/term-of-service/term-of-service.module').then((m) => m.TermOfServiceModule),
+  },
+  {
     path: '',
     canActivate: [AuthGuard],
     loadChildren: () =>
