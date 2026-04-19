@@ -25,6 +25,7 @@ import { AnalysisReportDetailComponent } from './components/analysis-report-deta
 import { PatientInformationComponent } from './components/patient-information/patient-information.component';
 import { GeneDetailComponent } from './components/gene-detail/gene-detail.component';
 import { IgvGenomeBrowserComponent } from './components/igv-genome-browser/igv-genome-browser.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   declarations: [
@@ -61,7 +62,8 @@ import { IgvGenomeBrowserComponent } from './components/igv-genome-browser/igv-g
 		MatSliderModule,
 		NgbDropdownModule,
 		MatProgressSpinnerModule,
-    FormsModule
+    FormsModule,
+    TranslateModule
   ]
 })
 export class AnalysisModule { }

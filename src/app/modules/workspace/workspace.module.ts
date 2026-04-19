@@ -15,6 +15,7 @@ import { CreateAnalysisComponent } from './components/create-analysis/create-ana
 import { DeleteAnalysisComponent } from './components/delete-analysis/delete-analysis.component';
 import { NgbDatepickerModule, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { DeleteMultipleWorkspacesComponent } from './components/delete-multiple-workspaces/delete-multiple-workspaces.component';
+import { TranslateModule } from "@ngx-translate/core";
 
 
 @NgModule({
@@ -36,7 +37,8 @@ import { DeleteMultipleWorkspacesComponent } from './components/delete-multiple-
     SharedModule,
     NgbDropdownModule,
     NgbDatepickerModule,
-  ],
+    TranslateModule
+],
   providers: [WorkspaceService],
   exports: [DeleteAnalysisComponent]
 })

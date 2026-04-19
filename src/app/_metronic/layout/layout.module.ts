@@ -64,8 +64,8 @@ const routes: Routes = [
     EngagesModule,
     DropdownMenusModule,
     NgbTooltipModule,
-    TranslateModule,
-    ThemeModeModule
+    ThemeModeModule,
+    TranslateModule
   ],
   exports: [RouterModule],
 })

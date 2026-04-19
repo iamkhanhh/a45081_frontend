@@ -14,6 +14,7 @@ import { DndDirective } from './directives/dnd.directive';
 import { ProgressComponent } from './components/progress/progress.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import {DragDropModule} from '@angular/cdk/drag-drop';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 @NgModule({
@@ -36,7 +37,8 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
     NgbDatepickerModule, 
     NgbAlertModule,
     ReactiveFormsModule,
-    DragDropModule
+    DragDropModule,
+    TranslateModule
   ],
 })
 export class SampleModule { }

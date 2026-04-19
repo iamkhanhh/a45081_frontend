@@ -2,7 +2,7 @@
   <div class="card-header border-0 cursor-pointer" role="button" data-bs-toggle="collapse"
     data-bs-target="#kt_account_signin_method">
     <div class="card-title m-0">
-      <h3 class="fw-bolder m-0">Change password</h3>
+      <h3 class="fw-bolder m-0">{{'PROFILE.CHANGE_PASSWORD' | translate}}</h3>
     </div>
   </div>
   <div id="kt_account_signin_method" class="collapse show">
@@ -15,14 +15,14 @@
             <div class="row mb-1">
               <div class="col-lg-4">
                 <div class="fv-row mb-0">
-                  <label for="currentpassword" class="form-label fs-6 fw-bolder mb-3">Current Password</label><input
+                  <label for="currentpassword" class="form-label fs-6 fw-bolder mb-3">{{'PROFILE.CURRENT_PASSWORD' | translate}}</label><input
                     type="password" class="form-control form-control-lg form-control-solid" id="currentpassword"
                     name="oldPassword" formControlName="oldPassword" />
                 </div>
               </div>
               <div class="col-lg-4">
                 <div class="fv-row mb-0">
-                  <label for="newpassword" class="form-label fs-6 fw-bolder mb-3">New Password</label><input
+                  <label for="newpassword" class="form-label fs-6 fw-bolder mb-3">{{'PROFILE.NEW_PASSWORD' | translate}}</label><input
                     type="password" class="form-control form-control-lg form-control-solid" id="newpassword"
                     name="password" [class.is-invalid]="isControlInvalid('password')" formControlName="password" />
                   <div class="invalid-feedback" *ngIf="controlHasError('required', 'password')">Password is
@@ -34,7 +34,7 @@
               </div>
               <div class="col-lg-4">
                 <div class="fv-row mb-0">
-                  <label for="confirmpassword" class="form-label fs-6 fw-bolder mb-3">Confirm New Password</label><input
+                  <label for="confirmpassword" class="form-label fs-6 fw-bolder mb-3">{{'PROFILE.CONFIRM_NEW_PASSWORD' | translate}}</label><input
                     type="password" class="form-control form-control-lg form-control-solid" id="confirmpassword"
                     name="cPassword" [class.is-invalid]="isControlInvalid('cPassword')"
                     [class.is-valid]="isControlValid('cPassword')" formControlName="cPassword" />
@@ -49,7 +49,7 @@
             </div>
             <div class="d-flex my-5">
               <button id="kt_password_submit" type="button" class="btn btn-primary me-2 px-6" (click)="savePassword()">
-                <ng-container *ngIf="!isLoading">Update Password</ng-container>
+                <ng-container *ngIf="!isLoading">{{'PROFILE.UPDATE' | translate}}</ng-container>
                 <ng-container *ngIf="isLoading">
                   <span class="indicator-progress" [style.display]="'block'">
                     Please wait...
@@ -61,7 +61,7 @@
                   </span>
                 </ng-container></button><button id="kt_password_cancel" type="button"
                 class="btn btn-color-gray-500 btn-active-light-primary px-6" (click)="reset()">
-                Cancel
+                {{'PROFILE.CANCEL' | translate}}
               </button>
             </div>
           </form>

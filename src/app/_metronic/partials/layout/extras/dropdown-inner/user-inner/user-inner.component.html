@@ -23,19 +23,19 @@
 
   <div class="menu-item px-5">
     <a routerLink="/account" class="menu-link px-5">
-      My Profile
+      {{ "PROFILE.MY_PROFILE" | translate }}
     </a>
   </div>
 
   <div class="menu-item px-5">
     <a class="menu-link px-5 cursor-pointer" routerLink="/workspaces">
-      <span class="menu-text">My Workspace</span>
+      <span class="menu-text">{{ "PROFILE.MY_WORKSPACE" | translate }}</span>
     </a>
   </div>
 
   <div class="menu-item px-5">
     <a class="menu-link px-5 cursor-pointer" routerLink="/analyses">
-      <span class="menu-text">My Analyses</span>
+      <span class="menu-text">{{ "PROFILE.MY_ANALYSES" | translate }}</span>
     </a>
   </div>
 
@@ -109,7 +109,7 @@
   >
     <a class="menu-link px-5 cursor-pointer">
       <span class="menu-title position-relative">
-        Language
+        {{ "PROFILE.LANGUAGES" | translate }}
         <span
           class="
             fs-8
@@ -159,6 +159,6 @@
   </div> -->
 
   <div class="menu-item px-5">
-    <a (click)="logout()" class="menu-link px-5 cursor-pointer"> Sign Out </a>
+    <a (click)="logout()" class="menu-link px-5 cursor-pointer">{{ "PROFILE.SIGN_OUT" | translate }} </a>
   </div>
 </ng-container>

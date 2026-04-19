@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { AnalysisService } from '../services/analysis.service';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
+import { AuthService } from 'src/app/modules/auth/services/auth.service';
 
 type Tabs =
 	| 'quality_control'
@@ -25,19 +26,24 @@ export class AnalysisIndexComponent {
 	project_id: number;
 	activeTab: Tabs = 'variant_list';
 	isBasicPlan: boolean = true; 
+	isAdmin: boolean = false;
+
 
 	constructor(
 		public analysisService: AnalysisService,
 		private route: ActivatedRoute,
 		private _location: Location,
 		private cd: ChangeDetectorRef,
+		private authService: AuthService
 	) {}
 
 	ngOnInit(): void {
+		this.isAdmin = this.authService.currentUserValue?.role == 'Admin';
 		this.id = this.route.snapshot.params.id;
 		this.isLoaded = false;
 		this.loadPlan();
 		this.getAnalysisName();
+		
 	}
 	private loadPlan(): void {
 		const stored = localStorage.getItem(PLAN_KEY);
@@ -64,7 +70,7 @@ export class AnalysisIndexComponent {
 	}
 
 	setTab(tab: Tabs) {
-		if (this.isBasicPlan && BASIC_RESTRICTED_TABS.includes(tab)) return;
+		if (this.isBasicPlan && !this.isAdmin && BASIC_RESTRICTED_TABS.includes(tab)) return;
 		this.activeTab = tab;
 	}
 

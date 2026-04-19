@@ -2,7 +2,7 @@
   <!-- begin::Header -->
   <div class="card-header border-0 pt-5">
     <h3 class="card-title align-items-start flex-column">
-      <span class="card-label fw-bolder fs-2 mb-1">My Analyses</span>
+      <span class="card-label fw-bolder fs-2 mb-1">{{ 'ANALYST.MY_ANALYSTS' | translate }}</span>
     </h3>
   </div>
   <!-- end::Header -->
@@ -13,14 +13,14 @@
       <div class="form-group row" [formGroup]="filterGroup">
         <div class="col-lg-3">
           <input type="text" class="form-control" name="analysisName" placeholder="Search" value=""
-            formControlName="analysisName" /><small class="form-text text-muted"><b>Search</b> in Analysis Name</small>
+            formControlName="analysisName" /><small class="form-text text-muted"><b>{{ 'FILTER.SEARCH_BY_NAME' | translate }}</b></small>
         </div>
         <div class="col-lg-3">
           <select class="form-control" placeholder="Filter by Assembly" name="assembly" formControlName="assembly">
             <option value='' [selected]="true">All</option>
             <option value='hg19'>Hg19</option>
             <option value='hg38'>Hg38</option>
-          </select><small class="form-text text-muted"><b>Filter</b> by Assembly</small>
+          </select><small class="form-text text-muted"><b>{{ 'FILTER.FILTERBY_ASSEMBLY' | translate }}</b></small>
         </div>
         <div class="col-lg-3">
           <select class="form-control" placeholder="Filter by Status" name="status" formControlName="status">
@@ -29,7 +29,7 @@
             <option value='analyzing'>Analyzing</option>
             <option value='analyzed'>Analyzed</option>
             <option value='error'>Error</option>
-          </select><small class="form-text text-muted"><b>Filter</b> by Status</small>
+          </select><small class="form-text text-muted"><b>{{ 'FILTER.FILTER_BY_STATUS' | translate }}</b></small>
         </div>
       </div>
     </div>
@@ -74,15 +74,15 @@
                   [checked]="grouping.checkAreAllRowsSelected()" />
               </div>
             </th>
-            <th class="min-w-50px">ID</th>
-            <th class="min-w-120px">ANALYSIS NAME</th>
-            <th class="min-w-120px">WORKSPACE</th>
-            <th class="min-w-120px">ASSEMBLY</th>
-            <th class="min-w-120px">ANALYZED</th>
-            <th class="min-w-120px">VARIANTS</th>
-            <th class="min-w-120px">STATUS</th>
-            <th class="min-w-120px">CREATED</th>
-            <th class="min-w-50px text-end">ACTIONS</th>
+            <th class="min-w-50px">{{ 'ANALYST.ID' | translate }}</th>
+            <th class="min-w-120px">{{ 'ANALYST.ANALYST_NAME' | translate }}</th>
+            <th class="min-w-120px">{{ 'ANALYST.WORKSPACE' | translate }}</th>
+            <th class="min-w-120px">{{ 'ANALYST.ASSEMBLY' | translate }}</th>
+            <th class="min-w-120px">{{ 'ANALYST.ANALYZED' | translate }}</th>
+            <th class="min-w-120px">{{ 'ANALYST.VARIANTS' | translate }}</th>
+            <th class="min-w-120px">{{ 'ANALYST.STATUS' | translate }}</th>
+            <th class="min-w-120px">{{ 'ANALYST.CREATED' | translate }}</th>
+            <th class="min-w-50px text-end">{{ 'ANALYST.ACTIONS' | translate }}</th>
           </tr>
         </thead>
         <!-- end::Table head -->

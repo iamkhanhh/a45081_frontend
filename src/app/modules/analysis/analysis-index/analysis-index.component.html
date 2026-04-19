@@ -2,7 +2,7 @@
     <!-- begin::Header -->
     <div class="card-header border-0 pt-5">
         <h3 class="card-title align-items-start flex-column">
-            <span class="card-label fw-bolder fs-2 mb-1">Analysis Detail: <span class="text-primary">{{ analysis_name }}</span></span>
+            <span class="card-label fw-bolder fs-2 mb-1">{{ 'ANALYST.ANALYST_DETAIL' | translate }}: <span class="text-primary">{{ analysis_name }}</span></span>
         </h3>
         <div class="card-toolbar">
             <ul class="nav">
@@ -15,10 +15,10 @@
                     me-1
                   " data-bs-toggle="tab" [ngClass]="activeClass('variant_list')"
                         (click)="setTab('variant_list')">
-                        Variants
+                        {{ 'ANALYST.VARIANT_LIST' | translate }}
                     </a>
                 </li>
-                <li class="nav-item" *ngIf="!isBasicPlan">
+                <li class="nav-item" *ngIf="!isBasicPlan || isAdmin">
                     <a class="
                     nav-link
                     btn btn-sm btn-color-muted btn-active btn-active-light-primary
@@ -27,10 +27,10 @@
                     me-1
                   " data-bs-toggle="tab" [ngClass]="activeClass('quality_control')"
                         (click)="setTab('quality_control')">
-                        Quality Control
+                        {{ 'ANALYST.QUANLITY_CONTROL' | translate }}
                     </a>
                 </li>
-                <li class="nav-item" *ngIf="!isBasicPlan">
+                <li class="nav-item" *ngIf="!isBasicPlan || isAdmin">
                     <a class="
                     nav-link
                     btn btn-sm btn-color-muted btn-active btn-active-light-primary
@@ -39,7 +39,7 @@
                     me-1
                   " data-bs-toggle="tab" [ngClass]="activeClass('variant_report')"
                         (click)="setTab('variant_report')">
-                        Reports
+                        {{ 'ANALYST.VARIANT_REPORT' | translate }}
                     </a>
                 </li>
                 <li class="nav-item">
@@ -51,7 +51,7 @@
                     me-1
                   " data-bs-toggle="tab" [ngClass]="activeClass('patient_information')"
                         (click)="setTab('patient_information')">
-                        Patient
+                        {{ 'ANALYST.PATIENT_INFORMATION' | translate }}
                     </a>
                 </li>
             </ul>
@@ -62,7 +62,7 @@
     <div class="card-body py-3">
         <div class="tab-content">
             <!-- begin::Tap pane -->
-            <div class="tab-pane fade" *ngIf="!isBasicPlan && activeTab === 'quality_control'" [ngClass]="activeClass('quality_control')" id="quality_control">
+            <div class="tab-pane fade" *ngIf="activeTab === 'quality_control' && (isAdmin || !isBasicPlan)"[ngClass]="activeClass('quality_control')" id="quality_control">
                 <div style="min-height: 800px !important">
                     <app-quality-control [id]="id"></app-quality-control>
                 </div>
@@ -76,7 +76,7 @@
             </div>
             <!-- end::Tap pane -->
             <!-- begin::Tap pane -->
-            <div class="tab-pane fade" *ngIf="!isBasicPlan && activeTab === 'variant_report'" [ngClass]="activeClass('variant_report')" id="variant_report">
+            <div class="tab-pane fade" *ngIf="activeTab === 'variant_report' && (isAdmin || !isBasicPlan)" [ngClass]="activeClass('variant_report')" id="variant_report">
                 <div style="min-height: 800px !important">
                     <app-analysis-report-variant [id]="id"></app-analysis-report-variant>
                 </div>
