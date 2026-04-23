@@ -156,14 +156,6 @@
                                             (click)="addReport()">
                                             <i class="far fa-sticky-note"></i> Add To Report
                                         </a>&nbsp;
-                                        <button type="button"
-                                            class="btn btn-light-primary font-weight-bolder font-size-sm mr-1"
-                                            [disabled]="loadingExport" (click)="exportVariants()">
-                                            Export
-                                        </button>&nbsp;
-                                        <ng-container *ngIf="loadingExport">
-                                            <span class="spinner spinner-primary ml-3 mr-5"></span>
-                                        </ng-container>
                                     </div>
                                 </div>
                             </div>
