@@ -1,0 +1,159 @@
+<!-- ===== SECTION 1: Contact Form ===== -->
+<section class="contact-hero">
+  <div class="contact-hero__inner">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+      <span>Genetics</span>
+      <span class="breadcrumb__dot">•</span>
+      <span class="breadcrumb__active">Contact us</span>
+    </nav>
+
+    <!-- Heading -->
+    <h1 class="hero-title">Contact us</h1>
+    <p class="hero-subtitle">
+      Get in touch and ask us anything. The difference between bookkeeping and
+      accounting, can you start a company from Madagascar, which business
+      literature our CEO prefers – we answer it all.
+    </p>
+
+    <!-- Form -->
+    <form class="contact-form" [formGroup]="contactForm" (ngSubmit)="onSubmit()" novalidate>
+      <!-- Row 1: Name + Email -->
+      <div class="form-row">
+        <div class="form-group" [class.form-group--error]="isInvalid('name')">
+          <input
+            type="text"
+            formControlName="name"
+            placeholder="Your name"
+            class="form-control"
+            autocomplete="name"
+          />
+          <span class="required-star">*</span>
+          <span class="error-msg" *ngIf="isInvalid('name')">Please enter your name</span>
+        </div>
+        <div class="form-group" [class.form-group--error]="isInvalid('email')">
+          <input
+            type="email"
+            formControlName="email"
+            placeholder="Email address"
+            class="form-control"
+            autocomplete="email"
+          />
+          <span class="required-star">*</span>
+          <span class="error-msg" *ngIf="isInvalid('email')">Please enter a valid email</span>
+        </div>
+      </div>
+
+      <!-- Row 2: Phone + Interest -->
+      <div class="form-row">
+        <div class="form-group form-group--phone" [class.form-group--error]="isInvalid('phone')">
+          <div class="phone-input">
+            <button type="button" class="country-selector" (click)="toggleCountryDropdown()">
+              <span class="flag">{{ selectedCountry.flag }}</span>
+              <svg class="chevron" viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+              </svg>
+            </button>
+            <div class="country-dropdown" *ngIf="showCountryDropdown">
+              <button
+                type="button"
+                class="country-option"
+                *ngFor="let country of countries"
+                (click)="selectCountry(country)"
+                [class.country-option--active]="country.code === selectedCountry.code"
+              >
+                <span>{{ country.flag }}</span>
+                <span>{{ country.name }}</span>
+                <span class="dial-code">{{ country.dialCode }}</span>
+              </button>
+            </div>
+            <span class="dial-code-display">{{ selectedCountry.dialCode }}</span>
+            <input
+              type="tel"
+              formControlName="phone"
+              placeholder="999 9999999"
+              class="form-control form-control--phone"
+              autocomplete="tel"
+            />
+          </div>
+          <span class="required-star">*</span>
+          <span class="error-msg" *ngIf="isInvalid('phone')">Please enter your phone number</span>
+        </div>
+
+        <div class="form-group" [class.form-group--error]="isInvalid('interest')">
+          <select formControlName="interest" class="form-control form-control--select">
+            <option value="" disabled selected>Interested in</option>
+            <option *ngFor="let item of interests" [value]="item">{{ item }}</option>
+          </select>
+          <span class="required-star">*</span>
+          <span class="error-msg" *ngIf="isInvalid('interest')">Please select an option</span>
+        </div>
+      </div>
+
+      <!-- Row 3: Message -->
+      <div class="form-group form-group--full" [class.form-group--error]="isInvalid('message')">
+        <textarea
+          formControlName="message"
+          placeholder="How can we help?"
+          class="form-control form-control--textarea"
+          rows="5"
+        ></textarea>
+        <span class="required-star">*</span>
+        <span class="error-msg" *ngIf="isInvalid('message')">Please describe how we can help</span>
+      </div>
+
+      <!-- Submit -->
+      <div class="form-submit">
+        <button type="submit" class="btn-submit">Send your message</button>
+        <p class="form-legal">
+          By clicking, you agree to our
+          <a href="#">Terms &amp; Conditions,</a>
+          <a href="#">Privacy and Data Protection Policy</a>
+        </p>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- ===== SECTION 2: Map & Office Info ===== -->
+<section class="contact-office">
+  <div class="contact-office__inner">
+    <div class="office-header">
+      <p class="office-label">VIỆT NAM</p>
+      <h2 class="office-title">Liên hệ với chúng tôi</h2>
+    </div>
+
+    <div class="office-content">
+      <!-- Map -->
+      <div class="office-map">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3633.2525689220283!2d105.8130185750592!3d20.975880889593054!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135acef8ad5350f%3A0x89435a3528118ff5!2zVHLGsOG7nW5nIMSQ4bqhaSBo4buNYyBUaMSDbmcgTG9uZw!5e1!3m2!1svi!2s!4v1776958516772!5m2!1svi!2s"
+          width="100%"
+          height="100%"
+          style="border: 0"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="Hà Nội, Việt Nam"
+        ></iframe>
+      </div>
+
+      <!-- Info card -->
+      <div class="office-info">
+        <div class="info-group">
+          <p class="info-label">Địa chỉ</p>
+          <p class="info-value">Đường Nghiêm Xuân Yêm, Phường Đại Kim, Quận Hoàng Mai, TP. Hà Nội</p>
+        </div>
+        <div class="info-group">
+          <p class="info-label">Email</p>
+          <a href="mailto:hi@osome.com" class="info-value info-value--link">suport&#64;genetics.com</a>
+        </div>
+        <div class="info-group">
+          <p class="info-label">Điện thoại</p>
+          <a href="tel:+84243xxxxxxx" class="info-value info-value--link">+84 24 3xxx xxxx</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+

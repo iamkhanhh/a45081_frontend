@@ -1,0 +1,94 @@
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+
+interface Country {
+  code: string;
+  name: string;
+  flag: string;
+  dialCode: string;
+}
+
+@Component({
+  selector: 'app-contact',
+  standalone: true,
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  templateUrl: './contact.component.html',
+  styleUrls: ['./contact.component.scss']
+})
+export class ContactComponent implements OnInit {
+  contactForm!: FormGroup;
+  showCountryDropdown = false;
+  submitted = false;
+
+  countries: Country[] = [
+    { code: 'IT', name: 'Italy', flag: '🇮🇹', dialCode: '+39' },
+    { code: 'SG', name: 'Singapore', flag: '🇸🇬', dialCode: '+65' },
+    { code: 'US', name: 'United States', flag: '🇺🇸', dialCode: '+1' },
+    { code: 'GB', name: 'United Kingdom', flag: '🇬🇧', dialCode: '+44' },
+    { code: 'AU', name: 'Australia', flag: '🇦🇺', dialCode: '+61' },
+    { code: 'HK', name: 'Hong Kong', flag: '🇭🇰', dialCode: '+852' },
+    { code: 'VN', name: 'Vietnam', flag: '🇻🇳', dialCode: '+84' },
+  ];
+
+  selectedCountry: Country = this.countries[0];
+
+  interests: string[] = [
+    'Company Registration',
+    'Accounting & Bookkeeping',
+    'Tax Filing',
+    'Payroll',
+    'Corporate Secretary',
+    'Other',
+  ];
+
+  socialLinks = [
+    { icon: 'facebook', url: '#', label: 'Facebook' },
+    { icon: 'twitter', url: '#', label: 'X (Twitter)' },
+    { icon: 'linkedin', url: '#', label: 'LinkedIn' },
+    { icon: 'youtube', url: '#', label: 'YouTube' },
+    { icon: 'instagram', url: '#', label: 'Instagram' },
+    { icon: 'tiktok', url: '#', label: 'TikTok' },
+  ];
+
+  constructor(private fb: FormBuilder) {}
+
+  ngOnInit(): void {
+    this.contactForm = this.fb.group({
+      name: ['', [Validators.required, Validators.minLength(2)]],
+      email: ['', [Validators.required, Validators.email]],
+      phone: ['', Validators.required],
+      interest: ['', Validators.required],
+      message: ['', [Validators.required, Validators.minLength(10)]],
+    });
+  }
+
+  selectCountry(country: Country): void {
+    this.selectedCountry = country;
+    this.showCountryDropdown = false;
+  }
+
+  toggleCountryDropdown(): void {
+    this.showCountryDropdown = !this.showCountryDropdown;
+  }
+
+  onSubmit(): void {
+    this.submitted = true;
+    if (this.contactForm.valid) {
+      console.log('Form submitted:', {
+        ...this.contactForm.value,
+        country: this.selectedCountry,
+      });
+      // Handle form submission here
+    }
+  }
+
+  get f() {
+    return this.contactForm.controls;
+  }
+
+  isInvalid(field: string): boolean {
+    const control = this.contactForm.get(field);
+    return !!(control && control.invalid && (control.dirty || control.touched || this.submitted));
+  }
+}
