@@ -21,6 +21,10 @@ export class SampleService {
     return this.http.post(`${API_SAMPLE_URL}/load-samples?page=${page}&pageSize=${pageSize}`, formValue ,{ withCredentials: true });
   }
 
+  loadSample(id: number): Observable<any> {
+    return this.http.get(`${API_SAMPLE_URL}/${id}`, { withCredentials: true });
+  }
+
   deleteFiles(ids: number[]): Observable<any>  {
     return this.http.delete(`${API_SAMPLE_URL}`, { withCredentials: true, body: {ids} });
   }

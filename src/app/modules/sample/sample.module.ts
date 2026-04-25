@@ -15,6 +15,7 @@ import { ProgressComponent } from './components/progress/progress.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import { TranslateModule } from '@ngx-translate/core';
+import { SampleDetailComponent } from './components/sample-detail/sample-detail.component';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import { TranslateModule } from '@ngx-translate/core';
     CreateSampleVcfComponent,
     CreateSampleFastqComponent,
     DndDirective,
-    ProgressComponent
+    ProgressComponent,
+    SampleDetailComponent
   ],
   imports: [
     CommonModule,

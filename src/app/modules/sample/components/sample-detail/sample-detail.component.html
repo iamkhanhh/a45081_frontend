@@ -1,0 +1,185 @@
+<div class="modal-content">
+
+  <!-- Header -->
+  <div class="modal-header px-7 py-5">
+    <div class="d-flex align-items-center gap-3">
+      <div class="symbol symbol-40px">
+        <span class="symbol-label" [ngClass]="sample?.file_type === 'fastq' ? 'bg-light-info' : 'bg-light-primary'">
+          <i class="fa-solid fa-dna fs-4" [ngClass]="sample?.file_type === 'fastq' ? 'text-info' : 'text-primary'"></i>
+        </span>
+      </div>
+      <div>
+        <h4 class="modal-title fw-bolder text-gray-900 mb-0">Sample Detail</h4>
+        <span class="text-muted fw-semibold fs-7">View sample information and files</span>
+      </div>
+    </div>
+    <button type="button" class="btn-close" (click)="modal.dismiss()"></button>
+  </div>
+
+  <!-- Body -->
+  <div class="modal-body px-7 py-6">
+
+    <!-- Loading -->
+    <div *ngIf="isLoading" class="d-flex justify-content-center align-items-center py-10">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading…</span>
+      </div>
+    </div>
+
+    <ng-container *ngIf="!isLoading && sample">
+
+      <!-- ── Sample Information ─────────────────────────── -->
+      <div class="card border border-dashed border-gray-300 mb-6">
+        <div class="card-header min-h-45px px-5">
+          <h5 class="card-title fw-bolder text-gray-800 fs-6 mb-0">
+            <i class="fa-solid fa-circle-info me-2 text-primary"></i>Sample Information
+          </h5>
+        </div>
+        <div class="card-body px-5 py-4">
+          <div class="row g-4">
+
+            <div class="col-sm-6 col-lg-3">
+              <label class="form-label text-muted fw-semibold fs-7 mb-1">Sample ID</label>
+              <div class="form-control form-control-sm bg-light border-0 fw-bolder text-gray-800">
+                #{{ sample.id }}
+              </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-5">
+              <label class="form-label text-muted fw-semibold fs-7 mb-1">Sample Name</label>
+              <div class="form-control form-control-sm bg-light border-0 fw-bolder text-gray-800">
+                {{ sample.name }}
+              </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-2">
+              <label class="form-label text-muted fw-semibold fs-7 mb-1">File Type</label>
+              <div class="pt-1">
+                <span class="badge fs-7 fw-bolder"
+                  [ngClass]="sample.file_type === 'fastq' ? 'badge-light-info' : 'badge-light-primary'">
+                  <i class="fa-solid me-1"
+                    [ngClass]="sample.file_type === 'fastq' ? 'fa-file-code' : 'fa-file-lines'"></i>
+                  {{ sample.file_type | uppercase }}
+                </span>
+              </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-2">
+              <label class="form-label text-muted fw-semibold fs-7 mb-1">Status</label>
+              <div class="pt-1">
+                <span class="badge fs-7 fw-bolder"
+                  [ngClass]="sample.complete_status === 1 ? 'badge-light-success' : 'badge-light-warning'">
+                  <i class="fa-solid me-1"
+                    [ngClass]="sample.complete_status === 1 ? 'fa-circle-check' : 'fa-clock'"></i>
+                  {{ sample.complete_status === 1 ? 'Complete' : 'Pending' }}
+                </span>
+              </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-3">
+              <label class="form-label text-muted fw-semibold fs-7 mb-1">Assembly</label>
+              <div class="form-control form-control-sm bg-light border-0 fw-bolder text-gray-800">
+                {{ sample.assembly }}
+              </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-3">
+              <label class="form-label text-muted fw-semibold fs-7 mb-1">Total Size</label>
+              <div class="form-control form-control-sm bg-light border-0 fw-bolder text-gray-800">
+                {{ formatBytes(sample.file_size) }}
+              </div>
+            </div>
+
+            <div class="col-sm-6 col-lg-4">
+              <label class="form-label text-muted fw-semibold fs-7 mb-1">Created At</label>
+              <div class="form-control form-control-sm bg-light border-0 fw-bolder text-gray-800">
+                {{ sample.createdAt | date:'dd MMM yyyy, HH:mm' }}
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Uploaded Files ─────────────────────────────── -->
+      <div class="card border border-dashed border-gray-300">
+        <div class="card-header min-h-45px px-5 d-flex align-items-center justify-content-between">
+          <h5 class="card-title fw-bolder text-gray-800 fs-6 mb-0">
+            <i class="fa-solid fa-folder-open me-2 text-warning"></i>Uploaded Files
+          </h5>
+          <span class="badge badge-light-secondary fw-bold fs-8">
+            {{ sample.uploads.length }} file{{ sample.uploads.length !== 1 ? 's' : '' }}
+          </span>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-row-dashed table-row-gray-300 align-middle gs-5 gy-3 mb-0">
+              <thead>
+                <tr class="fw-bolder text-muted fs-7 bg-light">
+                  <th class="ps-5">#</th>
+                  <th>File Name</th>
+                  <th *ngIf="sample.file_type === 'fastq'">Pair</th>
+                  <th>Size</th>
+                  <th>Status</th>
+                  <th class="text-end pe-5">Download</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let upload of sample.uploads; let i = index" class="upload-row">
+                  <td class="ps-5 text-muted fw-semibold fs-7">{{ i + 1 }}</td>
+                  <td>
+                    <div class="d-flex align-items-center gap-2">
+                      <div class="file-icon-wrap">
+                        <i class="fa-solid fs-4"
+                          [ngClass]="upload.file_type === 'fastq' ? 'fa-file-code text-info' : 'fa-file-lines text-primary'"></i>
+                      </div>
+                      <div>
+                        <p class="text-gray-800 fw-bolder fs-7 mb-0" style="word-break: break-all;">
+                          {{ upload.original_name }}
+                        </p>
+                        <span class="text-muted fw-semibold fs-8">
+                          {{ upload.createdAt | date:'dd MMM yyyy' }}
+                        </span>
+                      </div>
+                    </div>
+                  </td>
+                  <td *ngIf="sample.file_type === 'fastq'">
+                    <span class="badge fw-bold fs-8"
+                      [ngClass]="upload.fastq_pair_index === 1 ? 'badge-light-primary' : 'badge-light-success'">
+                      R{{ upload.fastq_pair_index }}
+                    </span>
+                  </td>
+                  <td class="fw-bolder text-gray-700 fs-7">{{ formatBytes(upload.file_size) }}</td>
+                  <td>
+                    <span class="badge fs-8 fw-bold"
+                      [ngClass]="upload.upload_status === 1 ? 'badge-light-success' : 'badge-light-warning'">
+                      <i class="fa-solid me-1 fs-9"
+                        [ngClass]="upload.upload_status === 1 ? 'fa-circle-check' : 'fa-clock'"></i>
+                      {{ upload.upload_status === 1 ? 'Uploaded' : 'Pending' }}
+                    </span>
+                  </td>
+                  <td class="text-end pe-5">
+                    <button
+                      class="btn btn-sm btn-light-primary fw-bolder"
+                      (click)="downloadFile(upload)"
+                      [disabled]="!upload.file_path">
+                      <i class="fa-solid fa-download me-1"></i>Download
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </ng-container>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="modal-footer px-7 py-4">
+    <button type="button" class="btn btn-light fw-bolder" (click)="modal.dismiss()">Close</button>
+  </div>
+
+</div>

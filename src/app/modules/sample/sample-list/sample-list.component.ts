@@ -8,6 +8,7 @@ import { CreateSampleVcfComponent } from '../components/create-sample-vcf/create
 import { CreateSampleFastqComponent } from '../components/create-sample-fastq/create-sample-fastq.component';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, Subscription } from 'rxjs';
+import { SampleDetailComponent } from '../components/sample-detail/sample-detail.component';
 
 export interface sample {
   id: number;
@@ -122,6 +123,14 @@ export class SampleListComponent implements OnInit, OnDestroy {
     const modalRef = this.modalService.open(CreateSampleFastqComponent, { size: 'xl', scrollable: true });
     modalRef.result.then(() =>
       this.loadSamples(),
+      () => { }
+    );
+  }
+
+  openModalSampleDetail(id: number) {
+    const modalRef = this.modalService.open(SampleDetailComponent, { size: 'xl' });
+    modalRef.componentInstance.id = id;
+    modalRef.result.then(() =>
       () => { }
     );
   }
