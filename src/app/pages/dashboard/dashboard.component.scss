@@ -1,56 +1,60 @@
-/* Ensure row columns stretch to equal height so cards align */
-.row.g-4 {
-  align-items: stretch; /* bootstrap .row is flex, this makes children stretch */
+// ── Loading overlay ─────────────────────────────────────────────
+.loading-overlay {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(3px);
+  z-index: 1000;
 }
 
-.card.card-xxl-stretch {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+// ── Greeting banner ─────────────────────────────────────────────
+.greeting-banner {
+  background: linear-gradient(135deg, var(--bs-primary) 0%, #083b88 100%);
+  box-shadow: 0 16px 40px rgba(var(--bs-primary-rgb), 0.2);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    right: -60px;
+    top: -80px;
+    pointer-events: none;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.04);
+    left: 40%;
+    bottom: -60px;
+    pointer-events: none;
+  }
 }
 
-.card.card-xxl-stretch > .card-body {
-  flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
+.greeting-btn-outline {
+  background: rgba(255, 255, 255, 0.12);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.22);
+    color: white;
+  }
 }
 
-/* Chart wrapper should use available space without forcing huge fixed height */
-.chart-wrapper {
-  width: 100%;
-  /* allow chart area to grow but avoid excessive min height */
-  min-height: 140px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  align-items: flex-start;
+// ── Stat cards ──────────────────────────────────────────────────
+// Make all cards in rows stretch to equal height
+.row {
+  align-items: stretch;
 }
 
-/* Let canvas size adapt; prefer max-height instead of forcing exact height */
-.chart-wrapper canvas {
-  max-width: 100% !important;
-  max-height: 260px !important;
-  height: auto !important;
-  width: 100% !important;
+// ── Chart cards equal height ─────────────────────────────────────
+.card {
+  border-radius: 16px !important;
 }
-
-/* small responsive tweaks */
-@media (max-width: 991px) {
-  .chart-wrapper { min-height: 120px; }
-  .chart-wrapper canvas { max-height: 180px !important; }
-}
-
-.dashboard-top-row > .col-lg-4,
-.dashboard-top-row > .col-lg-8 {
-  display: flex;
-  flex-direction: column;
-}
-
-/* cap card body vertical spacing to avoid large empty areas */
-.dashboard-top-row .card-body {
-  padding-bottom: 1rem;
-}
-
-/* ensure bottom row cards align */
-.row.g-4.mt-3 > .col-lg-6 { display: flex; flex-direction: column; }
-.row.g-4.mt-3 .card.card-xxl-stretch { margin-bottom: 0; }

@@ -34,11 +34,11 @@ export class ContactComponent implements OnInit {
   selectedCountry: Country = this.countries[0];
 
   interests: string[] = [
-    'Company Registration',
-    'Accounting & Bookkeeping',
-    'Tax Filing',
-    'Payroll',
-    'Corporate Secretary',
+    'Pipeline',
+    'Analysis flow',
+    'Payment Service',
+    'Account Management',
+    'Report Generation',
     'Other',
   ];
 
