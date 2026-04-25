@@ -1,0 +1,14 @@
+.file-icon-wrap {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: rgba(var(--bs-gray-200-rgb), 0.5);
+  flex-shrink: 0;
+}
+
+.upload-row:last-child td {
+  border-bottom: none;
+}
