@@ -108,6 +108,7 @@
             <th class="min-w-120px">{{'SAMPLE.SIZE' | translate}}</th>
             <th class="min-w-120px">{{'SAMPLE.ASSEMBLY' | translate}}</th>
             <th class="min-w-120px">{{'SAMPLE.CREATED_AT' | translate}}</th>
+            <th class="min-w-120px">{{'SAMPLE.ACTIONS' | translate}}</th>
           </tr>
         </thead>
         <!-- end::Table head -->
@@ -167,6 +168,17 @@
               <p class="text-gray-900 fw-bolder d-block fs-6" style="margin-top: revert;">
                 {{sample.createdAt}}
               </p>
+            </td>
+            <td>
+              <div class="d-flex justify-content-end flex-shrink-0">
+                <button (click)="delete(sample.id)" class="
+                  btn btn-icon btn-bg-light btn-active-color-primary btn-sm
+                ">
+                  <span [inlineSVG]="
+                    './assets/media/icons/duotune/general/gen027.svg'
+                  " class="svg-icon svg-icon-3"></span>
+                </button>
+              </div>
             </td>
           </tr>
         </tbody>

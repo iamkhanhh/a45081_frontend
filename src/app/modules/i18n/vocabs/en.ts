@@ -119,7 +119,8 @@ export const locale = {
       SAMPLE_STATUS: 'Sample Status',
       SIZE: 'Size',
       ASSEMBLY: 'Assembly',
-      CREATED_AT: 'Created At'
+      CREATED_AT: 'Created At',
+      ACTIONS: 'Actions',
     },
     ANALYST:{
       MY_ANALYSTS: 'My Analyses',

@@ -3,11 +3,12 @@ import { ToastrService } from 'ngx-toastr';
 import { PaginatorState, GroupingState } from 'src/app/_metronic/shared/models';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SampleService } from '../services/sample.service';
-import { DeleteSampleComponent } from '../components/delete-sample/delete-sample.component';
+import { DeleteSampleComponent } from '/Users/doandoanhthai/KLTN/a45081_frontend/src/app/modules/sample/components/delete-sample/delete-sample.component';
 import { CreateSampleVcfComponent } from '../components/create-sample-vcf/create-sample-vcf.component';
 import { CreateSampleFastqComponent } from '../components/create-sample-fastq/create-sample-fastq.component';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, Subscription } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
 import { SampleDetailComponent } from '../components/sample-detail/sample-detail.component';
 
 export interface sample {
@@ -38,6 +39,7 @@ export class SampleListComponent implements OnInit, OnDestroy {
     private cd: ChangeDetectorRef,
     private modalService: NgbModal,
     private fb: FormBuilder,
+    private readonly matDialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -147,6 +149,19 @@ export class SampleListComponent implements OnInit, OnDestroy {
       })
     );
   }
+
+  // openDeleteDialog(sampleId: number | string) {
+  //   const dialogRef = this.matDialog.open(DeleteSampleDialog, {
+  //     width: '420px',
+  //     data: { sampleId }
+  //   });
+
+  //   dialogRef.afterClosed().subscribe((result) => {
+  //     if (result) {
+  //       this.loadSamples();
+  //     }
+  //   });
+  // }
 
   ngOnDestroy() {
     this.subscriptions.forEach((sb) => sb.unsubscribe());

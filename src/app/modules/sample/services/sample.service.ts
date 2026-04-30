@@ -24,9 +24,8 @@ export class SampleService {
   loadSample(id: number): Observable<any> {
     return this.http.get(`${API_SAMPLE_URL}/${id}`, { withCredentials: true });
   }
-
-  deleteFiles(ids: number[]): Observable<any>  {
-    return this.http.delete(`${API_SAMPLE_URL}`, { withCredentials: true, body: {ids} });
+  deleteFiles(id: number): Observable<any>  {
+    return this.http.delete(`${API_SAMPLE_URL}/${id}`, { withCredentials: true});
   }
 
   generateSinglePresignedUrl(fileName: string): Observable<any>  {
