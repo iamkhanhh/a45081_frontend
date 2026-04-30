@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UserService } from 'src/app/modules/user/services/user-service.service';
 
 interface Country {
   code: string;
@@ -20,6 +21,7 @@ export class ContactComponent implements OnInit {
   contactForm!: FormGroup;
   showCountryDropdown = false;
   submitted = false;
+  isSubmitting = false; // new: prevent duplicate submissions
 
   countries: Country[] = [
     { code: 'IT', name: 'Italy', flag: '🇮🇹', dialCode: '+39' },
@@ -51,7 +53,7 @@ export class ContactComponent implements OnInit {
     { icon: 'tiktok', url: '#', label: 'TikTok' },
   ];
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private userService: UserService) {}
 
   ngOnInit(): void {
     this.contactForm = this.fb.group({
@@ -74,12 +76,31 @@ export class ContactComponent implements OnInit {
 
   onSubmit(): void {
     this.submitted = true;
-    if (this.contactForm.valid) {
-      console.log('Form submitted:', {
-        ...this.contactForm.value,
-        country: this.selectedCountry,
+    if (this.contactForm.valid && !this.isSubmitting) {
+      this.isSubmitting = true;
+      const form = this.contactForm.value;
+      const payload = {
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        interestedIn: form.interest,
+        message: form.message,
+        country: this.selectedCountry?.code,
+      };
+
+      this.userService.sendContact(payload).subscribe({
+        next: (res) => {
+          console.log('Contact sent:', res);
+          this.isSubmitting = false;
+          this.submitted = false;
+          this.contactForm.reset();
+          this.selectedCountry = this.countries[0];
+        },
+        error: (err) => {
+          console.error('Failed to send contact:', err);
+          this.isSubmitting = false;
+        }
       });
-      // Handle form submission here
     }
   }
 

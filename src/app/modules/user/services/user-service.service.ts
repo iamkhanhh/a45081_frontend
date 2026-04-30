@@ -35,4 +35,7 @@ export class UserService {
   createUser(user: UserModel): Observable<any> {
     return this.http.post(`${API_USER_URL}`, user,{ withCredentials: true });
   }
+  sendContact(data: any): Observable<any> {
+    return this.http.post(`${API_USER_URL}/contact`, data,{ withCredentials: true });
+  }
 }

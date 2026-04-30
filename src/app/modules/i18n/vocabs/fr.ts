@@ -119,7 +119,8 @@ export const locale = {
       SAMPLE_STATUS: 'Statut de l’échantillon',
       SIZE: 'Taille',
       ASSEMBLY: 'Assemblage',
-      CREATED_AT: 'Créé le'
+      CREATED_AT: 'Créé le',
+      ACTIONS: 'Actions',
     },
     ANALYST:{
       MY_ANALYSTS: 'Mes analyses',

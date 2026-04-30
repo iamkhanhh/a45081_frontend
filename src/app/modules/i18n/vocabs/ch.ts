@@ -120,6 +120,7 @@ export const locale = {
     SIZE: '大小',
     ASSEMBLY: '组装',
     CREATED_AT: '创建时间',
+    ACTIONS: '操作',
   },
   ANALYST:{
     MY_ANALYSTS: '我的分析',

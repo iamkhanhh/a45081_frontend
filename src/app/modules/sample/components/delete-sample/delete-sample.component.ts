@@ -1,49 +1,40 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy } from '@angular/core';
+import { delay, Subscription } from 'rxjs';
+import { SampleService } from '../../services/sample.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { of, Subscription } from 'rxjs';
-import { catchError, delay, finalize, tap } from 'rxjs/operators';
-import { SampleService } from '../../services/sample.service';
 
 @Component({
-  selector: 'app-delete-sample',
+  selector: 'app-delete-workspace',
   templateUrl: './delete-sample.component.html',
   styleUrl: './delete-sample.component.scss'
 })
-export class DeleteSampleComponent {
-  @Input() ids: number[];
-  isLoading = false;
-  subscriptions: Subscription[] = [];
-  
+export class DeleteSampleComponent implements OnDestroy {
+  @Input() id: any;
+  isLoading: boolean = false;
+  private subscriptions: Subscription[] = []
+
   constructor(
-    public readonly modal: NgbActiveModal,
-    private readonly sampleService: SampleService,
-    private readonly toastr: ToastrService
-  ) { }
+		private sampleService: SampleService,
+		public modal: NgbActiveModal,
+		private toastr: ToastrService
+	) { }
 
-  ngOnInit(): void {
-  }
-
-  deleteFiles() {
+  delete() {
     this.isLoading = true;
-    const sb = this.sampleService.deleteFiles(this.ids).pipe(
-      delay(1000),
-      tap((res: any) => {
-        if( res.status == 'success') {
-          this.toastr.success(res.message);
-       } else {
-          this.toastr.error(res.message);
-       }
-       this.modal.close();
-      }),
-      catchError((errorMessage) => {
-        this.modal.dismiss(errorMessage);
-        return of(undefined);
-      }),
-      finalize(() => {
-        this.isLoading = false;
-      })
-    ).subscribe();
+    const sb = this.sampleService.deleteFiles(this.id)
+    .pipe(
+      delay(1000)
+    )
+    .subscribe((response: any) => {
+      this.isLoading = false;
+      if (response.status === 'success') {
+        this.toastr.success(response.message);
+        this.modal.close();
+      } else {
+        this.toastr.error(response.message);
+      }
+    });
     this.subscriptions.push(sb);
   }
 

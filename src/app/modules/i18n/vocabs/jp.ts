@@ -119,7 +119,8 @@ export const locale = {
       SAMPLE_STATUS: 'サンプルステータス',
       SIZE: 'サイズ',
       ASSEMBLY: 'アセンブリ',
-      CREATED_AT: '作成日'
+      CREATED_AT: '作成日',
+      ACTIONS: '操作',
     },
     ANALYST:{
       MY_ANALYSTS: '私の分析',
