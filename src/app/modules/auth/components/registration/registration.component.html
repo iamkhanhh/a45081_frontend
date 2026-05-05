@@ -137,6 +137,11 @@
           message: 'Password should have maximum 100 symbols',
           control: registrationForm.controls['password']
         }"></ng-container>
+        <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+          validation: 'pattern',
+          message: 'Password should have at least one uppercase letter, one lowercase letter, and one number',
+          control: registrationForm.controls['password']
+        }"></ng-container>
     </div>
     <!--end::Form group-->
 

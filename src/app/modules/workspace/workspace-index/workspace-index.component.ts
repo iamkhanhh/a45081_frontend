@@ -8,6 +8,7 @@ import { DeleteAnalysisComponent } from '../components/delete-analysis/delete-an
 import { CreateAnalysisComponent } from '../components/create-analysis/create-analysis.component';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { AnalysisService } from '../../analysis/services/analysis.service';
 
 export interface analysis {
   id: number;
@@ -40,6 +41,7 @@ export class WorkspaceIndexComponent implements OnInit, OnDestroy {
   constructor(
     private toastr: ToastrService,
     private workspaceService: WorkspaceService,
+    private analysisService: AnalysisService,
     private cd: ChangeDetectorRef,
     private route: ActivatedRoute,
     private modalService: NgbModal,
@@ -50,6 +52,18 @@ export class WorkspaceIndexComponent implements OnInit, OnDestroy {
     this.workspace_id = this.route.snapshot.params.id;
     this.filterForm();
     this.loadAnalyses();
+
+    this.subscriptions.push(
+      this.analysisService.getStatusUpdate().subscribe((data: any) => {
+        const index = this.analyses.findIndex(a => a.id === data.id);
+        if (index !== -1) {
+          this.analyses[index].status = data.status;
+          this.analyses[index].analyzed = data.analyzed || '';
+          this.analyses[index].variants = data.variants || '';
+          this.cd.detectChanges();
+        }
+      })
+    );
   }
 
   loadAnalyses() {

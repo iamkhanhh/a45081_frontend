@@ -3,13 +3,13 @@ import { ToastrService } from 'ngx-toastr';
 import { PaginatorState, GroupingState } from 'src/app/_metronic/shared/models';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SampleService } from '../services/sample.service';
-import { DeleteSampleComponent } from '/Users/doandoanhthai/KLTN/a45081_frontend/src/app/modules/sample/components/delete-sample/delete-sample.component';
 import { CreateSampleVcfComponent } from '../components/create-sample-vcf/create-sample-vcf.component';
 import { CreateSampleFastqComponent } from '../components/create-sample-fastq/create-sample-fastq.component';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { SampleDetailComponent } from '../components/sample-detail/sample-detail.component';
+import { DeleteSampleComponent } from '../components/delete-sample/delete-sample.component';
 
 export interface sample {
   id: number;

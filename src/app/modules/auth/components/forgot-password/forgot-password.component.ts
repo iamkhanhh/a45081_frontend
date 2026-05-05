@@ -56,7 +56,15 @@ export class ForgotPasswordComponent implements OnInit {
   }
 
   submit() {
+    if (this.authService.isLoadingSubject.value) return;
     this.errorState = ErrorStates.NotSubmitted;
+    if (!this.f.email.value || this.f.email.value.trim() === '') {
+      this.toastr.error('Please fill in all required fields.');
+      return;
+    } else if (this.forgotPasswordForm.invalid) {
+      this.toastr.error('Please enter a valid email address.');
+      return;
+    }
     const forgotPasswordSubscr = this.authService
       .forgotPassword(this.f.email.value)
       .pipe(first())
